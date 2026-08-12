@@ -142,8 +142,8 @@ function updateWishlistButtonsState() {
     const svgPath = btn.querySelector("svg path");
     if (svgPath) {
       if (isWished) {
-        svgPath.setAttribute("fill", "#581123");
-        svgPath.setAttribute("stroke", "#581123");
+        svgPath.setAttribute("fill", "#702152");
+        svgPath.setAttribute("stroke", "#702152");
       } else {
         svgPath.setAttribute("fill", "none");
         svgPath.setAttribute("stroke", "currentColor");

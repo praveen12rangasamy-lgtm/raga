@@ -1,0 +1,13 @@
+{
+  "name": "raga-boutique",
+  "version": "1.0.0",
+  "description": "Raga Boutique - Handcrafted Indian Sarees, Kurtas, and Traditional Ethnic Wear",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 8080 -c-1",
+    "start": "npx http-server -p 8080 -c-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -434,7 +434,7 @@ function injectFooter() {
 
   footerContainer.innerHTML = `
     <!-- Top Footer Bar - Popular Searches -->
-    <div class="bg-[#581123]/5 border-t border-brand-gold/15 py-10 text-xs">
+    <div class="bg-[#702152]/5 border-t border-brand-gold/15 py-10 text-xs">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="space-y-3 leading-relaxed">
           <h4 class="font-serif text-sm font-bold text-brand-burgundy uppercase tracking-wider mb-2">Popular Searches</h4>
