@@ -259,7 +259,6 @@
         </div>
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-3">
-            <span id="detail-cat-icon" class="text-3xl"></span>
             <div>
               <h2 class="font-serif text-xl font-bold text-brand-burgundy" id="detail-cat-title">—</h2>
               <p class="text-xs text-gray-400" id="detail-cat-desc">—</p>
@@ -312,8 +311,6 @@
     <div class="modal-body">
       <label class="form-label">Category Name *</label>
       <input type="text" id="new-cat-name" class="form-input" placeholder="e.g. Lehengas, Accessories…">
-      <label class="form-label">Icon (Emoji)</label>
-      <input type="text" id="new-cat-icon" class="form-input" placeholder="e.g. 👗 🧣 💍" maxlength="4">
       <label class="form-label">Description</label>
       <input type="text" id="new-cat-desc" class="form-input" placeholder="Short description for this category">
     </div>
@@ -576,15 +573,13 @@
   function confirmAddCategory() {
     const name = document.getElementById('new-cat-name').value.trim();
     if (!name) { document.getElementById('new-cat-name').focus(); return; }
-    const icon = document.getElementById('new-cat-icon').value.trim() || '📦';
     const desc = document.getElementById('new-cat-desc').value.trim();
     const id = name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') + '-' + uid();
-    categories.push({ id, name, icon, desc, groups: [] });
+    categories.push({ id, name, desc, groups: [] });
     saveCategories();
     renderCategoryGrid();
     closeModal('modal-add-category');
     document.getElementById('new-cat-name').value = '';
-    document.getElementById('new-cat-icon').value = '';
     document.getElementById('new-cat-desc').value = '';
   }
 
@@ -599,7 +594,6 @@
     document.getElementById('cat-detail-view').style.display = 'block';
     document.getElementById('detail-cat-name').textContent = cat.name;
     document.getElementById('detail-cat-title').textContent = cat.name;
-    document.getElementById('detail-cat-icon').textContent = cat.icon || '📦';
     document.getElementById('detail-cat-desc').textContent = cat.desc || '';
     renderDetailGroups();
     renderCatProducts();
@@ -616,38 +610,31 @@
     const cat = getCat(currentCategoryId);
     const container = document.getElementById('detail-groups-container');
     if (!cat) return;
-    container.innerHTML = cat.groups.map((group, gi) => {
-      const groupProducts = adminProducts.filter(p => p.category === currentCategoryId && p.subcategory === group.name);
-      return `
+    container.innerHTML = cat.groups.map((group, gi) => `
       <div class="group-card">
         <div class="group-header">
-          <h4 class="font-serif text-sm font-bold text-brand-burgundy uppercase tracking-wider">${esc(group.name)} <span class="text-gray-400 font-normal text-xs normal-case">(${groupProducts.length} items)</span></h4>
+          <h4 class="font-serif text-sm font-bold text-brand-burgundy uppercase tracking-wider">${esc(group.name)} <span class="text-gray-400 font-normal text-xs normal-case">(${group.items.length} items)</span></h4>
           <button onclick="deleteGroup('${currentCategoryId}',${gi})" class="btn-del text-xs">Delete Group</button>
         </div>
         <div class="group-body">
-          ${groupProducts.length === 0 ? '<p class="text-xs text-gray-400 italic mb-3">No products yet.</p>' : ''}
-          ${groupProducts.map((p) => `
-            <div class="item-row flex items-center gap-3">
-              ${(p.photo || p.image) ? `<img src="${p.photo || p.image}" class="h-8 w-8 object-cover rounded border border-gray-100">` : `<div class="h-8 w-8 bg-gray-100 rounded flex items-center justify-center text-[8px] text-gray-400 border border-gray-100">No img</div>`}
-              <div class="flex-1">
-                <div class="text-sm font-semibold text-brand-charcoal">${esc(p.name)}</div>
-                <div class="text-xs text-gray-500">₹${Number(p.price).toLocaleString('en-IN')}</div>
-              </div>
+          ${group.items.length === 0 ? '<p class="text-xs text-gray-400 italic mb-3">No items yet.</p>' : ''}
+          ${group.items.map((item, ii) => `
+            <div class="item-row">
+              <span class="text-sm text-brand-charcoal">${esc(item)}</span>
               <div class="item-actions">
-                <button class="btn-edit" onclick="openEditProduct('${p.id}')">Edit</button>
-                <button class="btn-del" onclick="deleteProduct('${p.id}')">Delete</button>
+                <button class="btn-edit" onclick="openEditItem('${currentCategoryId}',${gi},${ii})">Edit</button>
+                <button class="btn-del" onclick="deleteItem('${currentCategoryId}',${gi},${ii})">Delete</button>
               </div>
             </div>
           `).join('')}
           <div class="add-row mt-3 pt-3 border-t border-brand-gold/10">
-            <input type="text" id="add-input-${group.id}" class="add-input" placeholder="Enter Product Name…"
-              onkeydown="if(event.key==='Enter')handleAddProductFromGroup('${esc(group.name)}', 'add-input-${group.id}')">
-            <button class="btn-add-item" onclick="handleAddProductFromGroup('${esc(group.name)}', 'add-input-${group.id}')">+ Add Product</button>
+            <input type="text" id="add-input-${group.id}" class="add-input" placeholder="Add new item/product…"
+              onkeydown="if(event.key==='Enter')handleAddProductFromGroup('${esc(group.name)}', 'add-input-${group.id}', ${gi})">
+            <button class="btn-add-item" onclick="handleAddProductFromGroup('${esc(group.name)}', 'add-input-${group.id}', ${gi})">+ Add</button>
           </div>
         </div>
       </div>
-      `;
-    }).join('');
+    `).join('');
   }
 
   function renderCatProducts() {
@@ -696,12 +683,20 @@
     renderDetailGroups();
   }
 
-  // ─ Group Product Management ─
-  function handleAddProductFromGroup(groupName, inputId) {
+  // ─ Item & Product Management ─
+  function handleAddProductFromGroup(groupName, inputId, gi) {
     const input = document.getElementById(inputId);
     const name = input ? input.value.trim() : '';
     if (!name) { if (input) input.focus(); return; }
     
+    // Add to group items list
+    const cat = getCat(currentCategoryId);
+    if (cat) {
+      cat.groups[gi].items.push(name);
+      saveCategories();
+    }
+    
+    // Create actual product
     const newProduct = {
       id: 'p-' + uid(),
       name: name,
@@ -726,8 +721,37 @@
     updateStats();
     filterTable();
     
+    // Open modal to add photo, price, etc.
     openEditProduct(newProduct.id);
   }
+
+  function deleteItem(catId, gi, ii) {
+    if (!confirm('Remove this item?')) return;
+    const cat = getCat(catId);
+    cat.groups[gi].items.splice(ii, 1);
+    saveCategories();
+    renderDetailGroups();
+  }
+
+  function openEditItem(catId, gi, ii) {
+    const cat = getCat(catId);
+    editItemTarget = { catId, gi, ii };
+    document.getElementById('edit-item-value').value = cat.groups[gi].items[ii];
+    openModal('modal-edit-item');
+    setTimeout(() => document.getElementById('edit-item-value').select(), 50);
+  }
+
+  function confirmEditItem() {
+    const val = document.getElementById('edit-item-value').value.trim();
+    if (!val || !editItemTarget) return;
+    const cat = getCat(editItemTarget.catId);
+    cat.groups[editItemTarget.gi].items[editItemTarget.ii] = val;
+    saveCategories();
+    renderDetailGroups();
+    closeModal('modal-edit-item');
+    editItemTarget = null;
+  }
+  document.getElementById('edit-item-value').addEventListener('keydown', e => { if(e.key==='Enter') confirmEditItem(); });
 
   // ═══════════════════════════════════════
   // ── PRODUCT CRUD ──
