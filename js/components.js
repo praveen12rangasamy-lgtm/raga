@@ -47,10 +47,10 @@ function injectHeader() {
             </a>
           </div>
 
-          <!-- Desktop Search Bar -->
-          <div class="hidden md:flex flex-1 max-w-lg mx-12">
-            <div class="w-full relative">
-              <input type="text" id="desktop-search-input" placeholder="Search For Sarees, Kurtas, Crafts..." 
+          <!-- Desktop Search Bar + Login/Signup Buttons -->
+          <div class="hidden md:flex flex-1 items-center gap-3 mx-6">
+            <div class="relative flex-1">
+              <input type="text" id="desktop-search-input" placeholder="Search For Sarees, Kurtas, Crafts..."
                 class="w-full bg-brand-cream/40 text-xs text-brand-charcoal pl-4 pr-10 py-3 border border-brand-gold/25 rounded-sm focus:outline-none focus:border-brand-burgundy transition-colors duration-300">
               <div class="absolute right-3.5 top-3.5 text-brand-burgundy cursor-pointer">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,6 +58,9 @@ function injectHeader() {
                 </svg>
               </div>
             </div>
+            <a href="javascript:void(0)" onclick="openAdminLoginModal()" id="header-login-btn" class="whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-bold px-4 py-2.5 border border-brand-burgundy text-brand-burgundy hover:bg-brand-burgundy hover:text-white transition-all duration-200 rounded-sm">Login</a>
+            <a href="javascript:void(0)" onclick="openAdminLoginModal()" id="header-signup-btn" class="whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-bold px-4 py-2.5 bg-brand-burgundy text-white hover:bg-brand-burgundyLight transition-all duration-200 rounded-sm border-b-2 border-brand-gold">Sign Up</a>
+            <a href="admin.html" id="header-admin-btn" style="display:none;" class="whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-bold px-4 py-2.5 bg-brand-gold text-brand-burgundy hover:bg-brand-goldDark transition-all duration-200 rounded-sm border-b-2 border-brand-burgundy">Admin Panel</a>
           </div>
 
           <!-- Right Action Icons -->
@@ -99,7 +102,7 @@ function injectHeader() {
                 </div>
 
                 <!-- Login Button -->
-                <a href="#" class="w-full flex items-center justify-center space-x-2 bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-full transition duration-300">
+                <a href="javascript:void(0)" onclick="openAdminLoginModal()" class="w-full flex items-center justify-center space-x-2 bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-full transition duration-300">
                   <span>LOGIN/SIGNUP</span>
                   <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3" />
@@ -755,6 +758,80 @@ function injectDrawersAndModals() {
         </div>
       </div>
     </div>
+
+    <!-- In-Page Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 z-[100] overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 bg-black/60 transition-opacity" onclick="closeAdminLoginModal()"></div>
+
+        <!-- Modal panel -->
+        <div class="relative inline-block align-middle text-left shadow-2xl transform transition-all sm:my-8 sm:max-w-[420px] w-full rounded-2xl overflow-hidden" style="background-color: #311124; border: 1px solid rgba(212,178,112,0.15);">
+          
+          <div class="p-8 pb-6 flex flex-col items-center border-b border-white/5">
+            <img src="images/raga_logo.png" alt="Raga Boutique" class="h-12 mb-6" onerror="this.style.display='none'">
+            <h2 class="text-[10px] font-bold tracking-[0.25em] text-[#d4b270] uppercase mb-3">Admin Portal</h2>
+            <h1 class="font-serif text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-[13px] text-white/60">Sign in to manage your boutique</p>
+          </div>
+
+          <div class="p-8 pt-6">
+            <form id="admin-login-form-modal" onsubmit="handleAdminLoginSubmit(event)">
+              <div id="login-error-modal" class="hidden mb-4 p-3 bg-red-900/30 border border-red-500/30 rounded-lg text-red-200 text-xs text-center"></div>
+              
+              <div class="mb-5">
+                <label class="block text-[11px] font-bold text-[#d4b270] tracking-widest uppercase mb-2">Username</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 text-[#d4b270]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <input type="text" id="admin-user-modal" required placeholder="Enter username" 
+                    class="block w-full pl-11 pr-4 py-3.5 bg-[#421731] border border-[#d4b270]/30 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#d4b270] transition-colors"
+                    value="admin">
+                </div>
+              </div>
+
+              <div class="mb-8">
+                <label class="block text-[11px] font-bold text-[#d4b270] tracking-widest uppercase mb-2">Password</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 text-[#d4b270]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <input type="password" id="admin-pass-modal" required placeholder="Enter password" 
+                    class="block w-full pl-11 pr-11 py-3.5 bg-[#421731] border border-[#d4b270]/30 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#d4b270] transition-colors"
+                    value="raga@admin2024">
+                  <div class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer text-[#d4b270]/60 hover:text-[#d4b270]" onclick="togglePasswordVisibilityModal()">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="eye-icon-modal">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="w-full py-4 bg-[#d4b270] hover:bg-[#bfa061] text-[#311124] text-xs font-bold tracking-[0.15em] uppercase rounded-xl transition duration-300">
+                Sign in to Admin Panel
+              </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+              <a href="javascript:void(0)" onclick="closeAdminLoginModal()" class="text-xs text-white/50 hover:text-white transition flex items-center justify-center gap-2">
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                Back to Raga Boutique
+              </a>
+            </div>
+          </div>
+          
+          <div class="bg-black/20 py-4 text-center">
+            <p class="text-[9px] font-bold text-white/30 tracking-[0.2em] uppercase">Raga Boutique • Admin Portal • Restricted Access</p>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
 }
 
@@ -850,4 +927,62 @@ function initializeComponentInteractivity() {
   if (mobileSearchInput) {
     mobileSearchInput.addEventListener("keydown", handleSearchSubmit);
   }
+
+  // ── Auth-aware header buttons ──
+  // Show Admin Panel link and hide Login/Signup when admin session is active
+  (function updateHeaderAuthState() {
+    const isAdmin = sessionStorage.getItem('raga_admin_auth') === 'true';
+    const loginBtn = document.getElementById('header-login-btn');
+    const signupBtn = document.getElementById('header-signup-btn');
+    const adminBtn = document.getElementById('header-admin-btn');
+    if (isAdmin) {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (signupBtn) signupBtn.style.display = 'none';
+      if (adminBtn) adminBtn.style.display = '';
+    } else {
+      if (loginBtn) loginBtn.style.display = '';
+      if (signupBtn) signupBtn.style.display = '';
+      if (adminBtn) adminBtn.style.display = 'none';
+    }
+  })();
 }
+
+// ── Admin Login Modal Logic ──
+window.openAdminLoginModal = function() {
+  const modal = document.getElementById('admin-login-modal');
+  if (modal) modal.classList.remove('hidden');
+};
+
+window.closeAdminLoginModal = function() {
+  const modal = document.getElementById('admin-login-modal');
+  if (modal) modal.classList.add('hidden');
+};
+
+window.togglePasswordVisibilityModal = function() {
+  const input = document.getElementById('admin-pass-modal');
+  const eye = document.getElementById('eye-icon-modal');
+  if (input.type === 'password') {
+    input.type = 'text';
+    eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />`;
+  } else {
+    input.type = 'password';
+    eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
+  }
+};
+
+window.handleAdminLoginSubmit = function(e) {
+  e.preventDefault();
+  const u = document.getElementById('admin-user-modal').value.trim();
+  const p = document.getElementById('admin-pass-modal').value;
+  const err = document.getElementById('login-error-modal');
+  
+  if (u === 'admin' && p === 'raga@admin2024') {
+    err.classList.add('hidden');
+    sessionStorage.setItem('raga_admin_auth', 'true');
+    sessionStorage.setItem('raga_admin_user', u);
+    window.location.href = 'admin.html';
+  } else {
+    err.textContent = 'Invalid username or password.';
+    err.classList.remove('hidden');
+  }
+};
