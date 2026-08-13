@@ -123,6 +123,11 @@
 
     <!-- Form -->
     <div class="px-10 py-8">
+      <div id="already-logged-in-banner" class="hidden mb-5 p-3.5 rounded-lg text-xs bg-brand-gold/15 border border-brand-gold/40 text-brand-gold text-center flex items-center justify-between">
+        <span>You are already signed in.</span>
+        <a href="admin.html" class="font-bold underline hover:text-white transition">Go to Dashboard &rarr;</a>
+      </div>
+
       <form id="login-form" onsubmit="handleLogin(event)" novalidate>
 
         <!-- Username -->
@@ -195,9 +200,14 @@
   </div>
 
   <script>
-    // Auth guard — if already logged in, skip to admin
-    if (sessionStorage.getItem('raga_admin_auth') === 'true') {
-      window.location.href = 'admin.html';
+    // Handle explicit logout or check auth status
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('logout') === 'true') {
+      sessionStorage.removeItem('raga_admin_auth');
+      sessionStorage.removeItem('raga_admin_user');
+    } else if (sessionStorage.getItem('raga_admin_auth') === 'true') {
+      const banner = document.getElementById('already-logged-in-banner');
+      if (banner) banner.classList.remove('hidden');
     }
 
     const DEFAULT_CREDENTIALS = { username: 'admin', password: 'raga@admin2024' };

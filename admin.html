@@ -1214,6 +1214,12 @@
     }
   }
 
+  function handleLogout() {
+    sessionStorage.removeItem('raga_admin_auth');
+    sessionStorage.removeItem('raga_admin_user');
+    window.location.href = 'admin-login.html?logout=true';
+  }
+
   function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const main = document.querySelector('.main-content');
