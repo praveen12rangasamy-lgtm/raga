@@ -75,6 +75,12 @@ function updateWishlistBadge() {
 }
 
 // Cart Action Handlers
+function buyNow(productId) {
+  cart = [{ id: productId, quantity: 1 }];
+  saveCart();
+  window.location.href = 'cart.html';
+}
+
 function addToCart(productId, quantity = 1, showDrawer = true) {
   const existingItem = cart.find(item => item.id === productId);
   if (existingItem) {

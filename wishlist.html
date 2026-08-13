@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Wishlist — Raga</title>
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/raga_favicon.png">
-  <meta name="description" content="View and manage your favorite handcrafted sarees and ethnic wear on your Raga Wishlist.">
-  
+  <meta name="description"
+    content="View and manage your favorite handcrafted sarees and ethnic wear on your Raga Wishlist.">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -32,10 +34,11 @@
       }
     }
   </script>
-  
+
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="bg-brand-cream text-brand-charcoal min-h-screen flex flex-col">
 
   <!-- Global Dynamic Header -->
@@ -50,26 +53,31 @@
 
   <!-- Main section -->
   <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-    
+
     <!-- Wishlist Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="wishlist-grid">
       <!-- Populated Dynamically via JS -->
     </div>
 
     <!-- Empty Wishlist Placeholder -->
-    <div id="wishlist-empty-state" class="hidden flex flex-col items-center justify-center py-24 text-center text-gray-500 bg-white border border-brand-gold/10 max-w-2xl mx-auto shadow-sm">
+    <div id="wishlist-empty-state"
+      class="hidden flex flex-col items-center justify-center py-24 text-center text-gray-500 bg-white border border-brand-gold/10 max-w-2xl mx-auto shadow-sm">
       <div class="p-4 bg-brand-cream/40 border border-brand-gold/15 rounded-full mb-4">
         <svg class="h-12 w-12 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
       </div>
       <h3 class="font-serif text-lg font-bold text-brand-burgundy mb-2">Your Wishlist is Empty</h3>
-      <p class="text-xs text-gray-400 max-w-[280px] mb-6">Looks like you haven't saved any handcrafted items yet. Explore our sarees or kurtas to fill your wishlist.</p>
+      <p class="text-xs text-gray-400 max-w-[280px] mb-6">Looks like you haven't saved any handcrafted items yet.
+        Explore our sarees or kurtas to fill your wishlist.</p>
       <div class="flex flex-col sm:flex-row gap-4">
-        <a href="sarees.html" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3 px-8 border-b-2 border-brand-gold transition duration-300">
+        <a href="sarees.html"
+          class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3 px-8 border-b-2 border-brand-gold transition duration-300">
           Shop Sarees
         </a>
-        <a href="kurtas.html" class="bg-white hover:bg-brand-cream text-brand-burgundy text-xs uppercase tracking-widest font-bold py-3 px-8 border border-brand-gold transition duration-300">
+        <a href="kurtas.html"
+          class="bg-white hover:bg-brand-cream text-brand-burgundy text-xs uppercase tracking-widest font-bold py-3 px-8 border border-brand-gold transition duration-300">
           Shop Kurtas
         </a>
       </div>
@@ -89,7 +97,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       renderWishlist();
-      
+
       // Listen for updates from other parts of the website
       document.addEventListener("wishlistUpdated", renderWishlist);
     });
@@ -97,7 +105,7 @@
     function renderWishlist() {
       const grid = document.getElementById("wishlist-grid");
       const emptyState = document.getElementById("wishlist-empty-state");
-      
+
       if (!grid || !emptyState || typeof ProductsDB === "undefined") return;
 
       // Access global wishlist array from main.js
@@ -126,8 +134,8 @@
     }
 
     function createWishlistCardHTML(product) {
-      const discountPercentage = product.originalPrice > product.price 
-        ? `<span class="bg-green-700 text-white text-[9px] font-bold px-1.5 py-0.5 absolute top-2 left-2 z-10 uppercase tracking-widest">${product.discount}% OFF</span>` 
+      const discountPercentage = product.originalPrice > product.price
+        ? `<span class="bg-green-700 text-white text-[9px] font-bold px-1.5 py-0.5 absolute top-2 left-2 z-10 uppercase tracking-widest">${product.discount}% OFF</span>`
         : "";
 
       return `
@@ -145,14 +153,8 @@
             <!-- Product Images -->
             <div class="h-full w-full">
               <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover zoom-image absolute inset-0">
-              <img src="${product.hoverImage}" alt="${product.name}" class="w-full h-full object-cover zoom-image absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             </div>
 
-            <!-- Quick View button -->
-            <div class="absolute inset-x-0 bottom-4 flex justify-center product-action-btn">
-              <button data-quick-view="${product.id}" class="bg-white/95 hover:bg-brand-burgundy text-brand-burgundy hover:text-white text-xs uppercase tracking-widest font-bold py-2 px-5 border border-brand-gold/30 hover:border-brand-burgundy shadow-md transition duration-300">
-                Quick View
-              </button>
             </div>
           </div>
 
@@ -165,17 +167,15 @@
               </h3>
             </div>
             
-            <div class="flex items-baseline space-x-2 pt-2">
-              <span class="text-sm font-bold text-brand-burgundy">₹ ${product.price.toLocaleString("en-IN")}</span>
-              ${product.originalPrice > product.price ? `
-                <span class="text-[11px] text-gray-400 line-through">₹ ${product.originalPrice.toLocaleString("en-IN")}</span>
-              ` : ""}
-            </div>
-            
-            <!-- Actions -->
-            <div class="pt-4 border-t border-brand-gold/10 mt-3 flex items-center space-x-2">
-              <button onclick="addToBagFromWishlist('${product.id}')" class="w-full text-center bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-[10px] uppercase tracking-widest font-bold py-2 border-b border-brand-gold transition duration-200">
-                Add To Bag
+            <div class="flex items-center justify-between pt-3 mt-auto border-t border-brand-gold/10">
+              <div class="flex items-baseline space-x-2.5">
+                <span class="text-sm font-bold text-brand-burgundy">₹ ${product.price.toLocaleString("en-IN")}</span>
+                ${product.originalPrice > product.price ? `
+                  <span class="text-[11px] text-gray-400 line-through">₹ ${product.originalPrice.toLocaleString("en-IN")}</span>
+                ` : ""}
+              </div>
+              <button onclick="addToBagFromWishlist('${product.id}'); window.location.href='cart.html'" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-[9px] uppercase tracking-widest font-bold py-1.5 px-3 rounded-sm shadow-sm transition duration-300">
+                Buy Now
               </button>
             </div>
           </div>
@@ -192,4 +192,5 @@
     }
   </script>
 </body>
+
 </html>

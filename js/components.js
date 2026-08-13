@@ -43,7 +43,7 @@ function injectHeader() {
           <!-- Brand Logo -->
           <div class="flex-shrink-0 flex items-center">
             <a href="index.html" class="flex items-center">
-              <img src="images/raga_logo.png" alt="Raga Boutique Logo" class="h-16 w-auto hover:opacity-90 transition duration-300">
+              <img src="images/raga_logo.png?v=3" alt="Raga Boutique Logo" class="h-11 w-auto hover:opacity-90 transition duration-300">
             </a>
           </div>
 
@@ -518,7 +518,7 @@ function injectFooter() {
             <ul class="space-y-3.5 text-xs font-semibold text-brand-charcoal/80 mb-6">
               <li><a href="tel:+918754291999" class="hover:text-brand-burgundy transition">+91 87542 91999</a></li>
               <li><a href="mailto:customercare@ragaboutique.co.in" class="hover:text-brand-burgundy transition">customercare@ragaboutique.co.in</a></li>
-              <li><a href="javascript:void(0)" onclick="openInfoModal('store')" class="hover:text-brand-burgundy transition font-bold">Store Locator</a></li>
+              <li class="leading-relaxed">No.21,22 & 23, Municipality Building,<br>Santhaipettai Bus Stop, Erode Main Road,<br>Tiruchengode - 637 211.</li>
             </ul>
             
             <!-- Social Icons (Burgundy fill matching screenshot) -->
@@ -526,7 +526,7 @@ function injectFooter() {
               <a href="#" class="p-2 bg-brand-burgundy text-white hover:bg-brand-burgundyLight transition duration-300 rounded-full w-8 h-8 flex items-center justify-center" aria-label="Facebook">
                 <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
               </a>
-              <a href="#" class="p-2 bg-brand-burgundy text-white hover:bg-brand-burgundyLight transition duration-300 rounded-full w-8 h-8 flex items-center justify-center" aria-label="Instagram">
+              <a href="https://www.instagram.com/ragaboutique_?igsh=MXdqdmczNXdkMHIyeQ%3D%3D&utm_source=qr" target="_blank" class="p-2 bg-brand-burgundy text-white hover:bg-brand-burgundyLight transition duration-300 rounded-full w-8 h-8 flex items-center justify-center" aria-label="Instagram">
                 <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               </a>
               <a href="#" class="p-2 bg-brand-burgundy text-white hover:bg-brand-burgundyLight transition duration-300 rounded-full w-8 h-8 flex items-center justify-center" aria-label="Pinterest">
@@ -769,7 +769,7 @@ function injectDrawersAndModals() {
         <div class="relative inline-block align-middle text-left shadow-2xl transform transition-all sm:my-8 sm:max-w-[420px] w-full rounded-2xl overflow-hidden" style="background-color: #311124; border: 1px solid rgba(212,178,112,0.15);">
           
           <div class="p-8 pb-6 flex flex-col items-center border-b border-white/5">
-            <img src="images/raga_logo.png" alt="Raga Boutique" class="h-12 mb-6" onerror="this.style.display='none'">
+            <img src="images/raga_logo_silver.png?v=3" alt="Raga Boutique" class="h-12 mb-6" onerror="this.style.display='none'">
             <h2 class="text-[10px] font-bold tracking-[0.25em] text-[#d4b270] uppercase mb-3">Admin Portal</h2>
             <h1 class="font-serif text-3xl font-bold text-white mb-2">Welcome Back</h1>
             <p class="text-[13px] text-white/60">Sign in to manage your boutique</p>

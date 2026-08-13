@@ -95,23 +95,7 @@
               <span id="summary-tax" class="font-semibold text-gray-400">Included</span>
             </div>
             
-            <!-- Coupon Discount row -->
-            <div id="summary-discount-row" class="flex justify-between text-green-700 font-semibold hidden">
-              <span>Promo Discount (10%):</span>
-              <span id="summary-discount">- ₹ 0</span>
-            </div>
 
-            <!-- Coupon Code Field -->
-            <div class="pt-4 border-t border-brand-gold/10 mt-4">
-              <label for="coupon-input" class="block text-xs uppercase tracking-wider font-semibold text-brand-gold mb-2">Apply coupon code</label>
-              <div class="flex">
-                <input type="text" id="coupon-input" placeholder="e.g. RAGA10" class="bg-brand-cream/50 text-xs px-3 py-2 border border-brand-gold/25 focus:outline-none focus:border-brand-burgundy flex-1 uppercase">
-                <button onclick="applyCoupon()" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs font-bold px-4 transition duration-300">
-                  Apply
-                </button>
-              </div>
-              <p id="coupon-message" class="text-[10px] mt-1.5 font-semibold"></p>
-            </div>
 
             <hr class="border-brand-gold/15 my-4">
 
@@ -127,15 +111,9 @@
           <h3 class="font-serif text-lg font-bold text-brand-burgundy border-b border-brand-gold/10 pb-3 mb-4">Delivery details</h3>
           <form id="checkout-form" onsubmit="handlePlaceOrder(event)" class="space-y-4 text-xs">
             
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label for="ship-first" class="block font-semibold mb-1">First Name *</label>
-                <input type="text" id="ship-first" required class="w-full bg-brand-cream/20 p-2.5 border border-brand-gold/20 focus:outline-none focus:border-brand-burgundy">
-              </div>
-              <div>
-                <label for="ship-last" class="block font-semibold mb-1">Last Name *</label>
-                <input type="text" id="ship-last" required class="w-full bg-brand-cream/20 p-2.5 border border-brand-gold/20 focus:outline-none focus:border-brand-burgundy">
-              </div>
+            <div>
+              <label for="ship-full" class="block font-semibold mb-1">Full Name *</label>
+              <input type="text" id="ship-full" required class="w-full bg-brand-cream/20 p-2.5 border border-brand-gold/20 focus:outline-none focus:border-brand-burgundy">
             </div>
 
             <div>
@@ -283,19 +261,24 @@
         checkoutSubtotal += sub;
 
         html += `
-          <div class="flex py-6 first:pt-0 last:pb-0">
-            <div class="h-28 w-20 flex-shrink-0 overflow-hidden border border-brand-gold/10">
-              <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover">
+          <div class="flex flex-col sm:flex-row py-6 first:pt-0 last:pb-0 gap-6">
+            <!-- Swipeable Image Gallery Container -->
+            <div class="h-80 w-full sm:h-[450px] sm:w-[320px] flex-shrink-0 flex overflow-x-auto snap-x snap-mandatory no-scrollbar border border-brand-gold/10 relative shadow-sm">
+              <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover flex-shrink-0 snap-center">
+              ${product.hoverImage ? `<img src="${product.hoverImage}" alt="${product.name} Alternate" class="h-full w-full object-cover flex-shrink-0 snap-center">` : ''}
+              ${product.hoverImage ? `<div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur-sm rounded-full p-1.5 shadow-sm pointer-events-none">
+                <svg class="w-4 h-4 text-brand-burgundy animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+              </div>` : ''}
             </div>
-            <div class="ml-6 flex-1 flex flex-col justify-between">
-              <div>
-                <div class="flex justify-between text-sm font-semibold text-brand-charcoal">
-                  <h4 class="pr-4 hover:text-brand-burgundy transition-colors">${product.name}</h4>
-                  <p class="text-brand-burgundy">₹ ${(product.price * item.quantity).toLocaleString("en-IN")}</p>
+            <div class="flex-1 flex flex-col justify-between py-1">
+                <div>
+                  <div class="flex justify-between items-start text-brand-charcoal mb-1">
+                    <h4 class="text-xl sm:text-2xl font-bold pr-4 hover:text-brand-burgundy transition-colors leading-tight">${product.name}</h4>
+                    <p class="text-brand-burgundy text-xl sm:text-2xl font-bold whitespace-nowrap">₹ ${(product.price * item.quantity).toLocaleString("en-IN")}</p>
+                  </div>
+                  <p class="text-sm text-brand-gold uppercase tracking-widest font-semibold mt-3">${product.fabric} | ${product.weave}</p>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">${product.fabric} | ${product.weave} | Weave: ${product.weave}</p>
-              </div>
-              <div class="flex items-center justify-between text-xs pt-4">
+                <div class="flex items-center justify-between text-sm pt-5">
                 <div class="flex items-center border border-brand-gold/30 bg-brand-cream/30 text-sm">
                   <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity - 1})" class="px-3 py-1 font-semibold text-brand-charcoal hover:bg-brand-gold/10">-</button>
                   <span class="px-3 py-1 font-semibold text-brand-burgundy">${item.quantity}</span>
@@ -389,8 +372,7 @@
       event.preventDefault();
       
       // Extract form values
-      const firstName = document.getElementById("ship-first").value;
-      const lastName = document.getElementById("ship-last").value;
+      const fullName = document.getElementById("ship-full").value;
       const payMethod = document.querySelector('input[name="payment"]:checked').value;
       
       // Calculate final total
@@ -398,10 +380,25 @@
       const finalAmount = checkoutSubtotal + shippingFee - discountAppliedVal;
 
       // Populate success modal info
-      document.getElementById("order-ref").textContent = `#RAGA-${Math.floor(10000000 + Math.random() * 90000000)}`;
-      document.getElementById("order-name").textContent = `${firstName} ${lastName}`;
+      const orderId = `#RAGA-${Math.floor(10000000 + Math.random() * 90000000)}`;
+      document.getElementById("order-ref").textContent = orderId;
+      document.getElementById("order-name").textContent = fullName;
       document.getElementById("order-pay").textContent = payMethod === "cod" ? "Cash on Delivery (COD)" : "Prepaid Online Card/UPI";
       document.getElementById("order-amount").textContent = `₹ ${finalAmount.toLocaleString("en-IN")}`;
+
+      // Save order to localStorage for Admin Panel
+      const newOrder = {
+        id: orderId,
+        date: new Date().toISOString(),
+        customer: fullName,
+        items: cart.length,
+        amount: finalAmount,
+        payment: payMethod,
+        status: "Processing"
+      };
+      const existingOrders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+      existingOrders.unshift(newOrder);
+      localStorage.setItem('raga_orders', JSON.stringify(existingOrders));
 
       // Open Success modal
       const modal = document.getElementById("success-modal");

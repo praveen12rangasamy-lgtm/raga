@@ -9,5 +9,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jimp": "^0.22.10",
+    "pngjs": "^7.0.0"
+  }
 }

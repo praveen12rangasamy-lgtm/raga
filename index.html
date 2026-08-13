@@ -701,15 +701,7 @@
             <!-- Product Images -->
             <a href="${product.category === 'sarees' ? 'sarees.html' : 'kurtas.html'}" class="block h-full w-full">
               <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover zoom-image absolute inset-0">
-              <img src="${product.hoverImage}" alt="${product.name}" class="w-full h-full object-cover zoom-image absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             </a>
-
-            <!-- Quick View Hover button -->
-            <div class="absolute inset-x-0 bottom-4 flex justify-center product-action-btn">
-              <button data-quick-view="${product.id}" class="bg-white/95 hover:bg-brand-burgundy text-brand-burgundy hover:text-white text-xs uppercase tracking-widest font-bold py-2 px-5 border border-brand-gold/30 hover:border-brand-burgundy shadow-md transition duration-300">
-                Quick View
-              </button>
-            </div>
           </div>
 
           <!-- Description / Price Block -->
@@ -721,11 +713,16 @@
               </h3>
             </div>
             
-            <div class="flex items-baseline space-x-2.5 pt-3 mt-auto border-t border-brand-gold/10">
-              <span class="text-sm font-bold text-brand-burgundy">₹ ${product.price.toLocaleString("en-IN")}</span>
-              ${product.originalPrice > product.price ? `
-                <span class="text-[11px] text-gray-400 line-through">₹ ${product.originalPrice.toLocaleString("en-IN")}</span>
-              ` : ""}
+            <div class="flex items-center justify-between pt-3 mt-auto border-t border-brand-gold/10">
+              <div class="flex items-baseline space-x-2.5">
+                <span class="text-sm font-bold text-brand-burgundy">₹ ${product.price.toLocaleString("en-IN")}</span>
+                ${product.originalPrice > product.price ? `
+                  <span class="text-[11px] text-gray-400 line-through">₹ ${product.originalPrice.toLocaleString("en-IN")}</span>
+                ` : ""}
+              </div>
+              <button onclick="addToCart('${product.id}', 1, false); window.location.href='cart.html'" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-[9px] uppercase tracking-widest font-bold py-1.5 px-3 rounded-sm shadow-sm transition duration-300">
+                Buy Now
+              </button>
             </div>
           </div>
         </div>

@@ -112,7 +112,7 @@
     <!-- Card Header -->
     <div class="px-10 pt-10 pb-6 text-center border-b border-white/5">
       <div class="flex justify-center mb-5">
-        <img src="images/raga_logo.png" alt="Raga Boutique" class="h-14 object-contain"
+        <img src="images/raga_logo_silver.png?v=2" alt="Raga Boutique" class="h-14 object-contain"
           onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block'">
         <h1 id="logo-text" class="font-serif text-3xl font-bold text-brand-gold" style="display:none;">Raga</h1>
       </div>
@@ -200,7 +200,7 @@
       window.location.href = 'admin.html';
     }
 
-    const ADMIN_CREDENTIALS = { username: 'admin', password: 'raga@admin2024' };
+    const DEFAULT_CREDENTIALS = { username: 'admin', password: 'raga@admin2024' };
 
     function handleLogin(e) {
       e.preventDefault();
@@ -210,7 +210,9 @@
       const errorText = document.getElementById('error-text');
       const form = document.getElementById('login-form');
 
-      if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+      const savedPassword = localStorage.getItem('raga_admin_password') || DEFAULT_CREDENTIALS.password;
+
+      if (username === DEFAULT_CREDENTIALS.username && password === savedPassword) {
         errorDiv.classList.add('hidden');
         sessionStorage.setItem('raga_admin_auth', 'true');
         sessionStorage.setItem('raga_admin_user', username);

@@ -1,6 +1,23 @@
 const PRODUCTS = [
   // SAREES
   {
+    id: "saree-15",
+    name: "Royal crimse Silk Saree",
+    category: "sarees",
+    price: 2999,
+    originalPrice: 5000,
+    discount: 40,
+    image: "images/img-saree-red.jpg",
+    hoverImage: "images/img-saree-red.jpg",
+    fabric: "Silk",
+    weave: "Traditional Weave",
+    color: "Red",
+    rating: 4.8,
+    reviews: 12,
+    description: "An elegant royal crimson silk saree, perfect for festive occasions and celebrations. Features a beautiful drape and authentic silk texture.",
+    highlights: ["Pure Silk Blend", "Traditional Motifs", "Rich Crimson Color", "Lightweight & Comfortable"]
+  },
+  {
     id: "saree-01",
     name: "Royal Crimson Banarasi Silk Saree",
     category: "sarees",
@@ -447,12 +464,23 @@ const PRODUCTS = [
 ];
 
 // Helper functions for E-commerce State and filtering
+function getActiveProducts() {
+  const s = localStorage.getItem('raga_admin_products_v2');
+  if (s) {
+    try {
+      const adminProducts = JSON.parse(s);
+      if (adminProducts && adminProducts.length > 0) return adminProducts;
+    } catch(e) {}
+  }
+  return PRODUCTS;
+}
+
 const ProductsDB = {
-  getAll: () => PRODUCTS,
+  getAll: () => getActiveProducts(),
   
-  getById: (id) => PRODUCTS.find(p => p.id === id),
+  getById: (id) => getActiveProducts().find(p => p.id === id),
   
-  getByCategory: (category) => PRODUCTS.filter(p => p.category === category),
+  getByCategory: (category) => getActiveProducts().filter(p => p.category === category),
   
   filterProducts: (products, filters) => {
     return products.filter(product => {
