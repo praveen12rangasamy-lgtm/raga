@@ -72,6 +72,10 @@
     .btn-edit:hover{background:rgba(212,178,112,.3);}
     .btn-del{padding:3px 10px;font-size:10px;font-weight:600;border-radius:5px;background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2);cursor:pointer;transition:all .15s;}
     .btn-del:hover{background:rgba(239,68,68,.18);}
+    .btn-icon-edit{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:rgba(212,178,112,.15);color:#bfa061;border:1px solid rgba(212,178,112,.3);cursor:pointer;transition:all .15s;}
+    .btn-icon-edit:hover{background:rgba(212,178,112,.3);color:#702152;}
+    .btn-icon-del{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.25);cursor:pointer;transition:all .15s;}
+    .btn-icon-del:hover{background:rgba(239,68,68,.22);}
 
     /* ─ Add row ─ */
     .add-row{display:flex;gap:8px;margin-top:10px;}
@@ -146,6 +150,15 @@
       .topbar { padding: 14px 16px; }
     }
   </style>
+  <script>
+    fetch('api/check_auth.php')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.authenticated) {
+          window.location.href = 'admin/index.php';
+        }
+      });
+  </script>
 </head>
 <body>
 
@@ -179,6 +192,10 @@
     <button class="nav-item" id="nav-transactions" onclick="switchView('transactions')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
       Transactions
+    </button>
+    <button class="nav-item" id="nav-messages" onclick="switchView('messages')">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Messages
     </button>
     <button class="nav-item" id="nav-settings" onclick="switchView('settings')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -226,17 +243,17 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:rgba(212,178,112,.12)">
-            <svg class="h-5 w-5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+            <svg class="h-5 w-5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
           </div>
-          <div class="text-3xl font-bold font-serif text-brand-gold" id="stat-sarees">—</div>
-          <div class="text-xs text-gray-400 font-medium mt-1 uppercase tracking-wider">Sarees</div>
+          <div class="text-3xl font-bold font-serif text-brand-gold" id="stat-dashboard-orders">—</div>
+          <div class="text-xs text-gray-400 font-medium mt-1 uppercase tracking-wider">Total Orders</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:rgba(139,41,104,.08)">
-            <svg class="h-5 w-5 text-brand-burgundyLight" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <svg class="h-5 w-5 text-brand-burgundyLight" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
-          <div class="text-3xl font-bold font-serif text-brand-burgundyLight" id="stat-kurtas">—</div>
-          <div class="text-xs text-gray-400 font-medium mt-1 uppercase tracking-wider">Kurtas & Suits</div>
+          <div class="text-3xl font-bold font-serif text-brand-burgundyLight" id="stat-dashboard-revenue">—</div>
+          <div class="text-xs text-gray-400 font-medium mt-1 uppercase tracking-wider">Total Revenue</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon" style="background:rgba(44,44,44,.07)">
@@ -254,7 +271,7 @@
           <span class="text-xs font-semibold px-3 py-1 rounded-full product-count-badge" style="background:rgba(212,178,112,.15);color:#bfa061;">—</span>
         </div>
         <div class="px-5 py-2.5 border-b flex gap-3 items-center" style="border-color:rgba(212,178,112,.08);background:rgba(250,246,240,.5);">
-          <input type="text" id="dashboard-table-search" placeholder="Search products…" oninput="filterTable()"
+          <input type="search" id="dashboard-table-search" name="dashboard_product_search" autocomplete="off" placeholder="Search products…" oninput="filterTable()"
             class="border rounded-lg px-3 py-1.5 text-xs focus:outline-none flex-1" style="border-color:rgba(212,178,112,.3);">
           <select id="dashboard-table-cat-filter" onchange="filterTable()"
             class="border rounded-lg px-3 py-1.5 text-xs focus:outline-none" style="border-color:rgba(212,178,112,.3);">
@@ -263,7 +280,7 @@
         </div>
         <div class="overflow-x-auto">
           <table class="admin-table">
-            <thead><tr><th>#</th><th>Photo</th><th>Product Name</th><th>Category</th><th>Price</th><th>Offer</th><th>Actions</th></tr></thead>
+            <thead><tr><th>#</th><th>Photo</th><th>Product Name</th><th>Category</th><th>Price</th><th>Offer</th><th>New Arrivals</th><th>Actions</th></tr></thead>
             <tbody id="dashboard-products-tbody"></tbody>
           </table>
         </div>
@@ -274,18 +291,18 @@
 
     <!-- ═══ PRODUCTS ═══ -->
     <div id="view-products" class="view fade-in" style="display:none;">
-      <div class="flex items-center justify-between mb-6">
-        <div>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div class="hidden sm:block">
           <p class="text-sm text-gray-500">Manage all your products, prices, and stock across all categories.</p>
         </div>
-        <div class="flex gap-3">
-          <button class="btn-secondary" onclick="openModal('modal-add-subcategory')">
+        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+          <button class="btn-secondary flex-1 sm:flex-initial justify-center whitespace-nowrap text-xs py-2 px-3 sm:px-4" onclick="openModal('modal-add-subcategory')">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Add Sub-Category
+            <span>Add Sub-Category</span>
           </button>
-          <button class="btn-primary" onclick="createNewProductAndEdit()">
+          <button class="btn-primary flex-1 sm:flex-initial justify-center whitespace-nowrap text-xs py-2 px-3 sm:px-4" onclick="createNewProductAndEdit()">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Add Product
+            <span>Add Product</span>
           </button>
         </div>
       </div>
@@ -297,7 +314,7 @@
           <span class="text-xs font-semibold px-3 py-1 rounded-full product-count-badge" style="background:rgba(212,178,112,.15);color:#bfa061;">—</span>
         </div>
         <div class="px-5 py-2.5 border-b flex gap-3 items-center" style="border-color:rgba(212,178,112,.08);background:rgba(250,246,240,.5);">
-          <input type="text" id="table-search" placeholder="Search products…" oninput="filterTable()"
+          <input type="search" id="table-search" name="all_product_search" autocomplete="off" placeholder="Search products…" oninput="filterTable()"
             class="border rounded-lg px-3 py-1.5 text-xs focus:outline-none flex-1" style="border-color:rgba(212,178,112,.3);">
           <select id="table-cat-filter" onchange="filterTable()"
             class="border rounded-lg px-3 py-1.5 text-xs focus:outline-none" style="border-color:rgba(212,178,112,.3);">
@@ -306,7 +323,7 @@
         </div>
         <div class="overflow-x-auto">
           <table class="admin-table">
-            <thead><tr><th>#</th><th>Photo</th><th>Product Name</th><th>Category</th><th>Price</th><th>Offer</th><th>Actions</th></tr></thead>
+            <thead><tr><th>#</th><th>Photo</th><th>Product Name</th><th>Category</th><th>Price</th><th>Offer</th><th>New Arrivals</th><th>Actions</th></tr></thead>
             <tbody id="products-tbody"></tbody>
           </table>
         </div>
@@ -318,16 +335,16 @@
     <div id="view-categories" class="view fade-in">
       <!-- Category Grid -->
       <div id="cat-grid-view">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between gap-3 mb-6">
           <div>
             <p class="text-sm text-gray-500">Click a category to manage its sub-categories and products.</p>
           </div>
-          <button class="btn-primary" onclick="openModal('modal-add-category')">
+          <button class="btn-primary whitespace-nowrap flex-shrink-0" onclick="openAddCategoryModal()">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Add Category
+            <span>Add Category</span>
           </button>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5" id="categories-grid"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5" id="categories-grid"></div>
       </div>
 
 
@@ -370,54 +387,29 @@
 
       <!-- Filters & Table -->
       <div class="bg-white rounded-xl border overflow-hidden" style="border-color:rgba(212,178,112,.18);box-shadow:0 2px 12px rgba(112,33,82,.06);">
-        <!-- Pill Filters -->
-        <div class="px-5 py-4 border-b flex flex-wrap gap-3 items-center" style="border-color:rgba(212,178,112,.12);background:rgba(250,246,240,.5);">
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-white text-gray-600 hover:bg-gray-50" style="border-color:rgba(212,178,112,.3);">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Pending <span id="filter-count-pending" class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full text-[10px]">0</span>
-          </button>
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-white text-green-700 hover:bg-green-50" style="border-color:rgba(5,150,105,.2);">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Confirmed <span id="filter-count-confirmed" class="bg-green-100 text-green-800 px-1.5 py-0.5 rounded-full text-[10px]">0</span>
-          </button>
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-white text-amber-700 hover:bg-amber-50" style="border-color:rgba(217,119,6,.2);">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-            Packed <span id="filter-count-packed" class="bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full text-[10px]">0</span>
-          </button>
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-white text-blue-700 hover:bg-blue-50" style="border-color:rgba(37,99,235,.2);">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
-            Shipped <span id="filter-count-shipped" class="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full text-[10px]">0</span>
-          </button>
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-white text-teal-700 hover:bg-teal-50" style="border-color:rgba(13,148,136,.2);">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            Delivered <span id="filter-count-delivered" class="bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded-full text-[10px]">0</span>
-          </button>
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-white text-red-600 hover:bg-red-50" style="border-color:rgba(220,38,38,.2);">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            Cancelled <span id="filter-count-cancelled" class="bg-red-100 text-red-800 px-1.5 py-0.5 rounded-full text-[10px]">0</span>
-          </button>
-          <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold text-white shadow-sm" style="background:#702152;border-color:#702152;">
-            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"/></svg>
-            Returned <span id="filter-count-returned" class="px-1.5 py-0.5 rounded-full text-[10px]" style="background:rgba(255,255,255,.2);color:#fff;">0</span>
-          </button>
-        </div>
 
-        <!-- Search Bar -->
-        <div class="px-5 py-3 border-b flex gap-3 items-center bg-white" style="border-color:rgba(212,178,112,.12);">
-          <div class="relative flex-1">
-            <svg class="h-4 w-4 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" id="orders-search" oninput="renderOrders()" placeholder="Search by Order ID, Customer Name, Phone, Item..." class="border rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none w-full" style="border-color:rgba(212,178,112,.3);">
+        <!-- Controls Bar: Left Date Filter, Right Search Expandable -->
+        <div class="px-5 py-3 border-b flex flex-wrap gap-3 items-center justify-between bg-white" style="border-color:rgba(212,178,112,.12);">
+          
+          <!-- Left: Date Filter -->
+          <div class="flex items-center gap-2">
+            <label for="orders-date-filter" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Filter by Date:</label>
+            <input type="date" id="orders-date-filter" onchange="renderOrders()" class="border rounded-lg px-3 py-1.5 text-xs focus:outline-none text-gray-700 bg-white" style="border-color:rgba(212,178,112,.3);">
+            <button type="button" onclick="document.getElementById('orders-date-filter').value=''; renderOrders();" class="text-xs text-gray-400 hover:text-brand-burgundy font-medium px-2 py-1.5 border rounded bg-white hover:bg-brand-cream/30" title="Clear Date Filter">Clear</button>
           </div>
-          <select id="orders-payment-filter" onchange="renderOrders()" class="border rounded-lg px-3 py-2 text-xs focus:outline-none" style="border-color:rgba(212,178,112,.3);">
-            <option value="">All Payment Methods</option>
-            <option value="upi">UPI</option>
-            <option value="card">Cards</option>
-            <option value="cod">Cash on Delivery</option>
-          </select>
-          <select id="orders-sort" onchange="renderOrders()" class="border rounded-lg px-3 py-2 text-xs focus:outline-none" style="border-color:rgba(212,178,112,.3);">
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
+
+          <!-- Right: Search Icon / Full Search Bar Expandable -->
+          <div class="flex items-center gap-2 relative">
+            <div id="orders-search-box" class="hidden transition-all duration-300 relative w-64 sm:w-80">
+              <svg class="h-4 w-4 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="orders-search" oninput="renderOrders()" placeholder="Search Order ID, Customer, Phone, Item..." class="border rounded-lg pl-9 pr-8 py-1.5 text-xs focus:outline-none w-full shadow-xs" style="border-color:rgba(212,178,112,.4);">
+              <button type="button" onclick="toggleOrdersSearchBar(false)" class="absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs">✕</button>
+            </div>
+            <button id="orders-search-toggle-btn" type="button" onclick="toggleOrdersSearchBar(true)" class="p-2 border rounded-lg hover:bg-brand-cream/30 text-brand-burgundy transition shadow-xs" style="border-color:rgba(212,178,112,.3);" title="Search Orders">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
+          </div>
+
         </div>
 
         <!-- Table -->
@@ -425,6 +417,7 @@
           <table class="admin-table">
             <thead>
               <tr>
+                <th>S.no</th>
                 <th>Order ID</th>
                 <th>Date & Time</th>
                 <th>Customer</th>
@@ -472,6 +465,46 @@
       </div>
     </div>
 
+    <!-- ═══ MESSAGES / INQUIRIES ═══ -->
+    <div id="view-messages" class="view fade-in" style="display:none;">
+      <!-- Search & Date Filter Container -->
+      <div class="bg-white rounded-xl border overflow-hidden" style="border-color:rgba(212,178,112,.18);box-shadow:0 2px 12px rgba(112,33,82,.06);">
+        <div class="p-4 border-b flex flex-col sm:flex-row gap-3 items-center justify-between" style="border-color:rgba(212,178,112,.12);background:rgba(250,246,240,.5);">
+          <div class="relative flex-1 w-full sm:w-auto">
+            <svg class="h-4 w-4 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="messages-search" oninput="renderMessages()" placeholder="Search messages by name, phone, email, topic, message..." class="border rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none w-full" style="border-color:rgba(212,178,112,.3);">
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <label for="messages-date-filter" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Filter by Date:</label>
+            <input type="date" id="messages-date-filter" onchange="renderMessages()" class="border rounded-lg px-3 py-2 text-xs focus:outline-none text-gray-600 bg-white" style="border-color:rgba(212,178,112,.3);">
+            <button onclick="document.getElementById('messages-date-filter').value=''; renderMessages();" class="text-xs text-gray-400 hover:text-brand-burgundy font-medium px-2 py-1 border rounded bg-white hover:bg-brand-cream/30" title="Clear Date">Clear</button>
+          </div>
+        </div>
+
+        <!-- Messages Table -->
+        <div class="overflow-x-auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Sender / Contact</th>
+                <th>Email</th>
+                <th>Inquiry Topic</th>
+                <th>Message Content</th>
+                <th>Date & Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="messages-tbody"></tbody>
+          </table>
+        </div>
+        <div id="messages-table-empty" class="text-center py-12 text-gray-400 text-sm hidden">
+          <svg class="h-10 w-10 text-brand-gold/40 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          No contact messages found matching your criteria.
+        </div>
+      </div>
+    </div>
+
     <!-- ═══ SETTINGS ═══ -->
     <div id="view-settings" class="view">
       <div class="grid grid-cols-1 max-w-xl gap-6">
@@ -506,22 +539,34 @@
   </main>
 </div>
 
-<!-- ── MODAL: Add Category ── -->
+<!-- ── MODAL: Add / Edit Category ── -->
 <div class="modal-overlay" id="modal-add-category" onclick="if(event.target===this)closeModal('modal-add-category')">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 class="font-serif text-lg font-bold text-white">Add New Category</h3>
+      <h3 class="font-serif text-lg font-bold text-white" id="cat-modal-title">Add New Category</h3>
       <button onclick="closeModal('modal-add-category')" class="text-white/60 hover:text-white">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
     <div class="modal-body">
       <label class="form-label">Category Name *</label>
-      <input type="text" id="new-cat-name" class="form-input" placeholder="e.g. Lehengas, Accessories…">
+      <input type="text" id="new-cat-name" class="form-input" placeholder="e.g. Lehengas, Silk Sarees, Festive Edit…">
+      
+      <!-- Category Photo Upload with Live Preview -->
+      <label class="form-label">Category Photo *</label>
+      <div class="photo-preview" id="cat-photo-preview-box" onclick="document.getElementById('cat-photo-file-input').click()">
+        <img id="cat-photo-preview-img" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover;">
+        <div class="photo-placeholder" id="cat-photo-placeholder" style="text-align:center;">
+          <svg class="h-8 w-8 mx-auto mb-2 opacity-40 text-brand-burgundy" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <p class="text-xs font-semibold text-brand-burgundy">Click to upload category photo</p>
+          <p class="text-[10px] text-gray-400 mt-0.5">JPG, PNG, WEBP</p>
+        </div>
+      </div>
+      <input type="file" id="cat-photo-file-input" accept="image/*" style="display:none;" onchange="handleCatPhotoUpload(event)">
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal('modal-add-category')">Cancel</button>
-      <button class="btn-primary" onclick="confirmAddCategory()">Create Category</button>
+      <button class="btn-primary" id="cat-modal-submit-btn" onclick="confirmSaveCategory()">Create Category</button>
     </div>
   </div>
 </div>
@@ -642,11 +687,65 @@
   </div>
 </div>
 
+<!-- ── MODAL: View Message Details ── -->
+<div class="modal-overlay" id="modal-view-message" onclick="if(event.target===this)closeModal('modal-view-message')">
+  <div class="modal-box" style="max-width:600px;">
+    <div class="modal-header">
+      <h3 class="font-serif text-lg font-bold text-white">Customer Inquiry Details</h3>
+      <button onclick="closeModal('modal-view-message')" class="text-white/60 hover:text-white">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
+      <!-- Sender details block -->
+      <div class="p-4 rounded-lg mb-4 border" style="background:rgba(250,246,240,0.6);border-color:rgba(212,178,112,0.25);">
+        <div class="mb-3 pb-2 border-b border-brand-gold/15">
+          <h4 class="font-serif text-base font-bold text-brand-burgundy" id="msg-detail-name">—</h4>
+          <span class="text-[11px] text-gray-400" id="msg-detail-date">—</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <span class="text-gray-400 block text-[10px] uppercase font-semibold">Phone</span>
+            <span id="msg-detail-phone" class="font-medium text-brand-charcoal">—</span>
+          </div>
+          <div>
+            <span class="text-gray-400 block text-[10px] uppercase font-semibold">Email</span>
+            <span id="msg-detail-email" class="font-medium text-brand-charcoal">—</span>
+          </div>
+          <div class="sm:col-span-2">
+            <span class="text-gray-400 block text-[10px] uppercase font-semibold">Inquiry Topic</span>
+            <span id="msg-detail-subject" class="font-semibold text-brand-burgundy">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Content -->
+      <label class="form-label">Full Message</label>
+      <div class="p-4 rounded-lg bg-white border border-brand-gold/20 text-xs text-brand-charcoal leading-relaxed whitespace-pre-wrap font-sans shadow-inner" id="msg-detail-body" style="min-height:110px;">
+        —
+      </div>
+    </div>
+    <div class="modal-footer flex flex-wrap gap-2 justify-between items-center">
+      <div class="flex gap-2">
+        <a id="msg-whatsapp-btn" href="#" target="_blank" class="px-3 py-1.5 text-xs font-semibold rounded bg-green-600 hover:bg-green-700 text-white flex items-center gap-1.5 transition shadow-sm">
+          <span>Reply on WhatsApp</span>
+        </a>
+        <a id="msg-email-btn" href="#" class="px-3 py-1.5 text-xs font-semibold rounded bg-brand-burgundy hover:bg-brand-burgundyLight text-white flex items-center gap-1.5 transition shadow-sm">
+          <span>Reply via Email</span>
+        </a>
+      </div>
+      <div>
+        <button class="btn-cancel" onclick="closeModal('modal-view-message')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="js/products.js"></script>
 <script>
   // ── Auth Guard ──
-  if (sessionStorage.getItem('raga_admin_auth') !== 'true') window.location.href = 'admin-login.html';
-  document.getElementById('admin-name').textContent = sessionStorage.getItem('raga_admin_user') || 'admin';
+  // Auth handled by check_auth.php at the top
+  document.getElementById('admin-name').textContent = 'admin';
 
   // ── Default Categories ──
   const DEFAULT_CATEGORIES = [
@@ -692,6 +791,7 @@
   // ── State ──
   let categories = loadCategories();
   let adminProducts = loadAdminProducts();
+  let adminOrders = [];
   let currentCategoryId = null;
   let editingProductId = null;
   let editItemTarget = null; // { catId, groupId, itemIdx }
@@ -702,7 +802,13 @@
     if (s) { try { return JSON.parse(s); } catch(e){} }
     return JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
   }
-  function saveCategories() { localStorage.setItem('raga_admin_categories_v2', JSON.stringify(categories)); }
+  function saveCategories() { 
+    try {
+      localStorage.setItem('raga_admin_categories_v2', JSON.stringify(categories));
+    } catch(e) {
+      console.warn('localStorage quota warning on saveCategories:', e);
+    }
+  }
 
   function loadAdminProducts() {
     const s = localStorage.getItem('raga_admin_products_v2');
@@ -712,7 +818,50 @@
     }
     return [];
   }
-  function saveAdminProducts() { localStorage.setItem('raga_admin_products_v2', JSON.stringify(adminProducts)); }
+  function saveAdminProducts() { 
+    try {
+      localStorage.setItem('raga_admin_products_v2', JSON.stringify(adminProducts));
+    } catch(e) {
+      console.warn('localStorage quota warning on saveAdminProducts:', e);
+    }
+  }
+
+  function compressImage(file, maxDimension, quality, callback) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        callback(dataUrl);
+      };
+      img.onerror = function() {
+        callback(e.target.result);
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = function() {
+      console.error('File reading error');
+    };
+    reader.readAsDataURL(file);
+  }
 
   // ── Helpers ──
   function esc(str) {
@@ -727,22 +876,39 @@
 
   // ── View Switching ──
   function switchView(view) {
+    if (window.location.hash !== '#' + view) {
+      window.history.replaceState(null, null, '#' + view);
+    }
     document.querySelectorAll('.view').forEach(v => { v.classList.remove('active'); v.style.display = 'none'; });
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     
-    document.getElementById('view-' + view).classList.add('active');
-    document.getElementById('view-' + view).style.display = '';
-    document.getElementById('nav-' + view).classList.add('active');
+    const viewEl = document.getElementById('view-' + view);
+    if (viewEl) {
+      viewEl.classList.add('active');
+      viewEl.style.display = '';
+    }
+    const navEl = document.getElementById('nav-' + view);
+    if (navEl) {
+      navEl.classList.add('active');
+    }
     
     const titles = { 
       dashboard: ['Dashboard', 'Raga Boutique Admin Panel'], 
       products: ['Products', 'Manage your product catalog'],
       categories: ['Categories', 'Manage your product categories'],
-      orders: ['Orders Management', 'Track, filter, update statuses, and view customer order details.']
+      orders: ['Orders Management', 'Track, filter, update statuses, and view customer order details.'],
+      transactions: ['Transactions', 'View all financial transactions.'],
+      messages: ['Messages & Inquiries', 'View and track all customer contact messages submitted on the website.'],
+      settings: ['Settings', 'Manage boutique configurations.']
     };
-    document.getElementById('page-title').textContent = titles[view][0];
-    document.getElementById('page-subtitle').textContent = titles[view][1];
+    document.getElementById('page-title').textContent = titles[view] ? titles[view][0] : 'Dashboard';
+    document.getElementById('page-subtitle').textContent = titles[view] ? titles[view][1] : '';
     
+    const search1 = document.getElementById('table-search');
+    const search2 = document.getElementById('dashboard-table-search');
+    if (search1) search1.value = '';
+    if (search2) search2.value = '';
+
     if (view === 'categories') renderCategoryGrid();
     if (view === 'products' || view === 'dashboard') {
       renderTable(adminProducts);
@@ -751,57 +917,75 @@
     if (view === 'orders') {
       renderOrders();
     }
+    if (view === 'messages') {
+      renderMessages();
+    }
   }
 
   function createNewProductAndEdit() {
-    const newProduct = {
-      id: 'p-' + uid(),
-      name: '',
-      category: '',
-      subcategory: '',
-      price: 0,
-      discount: null,
-      image: '',
-      fabric: '',
-      weave: '',
-      rating: 5,
-      reviews: 0
-    };
-    adminProducts.unshift(newProduct);
-    saveAdminProducts();
+    editingProductId = null;
+    photoDataUrl = null;
+    document.getElementById('product-modal-title').textContent = 'Add Product';
+    document.getElementById('product-category').value = '';
+    updateSubcatDropdown();
+    document.getElementById('product-subcategory').value = '';
+    document.getElementById('product-name').value = '';
+    document.getElementById('product-fabric').value = '';
+    document.getElementById('product-weave').value = '';
+    document.getElementById('product-price').value = '';
+    document.getElementById('product-original-price').value = '';
+    document.getElementById('product-discount').value = '';
+    document.getElementById('photo-preview-img').style.display = 'none';
+    document.getElementById('photo-placeholder').style.display = '';
     
-    updateStats();
-    filterTable();
-    
-    openEditProduct(newProduct.id);
+    openModal('modal-product');
   }
   function handleLogout() {
     sessionStorage.removeItem('raga_admin_auth');
     sessionStorage.removeItem('raga_admin_user');
-    window.location.href = 'index.html';
+    window.location.href = 'index.php';
   }
 
   // ═══════════════════════════════════════
-  // ── CATEGORY GRID ──
+  // ── CATEGORY GRID & MANAGEMENT ──
   // ═══════════════════════════════════════
+  let editingCategoryId = null;
+  let catPhotoDataUrl = null;
+
   function renderCategoryGrid() {
     const grid = document.getElementById('categories-grid');
     if (!grid) return;
     grid.innerHTML = categories.map(cat => {
-      const prodCount = adminProducts.filter(p => p.category === cat.id).length;
+      const prodCount = adminProducts.filter(p => String(p.category).trim() === String(cat.id).trim()).length;
+      const catImage = cat.image || 'images/img-saree-red.jpg';
       return `
-        <div class="cat-box fade-in" onclick="drillIntoCategory('${cat.id}')" style="position: relative;">
-          <button class="btn-del" style="position: absolute; top: 16px; right: 16px; padding: 4px;" onclick="event.stopPropagation(); deleteCategory('${cat.id}')" title="Delete Category">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-          </button>
-          <div class="cat-box-header">
-            <h3 class="font-serif text-lg font-bold text-brand-burgundy pr-8">${esc(cat.name)}</h3>
+        <div class="cat-box fade-in" style="position: relative; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
+          <!-- Top-Right Action Buttons: Icon-Only Edit and Delete -->
+          <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; z-index: 20;">
+            <button type="button" class="btn-icon-edit" onclick="openEditCategory('${cat.id}', event)" title="Edit Category">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            </button>
+            <button type="button" class="btn-icon-del" onclick="deleteCategory('${cat.id}', event)" title="Delete Category">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
           </div>
-          <div class="cat-box-footer">
-            <span class="text-xs text-gray-400 flex items-center gap-1">
-              <svg class="h-3.5 w-3.5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4"/></svg>
-              ${prodCount} product${prodCount !== 1 ? 's' : ''}
-            </span>
+
+          <!-- Category Info Clickable Area -->
+          <div onclick="drillIntoCategory('${cat.id}')" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+            <img src="${catImage}" alt="${esc(cat.name)}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(212,178,112,0.3); flex-shrink: 0; background: #2d0921;">
+            <div style="flex: 1; min-width: 0; padding-right: 68px;">
+              <h3 class="font-serif text-base font-bold text-brand-burgundy truncate hover:text-brand-burgundy/80 transition-colors" title="${esc(cat.name)}">${esc(cat.name)}</h3>
+              <span class="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                <svg class="h-3.5 w-3.5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4"/></svg>
+                ${prodCount} product${prodCount !== 1 ? 's' : ''}
+              </span>
+            </div>
+          </div>
+
+          <!-- Bottom Drill-In Link -->
+          <div onclick="drillIntoCategory('${cat.id}')" style="margin-top: 14px; pt: 8px; border-top: 1px solid rgba(212,178,112,0.12); display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+            <span class="text-[11px] font-semibold text-brand-gold hover:underline">Manage Products</span>
+            <span class="text-xs text-brand-gold">→</span>
           </div>
         </div>
       `;
@@ -809,41 +993,179 @@
 
     // Update category filter dropdown
     const sel = document.getElementById('table-cat-filter');
-    sel.innerHTML = '<option value="">All Categories</option>' +
-      categories.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    if (sel) {
+      sel.innerHTML = '<option value="">All Categories</option>' +
+        categories.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    }
     const sel2 = document.getElementById('product-category');
-    sel2.innerHTML = '<option value="">Select category…</option>' +
-      categories.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    if (sel2) {
+      sel2.innerHTML = '<option value="">Select category…</option>' +
+        categories.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    }
   }
 
-  // ─ Add Category ─
-  function confirmAddCategory() {
+  function openAddCategoryModal() {
+    editingCategoryId = null;
+    catPhotoDataUrl = null;
+    document.getElementById('cat-modal-title').textContent = 'Add New Category';
+    document.getElementById('cat-modal-submit-btn').textContent = 'Create Category';
+    document.getElementById('new-cat-name').value = '';
+    document.getElementById('cat-photo-file-input').value = '';
+    document.getElementById('cat-photo-preview-img').src = '';
+    document.getElementById('cat-photo-preview-img').style.display = 'none';
+    document.getElementById('cat-photo-placeholder').style.display = '';
+    openModal('modal-add-category');
+  }
+
+  function openEditCategory(catId, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    const cat = getCat(catId) || categories.find(c => String(c.id).trim() === String(catId).trim());
+    if (!cat) return;
+    editingCategoryId = cat.id;
+    catPhotoDataUrl = cat.image || '';
+    document.getElementById('cat-modal-title').textContent = 'Edit Category';
+    document.getElementById('cat-modal-submit-btn').textContent = 'Save Changes';
+    document.getElementById('new-cat-name').value = cat.name;
+    document.getElementById('cat-photo-file-input').value = '';
+    
+    if (catPhotoDataUrl) {
+      document.getElementById('cat-photo-preview-img').src = catPhotoDataUrl;
+      document.getElementById('cat-photo-preview-img').style.display = '';
+      document.getElementById('cat-photo-placeholder').style.display = 'none';
+    } else {
+      document.getElementById('cat-photo-preview-img').src = '';
+      document.getElementById('cat-photo-preview-img').style.display = 'none';
+      document.getElementById('cat-photo-placeholder').style.display = '';
+    }
+    openModal('modal-add-category');
+  }
+
+  function handleCatPhotoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    compressImage(file, 800, 0.82, function(dataUrl) {
+      catPhotoDataUrl = dataUrl;
+      const preview = document.getElementById('cat-photo-preview-img');
+      const placeholder = document.getElementById('cat-photo-placeholder');
+      if (preview) {
+        preview.src = catPhotoDataUrl;
+        preview.style.display = 'block';
+      }
+      if (placeholder) {
+        placeholder.style.display = 'none';
+      }
+    });
+  }
+
+  // ─ Save Category (Add / Edit) ─
+  async function confirmSaveCategory() {
     const name = document.getElementById('new-cat-name').value.trim();
-    if (!name) { document.getElementById('new-cat-name').focus(); return; }
-    const id = name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') + '-' + uid();
-    categories.push({ id, name, groups: [] });
-    saveCategories();
+    if (!name) {
+      alert('Please enter a category name.');
+      document.getElementById('new-cat-name').focus();
+      return;
+    }
+
+    let image = catPhotoDataUrl || '';
+    if (!image) {
+      if (editingCategoryId) {
+        const existing = getCat(editingCategoryId);
+        image = existing && existing.image ? existing.image : 'images/img-saree-red.jpg';
+      } else {
+        image = 'images/img-saree-red.jpg';
+      }
+    }
+
+    if (editingCategoryId) {
+      // Update existing category
+      const existing = getCat(editingCategoryId);
+      if (existing) {
+        existing.name = name;
+        existing.image = image;
+      }
+
+      const payload = {
+        id: editingCategoryId,
+        name: name,
+        image: image,
+        icon: existing ? (existing.icon || '✨') : '✨',
+        groups: existing ? (existing.groups || []) : []
+      };
+
+      saveCategories();
+
+      try {
+        await fetch('api/save_category.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.warn('Could not update category on server API:', e);
+      }
+    } else {
+      // Add new category at the very first
+      const id = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + uid();
+      const newCat = { id, name, image, icon: '✨', groups: [] };
+
+      categories.unshift(newCat);
+      saveCategories();
+
+      try {
+        await fetch('api/save_category.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newCat)
+        });
+      } catch (e) {
+        console.warn('Could not save category on server API:', e);
+      }
+    }
+
     renderCategoryGrid();
     closeModal('modal-add-category');
-    document.getElementById('new-cat-name').value = '';
     populateCategoryDropdowns();
+    updateStats();
   }
 
-  function deleteCategory(catId) {
-    if (!confirm('Are you sure you want to delete this category? All products in this category will be uncategorized.')) return;
-    categories = categories.filter(c => c.id !== catId);
+  async function deleteCategory(catId, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (!confirm('Are you sure you want to delete this category? All sub-categories and products in this category will also be permanently deleted.')) return;
     
-    adminProducts.forEach(p => {
-      if (p.category === catId) p.category = '';
-    });
+    const cleanId = String(catId).trim();
+
+    // 1. Remove category and its subcategories from memory
+    categories = categories.filter(c => String(c.id).trim().toLowerCase() !== cleanId.toLowerCase());
     
+    // 2. Remove all products belonging to this category from memory
+    adminProducts = adminProducts.filter(p => String(p.category).trim().toLowerCase() !== cleanId.toLowerCase());
+    
+    // 3. Save to localStorage immediately
     saveCategories();
     saveAdminProducts();
     
+    // 4. Re-render UI immediately
     renderCategoryGrid();
+    renderTable(adminProducts);
     populateCategoryDropdowns();
     updateStats();
-    filterTable();
+
+    // 5. Call server API to delete from MySQL database
+    try {
+      await fetch('api/delete_category.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: cleanId })
+      });
+    } catch (e) {
+      console.warn('Could not delete category on server API:', e);
+    }
   }
 
   // ═══════════════════════════════════════
@@ -882,7 +1204,7 @@
     sel.innerHTML = html;
   }
 
-  function confirmAddSubcategory() {
+  async function confirmAddSubcategory() {
     const catId = document.getElementById('new-subcat-category').value;
     const subName = document.getElementById('new-subcat-name').value.trim();
     if (!catId || !subName) {
@@ -893,8 +1215,24 @@
     if (!cat) return;
     if (!cat.groups) cat.groups = [];
     if (!cat.groups.includes(subName)) {
-      cat.groups.push(subName);
+      cat.groups.unshift(subName);
       saveCategories();
+
+      try {
+        await fetch('api/save_category.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: cat.id,
+            name: cat.name,
+            image: cat.image || '',
+            icon: cat.icon || '✨',
+            groups: cat.groups
+          })
+        });
+      } catch (e) {
+        console.warn('Could not save subcategory to server API:', e);
+      }
     }
     closeModal('modal-add-subcategory');
     document.getElementById('new-subcat-category').value = '';
@@ -931,60 +1269,127 @@
   function handlePhotoUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      photoDataUrl = evt.target.result;
-      document.getElementById('photo-preview-img').src = photoDataUrl;
-      document.getElementById('photo-preview-img').style.display = '';
-      document.getElementById('photo-placeholder').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
+    compressImage(file, 900, 0.82, function(dataUrl) {
+      photoDataUrl = dataUrl;
+      const preview = document.getElementById('photo-preview-img');
+      const placeholder = document.getElementById('photo-placeholder');
+      if (preview) {
+        preview.src = photoDataUrl;
+        preview.style.display = 'block';
+      }
+      if (placeholder) {
+        placeholder.style.display = 'none';
+      }
+    });
   }
 
-  function confirmSaveProduct() {
-    const name = document.getElementById('product-name').value.trim();
-    const category = document.getElementById('product-category').value;
-    const price = document.getElementById('product-price').value;
+  async function confirmSaveProduct() {
+    const nameEl = document.getElementById('product-name');
+    const catEl = document.getElementById('product-category');
+    const subcatEl = document.getElementById('product-subcategory');
+    const priceEl = document.getElementById('product-price');
+    const origPriceEl = document.getElementById('product-original-price');
+    const discountEl = document.getElementById('product-discount');
+    const fabricEl = document.getElementById('product-fabric');
+    const weaveEl = document.getElementById('product-weave');
+
+    const name = nameEl ? nameEl.value.trim() : '';
+    const category = catEl ? catEl.value.trim() : '';
+    const subcategory = subcatEl ? subcatEl.value.trim() : '';
+    const price = priceEl ? priceEl.value.trim() : '';
+
     if (!name || !category || !price) {
-      alert('Please fill in Category, Product Name and Price.');
+      alert('Please fill in Category, Product Name, and Price.');
       return;
     }
+
+    const priceNum = Number(price) || 0;
+    const origPriceNum = origPriceEl && origPriceEl.value ? Number(origPriceEl.value) : priceNum;
+    const discountNum = discountEl && discountEl.value ? Number(discountEl.value) : 0;
+    const fabricVal = fabricEl && fabricEl.value.trim() ? fabricEl.value.trim() : 'Handloom';
+    const weaveVal = weaveEl && weaveEl.value.trim() ? weaveEl.value.trim() : 'Traditional Weave';
+
     const product = {
       id: editingProductId || uid(),
       name,
       category,
-      subcategory: document.getElementById('product-subcategory').value.trim(),
-      price: Number(price),
-      originalPrice: document.getElementById('product-original-price').value ? Number(document.getElementById('product-original-price').value) : null,
-      discount: document.getElementById('product-discount').value ? Number(document.getElementById('product-discount').value) : null,
-      image: photoDataUrl || '',
-      fabric: document.getElementById('product-fabric').value.trim() || 'Undefined',
-      weave: document.getElementById('product-weave').value.trim() || 'Undefined',
+      subcategory,
+      price: priceNum,
+      originalPrice: origPriceNum,
+      discount: discountNum,
+      image: photoDataUrl || 'images/img-saree-red.jpg',
+      hover_image: photoDataUrl || 'images/img-saree-red.jpg',
+      fabric: fabricVal,
+      weave: weaveVal,
+      color: '',
       rating: 5,
       reviews: 0,
-      description: "A beautiful handloom piece.",
-      highlights: ["Premium Quality", "Authentic"]
+      description: "A beautiful handcrafted piece from Raga Boutique.",
+      highlights: ["Premium Quality", "Authentic Handloom"]
     };
+
+    // 1. Update in-memory array immediately
     if (editingProductId) {
-      const idx = adminProducts.findIndex(x => x.id === editingProductId);
-      if (idx > -1) adminProducts[idx] = product;
+      const idx = adminProducts.findIndex(x => String(x.id).trim() === String(editingProductId).trim());
+      if (idx > -1) {
+        adminProducts[idx] = product;
+      } else {
+        adminProducts.unshift(product);
+      }
     } else {
-      adminProducts.push(product);
+      adminProducts.unshift(product);
     }
+
+    // 2. Persist to localStorage safely and re-render UI
     saveAdminProducts();
     closeModal('modal-product');
     updateStats();
     filterTable();
     renderCategoryGrid();
+
+    // 3. Save to server MySQL database
+    try {
+      const response = await fetch('api/save_product.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(product)
+      });
+      const data = await response.json();
+      if (!data.success) {
+        console.warn('Backend product save notice:', data.message);
+      }
+    } catch(e) {
+      console.warn('Network issue while saving product to server:', e);
+    }
   }
 
-  function deleteProduct(id) {
-    if (!confirm('Delete this product?')) return;
-    adminProducts = adminProducts.filter(p => p.id !== id);
+  async function deleteProduct(id, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (!confirm('Are you sure you want to delete this product?')) return;
+
+    // Immediately remove from local memory and UI
+    adminProducts = adminProducts.filter(p => String(p.id).trim() !== String(id).trim());
     saveAdminProducts();
     updateStats();
     filterTable();
     renderCategoryGrid();
+
+    try {
+      const response = await fetch('api/delete_product.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await response.json();
+      if (!data.success) {
+        console.warn('Backend delete product warning:', data.message);
+      }
+    } catch(e) {
+      console.warn('Network issue on delete product:', e);
+    }
   }
 
   // ─ Tables ─
@@ -999,7 +1404,7 @@
     const q = searchEl.value.toLowerCase();
     const cat = catEl.value;
     let list = adminProducts;
-    if (cat) list = list.filter(p => p.category === cat);
+    if (cat) list = list.filter(p => String(p.category).toLowerCase() === String(cat).toLowerCase());
     if (q) list = list.filter(p => p.name.toLowerCase().includes(q) || (p.subcategory||'').toLowerCase().includes(q));
     
     renderTableForPrefix(list, prefix);
@@ -1018,6 +1423,7 @@
     empty.classList.add('hidden');
     tbody.innerHTML = products.map((p, i) => {
       const catName = (getCat(p.category) || {}).name || p.category;
+      const isLiked = p.is_liked === true || (typeof isProductLiked === 'function' && isProductLiked(p.id));
       return `<tr>
         <td class="text-gray-400 font-mono text-xs">${i+1}</td>
         <td>${(p.image || p.photo) ? `<img src="${p.image || p.photo}" class="h-10 w-10 object-cover rounded-lg border border-brand-gold/20">` : '<div class="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-300 text-xs">—</div>'}</td>
@@ -1028,42 +1434,159 @@
           ${p.originalPrice ? `<div class="text-xs text-gray-400 line-through">₹${Number(p.originalPrice).toLocaleString('en-IN')}</div>` : ''}
         </td>
         <td>${p.discount ? `<span class="text-xs font-bold text-green-700">${esc(p.discount)}% OFF</span>` : (p.offer ? `<span class="text-xs font-bold text-green-700">${esc(p.offer)}</span>` : '—')}</td>
-        <td><div class="flex gap-2"><button class="btn-edit" onclick="openEditProduct('${p.id}')">Edit</button><button class="btn-del" onclick="deleteProduct('${p.id}')">Delete</button></div></td>
+        <td class="text-center">
+          <button type="button" 
+            onclick="toggleAdminProductLike('${p.id}', event)" 
+            class="p-1.5 rounded-full hover:bg-brand-burgundy/10 transition duration-200 inline-flex items-center justify-center"
+            title="${isLiked ? 'Featured in New Arrivals (Click to remove)' : 'Click to feature in New Arrivals'}">
+            <svg class="w-5 h-5 transition-all duration-200 ${isLiked ? 'text-[#e11d48] scale-110' : 'text-gray-300 hover:text-brand-burgundy'}" 
+              fill="${isLiked ? '#e11d48' : 'none'}" 
+              stroke="${isLiked ? '#e11d48' : 'currentColor'}" 
+              stroke-width="2" 
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </button>
+        </td>
+        <td><div class="flex gap-2"><button type="button" class="btn-edit" onclick="openEditProduct('${p.id}', event)">Edit</button><button type="button" class="btn-del" onclick="deleteProduct('${p.id}', event)">Delete</button></div></td>
       </tr>`;
     }).join('');
   }
 
-  function handleChangePassword() {
+  async function toggleAdminProductLike(id, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    const cleanId = String(id).trim();
+    const prod = adminProducts.find(p => String(p.id).trim() === cleanId);
+    if (!prod) return;
+
+    // Toggle local product state
+    const newLiked = !prod.is_liked;
+    prod.is_liked = newLiked;
+
+    // Sync with localStorage liked array
+    let likedList = [];
+    try {
+      likedList = JSON.parse(localStorage.getItem('raga_liked_products') || '[]');
+    } catch(e){}
+    if (newLiked) {
+      if (!likedList.includes(cleanId)) likedList.push(cleanId);
+    } else {
+      likedList = likedList.filter(x => x !== cleanId);
+    }
+
+    try {
+      localStorage.setItem('raga_liked_products', JSON.stringify(likedList));
+      localStorage.setItem('raga_admin_products_v2', JSON.stringify(adminProducts));
+    } catch(e) {}
+
+    // Re-render table rows immediately
+    filterTable();
+
+    // Persist to MySQL database via API
+    try {
+      await fetch('api/toggle_like.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: cleanId, is_liked: newLiked })
+      });
+    } catch(e) {
+      console.warn('Could not save like state to server:', e);
+    }
+  }
+
+  async function handleChangePassword() {
     const current = document.getElementById('cp-current').value;
     const newPass = document.getElementById('cp-new').value;
     const confirmPass = document.getElementById('cp-confirm').value;
 
-    const savedPass = localStorage.getItem('raga_admin_password') || 'raga@admin2024';
-    if (current !== savedPass) {
-       alert('Current password is incorrect!');
-       return;
+    if (!current) {
+      alert('Please enter your current password.');
+      document.getElementById('cp-current').focus();
+      return;
     }
-    if (!newPass || newPass !== confirmPass) {
-       alert('New password and confirm password do not match, or are empty!');
-       return;
+    if (!newPass) {
+      alert('Please enter a new password.');
+      document.getElementById('cp-new').focus();
+      return;
     }
-    
-    localStorage.setItem('raga_admin_password', newPass);
-    alert('Password updated successfully! Please login again with your new password.');
-    
-    document.getElementById('cp-current').value = '';
-    document.getElementById('cp-new').value = '';
-    document.getElementById('cp-confirm').value = '';
+    if (newPass !== confirmPass) {
+      alert('New password and confirm password do not match!');
+      document.getElementById('cp-confirm').focus();
+      return;
+    }
+    if (newPass.length < 4) {
+      alert('New password must be at least 4 characters long.');
+      return;
+    }
 
-    handleLogout();
+    try {
+      const response = await fetch('api/change_password.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          current_password: current,
+          new_password: newPass
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem('raga_admin_password', newPass);
+        alert(data.message || 'Password updated successfully! Please login with your new password.');
+        window.location.href = 'admin/index.php';
+      } else {
+        alert(data.message || 'Failed to update password. Please check your current password.');
+      }
+    } catch (e) {
+      console.error('Error updating password:', e);
+      alert('Server error while updating password. Please try again.');
+    }
   }
 
-  function deleteOrder(id) {
+  async function deleteOrder(id) {
     if (!confirm('Are you sure you want to delete order ' + id + '?')) return;
-    let orders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
-    orders = orders.filter(o => o.id !== id);
-    localStorage.setItem('raga_orders', JSON.stringify(orders));
-    renderOrders();
+    try {
+      const response = await fetch('api/delete_order.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await response.json();
+      if (data.success) {
+        adminOrders = adminOrders.filter(o => o.id !== id);
+        renderOrders();
+      } else {
+        alert('Failed to delete order: ' + data.message);
+      }
+    } catch(e) {
+      alert('Error deleting order');
+    }
+  }
+
+  function toggleOrdersSearchBar(open) {
+    const box = document.getElementById('orders-search-box');
+    const btn = document.getElementById('orders-search-toggle-btn');
+    const input = document.getElementById('orders-search');
+    if (!box || !btn) return;
+    
+    if (open) {
+      box.classList.remove('hidden');
+      btn.classList.add('hidden');
+      if (input) {
+        input.focus();
+      }
+    } else {
+      box.classList.add('hidden');
+      btn.classList.remove('hidden');
+      if (input) {
+        input.value = '';
+        renderOrders();
+      }
+    }
   }
 
   function renderOrders() {
@@ -1071,7 +1594,7 @@
     const empty = document.getElementById('orders-table-empty');
     if (!tbody || !empty) return;
     
-    let orders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+    let orders = [...adminOrders];
     
     const totalOrders = orders.length;
     let revenue = 0;
@@ -1094,36 +1617,33 @@
     if (elShipped) elShipped.textContent = counts.shipped;
     if (elRevenue) elRevenue.textContent = '₹' + revenue.toLocaleString('en-IN');
 
-    for (const [key, val] of Object.entries(counts)) {
-      const el = document.getElementById('filter-count-' + key);
-      if (el) el.textContent = val;
-    }
-
     const searchEl = document.getElementById('orders-search');
-    const paymentEl = document.getElementById('orders-payment-filter');
-    const sortEl = document.getElementById('orders-sort');
-
-    if (searchEl && searchEl.value) {
-       const q = searchEl.value.toLowerCase();
+    if (searchEl && searchEl.value.trim()) {
+       const q = searchEl.value.trim().toLowerCase();
        orders = orders.filter(o => 
          (o.id && o.id.toLowerCase().includes(q)) || 
          (o.customer && o.customer.toLowerCase().includes(q)) || 
-         (o.payment && o.payment.toLowerCase().includes(q))
+         (o.payment && o.payment.toLowerCase().includes(q)) ||
+         (o.product_name && o.product_name.toLowerCase().includes(q)) ||
+         (o.status && o.status.toLowerCase().includes(q))
        );
     }
-    
-    if (paymentEl && paymentEl.value) {
-       orders = orders.filter(o => (o.payment || '').toLowerCase() === paymentEl.value.toLowerCase());
-    }
 
-    if (sortEl) {
-       const isOldest = sortEl.value === 'oldest';
-       orders.sort((a, b) => {
-         const t1 = new Date(a.date).getTime();
-         const t2 = new Date(b.date).getTime();
-         return isOldest ? (t1 - t2) : (t2 - t1);
+    const dateEl = document.getElementById('orders-date-filter');
+    if (dateEl && dateEl.value) {
+       orders = orders.filter(o => {
+         if (!o.date) return false;
+         const d = new Date(o.date);
+         if (isNaN(d.getTime())) return false;
+         const yyyy = d.getFullYear();
+         const mm = String(d.getMonth() + 1).padStart(2, '0');
+         const dd = String(d.getDate()).padStart(2, '0');
+         return `${yyyy}-${mm}-${dd}` === dateEl.value;
        });
     }
+
+    // Default sorting to newest first
+    orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     if (orders.length === 0) {
       tbody.innerHTML = '';
@@ -1132,14 +1652,15 @@
     }
     
     empty.classList.add('hidden');
-    tbody.innerHTML = orders.map(o => `
+    tbody.innerHTML = orders.map((o, index) => `
       <tr class="border-b border-brand-gold/10 last:border-0 hover:bg-brand-cream/10 transition-colors">
+        <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold">${index + 1}</td>
         <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold">${o.id}</td>
-        <td class="p-4 text-xs text-gray-500">${new Date(o.date).toLocaleString()}</td>
+        <td class="p-4 text-xs text-gray-500">${new Date(o.date).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
         <td class="p-4 font-medium text-sm">${esc(o.customer)}</td>
         <td class="p-4 text-sm">${o.items} item(s)</td>
         <td class="p-4 font-semibold text-brand-charcoal">₹${Number(o.amount).toLocaleString('en-IN')}</td>
-        <td class="p-4 text-xs text-gray-500">${o.payment === 'cod' ? 'Cash on Delivery' : (o.payment === 'card' ? 'Prepaid / Cards' : esc(o.payment))}</td>
+        <td class="p-4 text-xs text-gray-500">${o.payment === 'upi' ? 'UPI Payment' : (o.payment === 'cod' ? 'Cash on Delivery' : (o.payment === 'card' ? 'Prepaid / Cards' : esc(o.payment)))}</td>
         <td class="p-4"><span class="inline-block px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-brand-gold/20 text-brand-charcoal">${esc(o.status)}</span></td>
         <td class="p-4">
           <div class="flex gap-2">
@@ -1167,7 +1688,7 @@
     
     empty.classList.add('hidden');
     tbody.innerHTML = orders.map(o => {
-      const paymentDisplay = o.payment === 'cod' ? 'Cash on Delivery' : (o.payment === 'card' ? 'Prepaid / Cards' : esc(o.payment));
+      const paymentDisplay = o.payment === 'upi' ? 'UPI Payment' : (o.payment === 'cod' ? 'Cash on Delivery' : (o.payment === 'card' ? 'Prepaid / Cards' : esc(o.payment)));
       // Assume all orders recorded have a 'Success' payment status for now
       const statusDisplay = o.status.toLowerCase() === 'cancelled' ? 'Refunded' : 'Success';
       const statusClass = statusDisplay === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
@@ -1186,10 +1707,33 @@
   }
 
   function updateStats() {
-    document.getElementById('stat-total').textContent = adminProducts.length;
-    document.getElementById('stat-sarees').textContent = adminProducts.filter(p=>p.category==='sarees').length;
-    document.getElementById('stat-kurtas').textContent = adminProducts.filter(p=>p.category==='kurtas').length;
-    document.getElementById('stat-categories').textContent = categories.length;
+    const totalProdEl = document.getElementById('stat-total');
+    if (totalProdEl) totalProdEl.textContent = adminProducts.length;
+
+    // Calculate orders and revenue
+    let ordersList = [];
+    if (Array.isArray(adminOrders) && adminOrders.length > 0) {
+      ordersList = adminOrders;
+    } else {
+      try {
+        ordersList = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+      } catch(e) {}
+    }
+
+    const totalOrders = ordersList.length;
+    const totalRevenue = ordersList
+      .filter(o => (o.status || '').toLowerCase() !== 'cancelled')
+      .reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+
+    const ordersEl = document.getElementById('stat-dashboard-orders');
+    if (ordersEl) ordersEl.textContent = totalOrders;
+
+    const revEl = document.getElementById('stat-dashboard-revenue');
+    if (revEl) revEl.textContent = '₹' + Number(totalRevenue).toLocaleString('en-IN');
+
+    const catEl = document.getElementById('stat-categories');
+    if (catEl) catEl.textContent = categories.length;
+
     document.querySelectorAll('.product-count-badge').forEach(el => el.textContent = adminProducts.length + ' products');
   }
 
@@ -1214,10 +1758,11 @@
     }
   }
 
-  function handleLogout() {
-    sessionStorage.removeItem('raga_admin_auth');
-    sessionStorage.removeItem('raga_admin_user');
-    window.location.href = 'admin-login.html?logout=true';
+  async function handleLogout() {
+    try {
+      await fetch('api/logout.php');
+    } catch(e) {}
+    window.location.href = 'index.php';
   }
 
   function toggleSidebar() {
@@ -1234,15 +1779,199 @@
     }
   }
 
+  // ═══════════════════════════════════════
+  // ── MESSAGES / INQUIRIES MANAGEMENT ──
+  // ═══════════════════════════════════════
+  let adminMessages = [];
+  let currentViewingMsgId = null;
+
+  async function loadMessages() {
+    try {
+      const res = await fetch('api/get_messages.php');
+      if (res.ok) {
+        const dbMsgs = await res.json();
+        if (Array.isArray(dbMsgs)) {
+          adminMessages = dbMsgs;
+          try { localStorage.setItem('raga_messages', JSON.stringify(dbMsgs)); } catch(e){}
+        }
+      }
+    } catch(e) {
+      console.warn('Could not fetch messages from server API, using local cache:', e);
+      try {
+        adminMessages = JSON.parse(localStorage.getItem('raga_messages') || '[]');
+      } catch(ign){}
+    }
+  }
+
+  function renderMessages() {
+    const tbody = document.getElementById('messages-tbody');
+    const empty = document.getElementById('messages-table-empty');
+    if (!tbody || !empty) return;
+
+    let filtered = [...adminMessages];
+
+    const searchVal = (document.getElementById('messages-search')?.value || '').toLowerCase().trim();
+    const dateVal = document.getElementById('messages-date-filter')?.value || '';
+
+    if (searchVal) {
+      filtered = filtered.filter(m => 
+        (m.name && m.name.toLowerCase().includes(searchVal)) ||
+        (m.phone && m.phone.toLowerCase().includes(searchVal)) ||
+        (m.email && m.email.toLowerCase().includes(searchVal)) ||
+        (m.subject && m.subject.toLowerCase().includes(searchVal)) ||
+        (m.message && m.message.toLowerCase().includes(searchVal))
+      );
+    }
+
+    if (dateVal) {
+      filtered = filtered.filter(m => {
+        if (!m.created_at) return false;
+        const d = new Date(m.created_at);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}` === dateVal;
+      });
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '';
+      empty.classList.remove('hidden');
+      return;
+    }
+
+    empty.classList.add('hidden');
+
+    tbody.innerHTML = filtered.map((m, index) => {
+      const snippet = m.message ? (m.message.length > 55 ? m.message.substring(0, 55) + '…' : m.message) : '—';
+      
+      return `
+        <tr class="border-b border-brand-gold/10 last:border-0 hover:bg-brand-cream/15 transition-colors">
+          <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold">${index + 1}</td>
+          <td class="p-4">
+            <div class="font-bold text-sm text-brand-burgundy">${esc(m.name)}</div>
+            ${m.phone ? `<a href="tel:${esc(m.phone)}" class="text-xs text-gray-500 hover:text-brand-gold">${esc(m.phone)}</a>` : '<span class="text-xs text-gray-400">No phone</span>'}
+          </td>
+          <td class="p-4 text-xs text-gray-600">
+            ${m.email ? `<a href="mailto:${esc(m.email)}" class="hover:text-brand-burgundy hover:underline">${esc(m.email)}</a>` : '<span class="text-gray-400">—</span>'}
+          </td>
+          <td class="p-4 text-xs font-semibold text-brand-charcoal">${esc(m.subject || 'General Inquiry')}</td>
+          <td class="p-4 text-xs text-gray-600 max-w-xs truncate cursor-pointer hover:text-brand-burgundy" onclick="viewMessageDetails(${m.id})" title="${esc(m.message)}">
+            ${esc(snippet)}
+          </td>
+          <td class="p-4 text-xs text-gray-500 whitespace-nowrap">${m.created_at ? new Date(m.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : '—'}</td>
+          <td class="p-4">
+            <div class="flex items-center gap-3">
+              <button class="text-brand-burgundy text-xs hover:underline font-bold" onclick="viewMessageDetails(${m.id})">View</button>
+              <button class="text-red-500 text-xs hover:underline font-semibold" onclick="deleteMessage(${m.id}, event)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function viewMessageDetails(id) {
+    const msg = adminMessages.find(m => String(m.id) === String(id));
+    if (!msg) return;
+
+    currentViewingMsgId = msg.id;
+
+    document.getElementById('msg-detail-name').textContent = msg.name || '—';
+    document.getElementById('msg-detail-date').textContent = msg.created_at ? new Date(msg.created_at).toLocaleString() : '—';
+    document.getElementById('msg-detail-phone').textContent = msg.phone || 'Not provided';
+    document.getElementById('msg-detail-email').textContent = msg.email || 'Not provided';
+    document.getElementById('msg-detail-subject').textContent = msg.subject || 'General Inquiry';
+    document.getElementById('msg-detail-body').textContent = msg.message || '—';
+
+    // Action links
+    const cleanPhone = (msg.phone || '').replace(/[^0-9]/g, '');
+    const waBtn = document.getElementById('msg-whatsapp-btn');
+    if (waBtn) {
+      if (cleanPhone) {
+        waBtn.href = `https://wa.me/${cleanPhone}?text=${encodeURIComponent('Hello ' + (msg.name || '') + ', greetings from Raga Boutique regarding your inquiry on ' + (msg.subject || 'our collection') + '.')}`;
+        waBtn.style.display = 'inline-flex';
+      } else {
+        waBtn.style.display = 'none';
+      }
+    }
+
+    const emailBtn = document.getElementById('msg-email-btn');
+    if (emailBtn) {
+      if (msg.email) {
+        emailBtn.href = `mailto:${msg.email}?subject=${encodeURIComponent('Re: ' + (msg.subject || 'Inquiry at Raga Boutique'))}&body=${encodeURIComponent('Dear ' + (msg.name || '') + ',\n\nThank you for reaching out to Raga Boutique.\n\n')}`;
+        emailBtn.style.display = 'inline-flex';
+      } else {
+        emailBtn.style.display = 'none';
+      }
+    }
+
+    openModal('modal-view-message');
+  }
+
+  async function deleteMessage(id, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (!confirm('Are you sure you want to delete this message?')) return;
+
+    adminMessages = adminMessages.filter(m => String(m.id) !== String(id));
+    try {
+      localStorage.setItem('raga_messages', JSON.stringify(adminMessages));
+    } catch(e){}
+
+    renderMessages();
+    if (currentViewingMsgId === id) {
+      closeModal('modal-view-message');
+    }
+
+    try {
+      await fetch('api/delete_message.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+    } catch(e) {
+      console.warn('Could not delete message on server:', e);
+    }
+  }
+
   // ── Init ──
-  window.addEventListener('DOMContentLoaded', () => {
+  async function initAdminApp() {
+    try {
+      const cRes = await fetch('api/get_categories.php');
+      if (cRes.ok) {
+        categories = await cRes.json();
+        saveCategories();
+      }
+    } catch(e) { console.error('Failed to load categories', e); }
+
+    try {
+      const pRes = await fetch('api/get_products.php');
+      if (pRes.ok) adminProducts = await pRes.json();
+    } catch(e) { console.error('Failed to load products', e); }
+    
+    try {
+      const oRes = await fetch('api/get_orders.php');
+      if (oRes.ok) adminOrders = await oRes.json();
+    } catch(e) { console.error('Failed to load orders', e); }
+
+    await loadMessages();
+    
     populateCategoryDropdowns();
     updateStats();
     renderTable(adminProducts);
     renderCategoryGrid();
     renderOrders();
     renderTransactions();
-  });
+    renderMessages();
+    
+    const initialView = window.location.hash ? window.location.hash.substring(1) : 'dashboard';
+    switchView(initialView);
+  }
+  
+  initAdminApp();
 </script>
 </body>
 </html>

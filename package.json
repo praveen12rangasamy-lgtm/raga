@@ -2,10 +2,12 @@
   "name": "raga-boutique",
   "version": "1.0.0",
   "description": "Raga Boutique - Handcrafted Indian Sarees, Kurtas, and Traditional Ethnic Wear",
-  "main": "index.html",
+  "main": "index.php",
   "scripts": {
-    "dev": "npx http-server -p 8080 -c-1",
-    "start": "npx http-server -p 8080 -c-1"
+    "dev": "docker-compose up -d",
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down",
+    "logs": "docker-compose logs -f web"
   },
   "keywords": [],
   "author": "",

@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body class="bg-brand-cream text-brand-charcoal min-h-screen flex flex-col">
+<body class="bg-brand-cream text-brand-charcoal min-h-screen flex flex-col selection:bg-brand-gold selection:text-brand-burgundy">
 
   <!-- Global Dynamic Header -->
   <header id="global-header" class="w-full bg-white z-40"></header>
@@ -67,7 +67,7 @@
                 <p class="text-sm sm:text-base text-white/90 font-light max-w-sm fade-in">Indulge in royal handwoven
                   silks adorned with dual-tone shimmers and gold borders, hand-loomed by master artisans.</p>
                 <div class="pt-4 fade-in">
-                  <a href="sarees.html?weave=Banarasi"
+                  <a href="#collections"
                     class="inline-block bg-brand-gold hover:bg-brand-goldDark text-brand-burgundy text-xs uppercase tracking-widest font-bold py-3.5 px-8 border-b-2 border-brand-burgundy transition-all duration-300">
                     Explore Collection
                   </a>
@@ -92,7 +92,7 @@
                 <p class="text-sm sm:text-base text-white/90 font-light max-w-sm">Celebrate elegance with soft peach
                   tissue silk sarees, detailed with delicate scalloped borders.</p>
                 <div class="pt-4">
-                  <a href="sarees.html?fabric=Tissue"
+                  <a href="sarees.php?fabric=Silk"
                     class="inline-block bg-brand-gold hover:bg-brand-goldDark text-brand-burgundy text-xs uppercase tracking-widest font-bold py-3.5 px-8 border-b-2 border-brand-burgundy transition-all duration-300">
                     Discover Tissue Silk
                   </a>
@@ -138,149 +138,55 @@
       </div>
     </section>
 
-    <!-- Occasions Category Grid -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="text-center mb-12">
-        <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-2.5 block">Shop By
-          Collection</span>
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy">Curated Occasions</h2>
-        <div class="h-0.5 w-16 bg-brand-gold mx-auto mt-4"></div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        <!-- Wedding Wear -->
-        <a href="sarees.html?weave=Kanjivaram"
-          class="relative block h-96 group overflow-hidden border border-brand-gold/15 bg-brand-burgundy">
-          <img src="images/img-saree-red.jpg" alt="Bridal Weaves"
-            class="w-full h-full object-cover zoom-image opacity-90 group-hover:opacity-75">
-          <div class="absolute inset-0 bg-gradient-to-t from-brand-burgundy/90 via-brand-burgundy/15 to-transparent">
-          </div>
-          <div class="absolute bottom-6 left-6 text-white space-y-1">
-            <h3 class="font-serif text-xl font-bold text-brand-gold">Wedding Grace</h3>
-            <p class="text-xs text-white/80 uppercase tracking-widest font-medium">Bridal Kanjivarams & Banarasis</p>
-          </div>
-        </a>
-
-        <!-- Festive Celebrations -->
-        <a href="sarees.html?fabric=Silk"
-          class="relative block h-96 group overflow-hidden border border-brand-gold/15 bg-brand-burgundy">
-          <img src="images/img-saree-gold.jpg" alt="Festive Sarees"
-            class="w-full h-full object-cover zoom-image opacity-90 group-hover:opacity-75">
-          <div class="absolute inset-0 bg-gradient-to-t from-brand-burgundy/90 via-brand-burgundy/15 to-transparent">
-          </div>
-          <div class="absolute bottom-6 left-6 text-white space-y-1">
-            <h3 class="font-serif text-xl font-bold text-brand-gold">Festive Glow</h3>
-            <p class="text-xs text-white/80 uppercase tracking-widest font-medium">Tussars, Chanderis & Georgettes</p>
-          </div>
-        </a>
-
-        <!-- Casual Elegance -->
-        <a href="sarees.html?fabric=Cotton"
-          class="relative block h-96 group overflow-hidden border border-brand-gold/15 bg-brand-burgundy">
-          <img src="images/img-saree-organza.jpg" alt="Casual Cottons"
-            class="w-full h-full object-cover zoom-image opacity-90 group-hover:opacity-75">
-          <div class="absolute inset-0 bg-gradient-to-t from-brand-burgundy/90 via-brand-burgundy/15 to-transparent">
-          </div>
-          <div class="absolute bottom-6 left-6 text-white space-y-1">
-            <h3 class="font-serif text-xl font-bold text-brand-gold">Casual Drapes</h3>
-            <p class="text-xs text-white/80 uppercase tracking-widest font-medium">Handloom Cottons & Mulmuls</p>
-          </div>
-        </a>
-
-        <!-- Kurta Sets -->
-        <a href="kurtas.html"
-          class="relative block h-96 group overflow-hidden border border-brand-gold/15 bg-brand-burgundy">
-          <img src="images/img-kurta-anarkali.jpg" alt="Designer Salwars"
-            class="w-full h-full object-cover zoom-image opacity-90 group-hover:opacity-75">
-          <div class="absolute inset-0 bg-gradient-to-t from-brand-burgundy/90 via-brand-burgundy/15 to-transparent">
-          </div>
-          <div class="absolute bottom-6 left-6 text-white space-y-1">
-            <h3 class="font-serif text-xl font-bold text-brand-gold">Ready to Wear</h3>
-            <p class="text-xs text-white/80 uppercase tracking-widest font-medium">Designer Kurtas & Salwars</p>
-          </div>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- New Arrivals Product Carousel Section -->
-    <section class="bg-white border-t border-b border-brand-gold/10 py-16">
+    <!-- ── NEW ARRIVALS PRODUCT CAROUSEL SECTION ── -->
+    <section id="new-arrivals" class="bg-white border-b border-brand-gold/15 py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Section Header -->
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10">
+        <div class="flex items-end justify-between mb-8 sm:mb-10">
           <div>
-            <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-1.5 block">Newly Unveiled
-              Weaves</span>
-            <h2 class="font-serif text-3xl font-bold text-brand-burgundy">New Arrivals</h2>
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-1 block">Newly Unveiled Weaves</span>
+            <h2 class="font-serif text-2xl sm:text-4xl font-bold text-brand-burgundy">New Arrivals</h2>
           </div>
-          <a href="sarees.html"
-            class="text-sm font-semibold text-brand-burgundy hover:text-brand-gold flex items-center mt-3 sm:mt-0 transition duration-200">
-            View All Products
-            <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <a href="sarees.php"
+            class="text-xs sm:text-sm font-semibold text-brand-burgundy hover:text-brand-gold flex items-center whitespace-nowrap transition duration-200 ml-2">
+            <span>View All Products</span>
+            <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </a>
         </div>
 
         <!-- Product Cards Grid/Carousel Container -->
-        <div class="relative overflow-x-auto no-scrollbar pb-6 flex space-x-6" id="new-arrivals-carousel">
+        <div class="relative overflow-x-auto no-scrollbar pb-6 flex space-x-4 sm:space-x-6 snap-x snap-mandatory" id="new-arrivals-carousel">
           <!-- Populated Dynamically via products.js -->
         </div>
 
       </div>
     </section>
 
-    <!-- Shop The Look Section (Matching screenshots) -->
+    <!-- Shop The Look Section -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center mb-10">
+        <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-1.5 block">Visual Drapes</span>
         <h2 class="font-serif text-3xl font-bold text-brand-burgundy uppercase tracking-wider">Shop The Look</h2>
         <div class="h-0.5 w-16 bg-brand-gold mx-auto mt-4"></div>
       </div>
 
-      <!-- Grid of 5 vertical cards -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <!-- Grid of 4 vertical cards (Unique Looks) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
 
-        <!-- Card 1 (saree-06) -->
+        <!-- Card 1 (saree-01) -->
         <div
           class="relative group cursor-pointer overflow-hidden border border-brand-gold/15 shadow-sm rounded-lg stl-card"
-          onclick="openShopTheLook('saree-06', 'videos/look-1.mp4')" onmouseenter="this.querySelector('video').play()"
-          onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
+          onclick="openShopTheLook('saree-01', 'videos/look-2.mp4')" onmouseenter="playHoverVideo(this)"
+          onmouseleave="pauseHoverVideo(this)">
           <div class="aspect-[2/3] overflow-hidden bg-brand-cream/10 relative">
-            <img src="images/img-saree-banarasi.jpg" alt="Shop the Look 1"
-              class="w-full h-full object-cover zoom-image absolute inset-0 group-hover:opacity-0 transition-opacity duration-300">
-            <video src="videos/look-1.mp4"
-              class="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 stl-video-zoom transition-opacity duration-300"
-              loop muted playsinline></video>
-            <!-- Play mask overlay -->
-            <div
-              class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition duration-300 z-10">
-              <div
-                class="bg-white/95 text-brand-burgundy p-3 rounded-full shadow-lg transform group-hover:scale-110 transition duration-300 stl-play-btn">
-                <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-            </div>
-            <!-- Small round thumbnail -->
-            <div class="absolute bottom-3 left-3 bg-white p-0.5 rounded-full border border-brand-gold/25 shadow z-10">
-              <img src="images/img-saree-banarasi.jpg" alt="thumb" class="h-10 w-10 rounded-full object-cover">
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2 (saree-01) -->
-        <div
-          class="relative group cursor-pointer overflow-hidden border border-brand-gold/15 shadow-sm rounded-lg stl-card"
-          onclick="openShopTheLook('saree-01', 'videos/look-2.mp4')" onmouseenter="this.querySelector('video').play()"
-          onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
-          <div class="aspect-[2/3] overflow-hidden bg-brand-cream/10 relative">
-            <img src="images/img-saree-red.jpg" alt="Shop the Look 2"
+            <img src="images/img-saree-red.jpg" alt="Shop the Look 1"
               class="w-full h-full object-cover zoom-image absolute inset-0 group-hover:opacity-0 transition-opacity duration-300">
             <video src="videos/look-2.mp4"
               class="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 stl-video-zoom transition-opacity duration-300"
-              loop muted playsinline></video>
+              loop muted playsinline preload="metadata"></video>
             <div
               class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition duration-300 z-10">
               <div
@@ -296,17 +202,17 @@
           </div>
         </div>
 
-        <!-- Card 3 (saree-02) -->
+        <!-- Card 2 (saree-02) -->
         <div
           class="relative group cursor-pointer overflow-hidden border border-brand-gold/15 shadow-sm rounded-lg stl-card"
-          onclick="openShopTheLook('saree-02', 'videos/look-3.mp4')" onmouseenter="this.querySelector('video').play()"
-          onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
+          onclick="openShopTheLook('saree-02', 'videos/look-3.mp4')" onmouseenter="playHoverVideo(this)"
+          onmouseleave="pauseHoverVideo(this)">
           <div class="aspect-[2/3] overflow-hidden bg-brand-cream/10 relative">
-            <img src="images/img-saree-gold.jpg" alt="Shop the Look 3"
+            <img src="images/img-saree-gold.jpg" alt="Shop the Look 2"
               class="w-full h-full object-cover zoom-image absolute inset-0 group-hover:opacity-0 transition-opacity duration-300">
             <video src="videos/look-3.mp4"
               class="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 stl-video-zoom transition-opacity duration-300"
-              loop muted playsinline></video>
+              loop muted playsinline preload="metadata"></video>
             <div
               class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition duration-300 z-10">
               <div
@@ -322,17 +228,17 @@
           </div>
         </div>
 
-        <!-- Card 4 (saree-03) -->
+        <!-- Card 3 (saree-03) -->
         <div
           class="relative group cursor-pointer overflow-hidden border border-brand-gold/15 shadow-sm rounded-lg stl-card"
-          onclick="openShopTheLook('saree-03', 'videos/look-4.mp4')" onmouseenter="this.querySelector('video').play()"
-          onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
+          onclick="openShopTheLook('saree-03', 'videos/look-4.mp4')" onmouseenter="playHoverVideo(this)"
+          onmouseleave="pauseHoverVideo(this)">
           <div class="aspect-[2/3] overflow-hidden bg-brand-cream/10 relative">
-            <img src="images/img-saree-organza.jpg" alt="Shop the Look 4"
+            <img src="images/img-saree-organza.jpg" alt="Shop the Look 3"
               class="w-full h-full object-cover zoom-image absolute inset-0 group-hover:opacity-0 transition-opacity duration-300">
             <video src="videos/look-4.mp4"
               class="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 stl-video-zoom transition-opacity duration-300"
-              loop muted playsinline></video>
+              loop muted playsinline preload="metadata"></video>
             <div
               class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition duration-300 z-10">
               <div
@@ -348,17 +254,17 @@
           </div>
         </div>
 
-        <!-- Card 5 (saree-05) -->
+        <!-- Card 4 (saree-05) -->
         <div
           class="relative group cursor-pointer overflow-hidden border border-brand-gold/15 shadow-sm rounded-lg stl-card"
-          onclick="openShopTheLook('saree-05', 'videos/look-5.mp4')" onmouseenter="this.querySelector('video').play()"
-          onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;">
+          onclick="openShopTheLook('saree-05', 'videos/look-5.mp4')" onmouseenter="playHoverVideo(this)"
+          onmouseleave="pauseHoverVideo(this)">
           <div class="aspect-[2/3] overflow-hidden bg-brand-cream/10 relative">
-            <img src="images/img-saree-tussar.jpg" alt="Shop the Look 5"
+            <img src="images/img-saree-tussar.jpg" alt="Shop the Look 4"
               class="w-full h-full object-cover zoom-image absolute inset-0 group-hover:opacity-0 transition-opacity duration-300">
             <video src="videos/look-5.mp4"
               class="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 stl-video-zoom transition-opacity duration-300"
-              loop muted playsinline></video>
+              loop muted playsinline preload="metadata"></video>
             <div
               class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition duration-300 z-10">
               <div
@@ -377,90 +283,136 @@
       </div>
     </section>
 
-    <!-- Brand Story/Heritage Block -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div class="relative h-[450px] sm:h-[550px] border border-brand-gold/20 p-3 bg-white">
-          <img src="images/img-saree-tussar.jpg" alt="Weaving loom details" class="w-full h-full object-cover">
-          <div
-            class="absolute bottom-8 right-8 bg-brand-burgundy text-white p-6 border-l-4 border-brand-gold max-w-[240px]">
-            <h4 class="font-serif text-lg font-bold text-brand-gold mb-1">Pure Mulberry Silk</h4>
-            <p class="text-xs text-white/80 leading-relaxed font-light">Every thread of silk in our collection is Silk
-              Mark certified for purity.</p>
+    <!-- ── ABOUT US / HERITAGE SECTION ── -->
+    <section id="about" class="relative py-20 bg-brand-cream border-t border-b border-brand-gold/20 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Section Side Heading -->
+        <div class="mb-10">
+          <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-1.5 block">Our Story & Heritage</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy">About Us</h2>
+        </div>
+
+        <!-- Header Banner with Rich Purple Gradient -->
+        <div class="bg-gradient-to-r from-[#4a1236] via-brand-burgundy to-[#3b0e2b] text-white p-8 sm:p-12 rounded-xl shadow-2xl mb-16 border border-brand-gold/30 relative overflow-hidden">
+          <div class="relative z-10 max-w-3xl">
+            <span class="text-xs uppercase tracking-[0.3em] text-brand-gold font-bold mb-2 block">Our Heritage & Craftsmanship</span>
+            <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">Woven in Heritage,<br>Worn in Grace.</h2>
+            <div class="h-0.5 w-20 bg-brand-gold mb-6"></div>
+            <p class="text-sm sm:text-base text-white/90 font-light leading-relaxed">
+              At Raga Boutique, we celebrate the eternal elegance of Indian handlooms. Each drape tells a story of centuries-old craftsmanship, brought to life for the modern connoisseur.
+            </p>
+          </div>
+          <!-- Decorative stamp watermark -->
+          <div class="absolute -bottom-8 -right-8 w-52 h-52 opacity-10 text-brand-gold border-8 border-current rounded-full flex items-center justify-center font-serif text-4xl font-bold pointer-events-none select-none">
+            RAGA
           </div>
         </div>
-        <div class="space-y-6">
-          <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold block">100% Authentic
-            Handlooms</span>
-          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy leading-tight">Woven in Heritage,
-            Crafting Legacies</h2>
-          <p class="text-sm text-brand-charcoal/80 leading-relaxed">
-            At Raga Boutique, we celebrate the master artisans of India. Our handloom collections represent months of hard
-            work, ancestral weaving patterns, and authentic certification marks like the Silk Mark and Handloom Mark.
-          </p>
-          <div class="grid grid-cols-2 gap-6 pt-4">
-            <div class="flex items-start">
-              <span class="text-brand-gold text-lg mr-3">✦</span>
-              <div>
-                <h4 class="font-serif font-bold text-brand-burgundy mb-1">Banarasi Zari</h4>
-                <p class="text-xs text-gray-500">Fine hand-loomed brocades from the ghats of Varanasi.</p>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-brand-gold text-lg mr-3">✦</span>
-              <div>
-                <h4 class="font-serif font-bold text-brand-burgundy mb-1">Kanjivaram Silk</h4>
-                <p class="text-xs text-gray-500">Double warp Mulberry silks handwoven in Tamil Nadu.</p>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-brand-gold text-lg mr-3">✦</span>
-              <div>
-                <h4 class="font-serif font-bold text-brand-burgundy mb-1">Chanderi Weaves</h4>
-                <p class="text-xs text-gray-500">Sheer cotton-silks decorated with gold coin buttas.</p>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-brand-gold text-lg mr-3">✦</span>
-              <div>
-                <h4 class="font-serif font-bold text-brand-burgundy mb-1">Jamdani Art</h4>
-                <p class="text-xs text-gray-500">Inlaid muslin floral motifs from weavers of Bengal.</p>
+
+        <!-- Story & Pillars Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+          <div class="relative group">
+            <div class="absolute -inset-3 bg-brand-burgundy/10 rounded-xl transform rotate-1 transition duration-500 group-hover:rotate-0"></div>
+            <div class="relative h-[420px] sm:h-[500px] rounded-lg overflow-hidden border border-brand-gold/20 shadow-md">
+              <img src="images/img-saree-tussar.jpg" alt="Weaving Loom Artistry" class="w-full h-full object-cover">
+              <div class="absolute bottom-6 left-6 right-6 bg-brand-burgundy/95 backdrop-blur-sm text-white p-5 border-l-4 border-brand-gold shadow-lg rounded-sm">
+                <span class="text-brand-gold text-[10px] uppercase tracking-widest font-bold block mb-1">Authenticity Guaranteed</span>
+                <p class="text-xs text-white/90 leading-relaxed font-light">Every silk saree in our boutique is Silk Mark Certified for 100% pure Mulberry silk.</p>
               </div>
             </div>
           </div>
-          <div class="pt-4">
-            <a href="sarees.html"
-              class="inline-block bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3.5 px-8 border-b-2 border-brand-gold transition duration-300">
-              Read Our Saree Story
-            </a>
+
+          <div class="space-y-6">
+            <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold block">Preserving Ancient Looms</span>
+            <h3 class="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy leading-tight">A Legacy of Threads & Master Artisans</h3>
+            <p class="text-sm text-brand-charcoal/80 leading-relaxed">
+              Founded with a passion for preserving the rich textile heritage of India, Raga Boutique travels across the country to bring you the finest, most authentic weaves. From the royal looms of Kanchipuram to the delicate artistry of Banaras, we curate collections that honor traditional weavers while appealing to contemporary aesthetics.
+            </p>
+            <p class="text-sm text-brand-charcoal/80 leading-relaxed">
+              We believe that a saree is not just a garment; it is an heirloom. It represents patience, artistry, and the soul of the artisan who spent weeks meticulously bringing a vision to life.
+            </p>
+
+            <!-- Key Stats -->
+            <div class="grid grid-cols-3 gap-4 border-t border-brand-gold/20 pt-6">
+              <div class="bg-white p-4 rounded-lg border border-brand-gold/20 text-center shadow-sm">
+                <h4 class="font-serif text-2xl font-bold text-brand-burgundy">100%</h4>
+                <p class="text-[10px] uppercase tracking-wider text-brand-charcoal/70 font-semibold mt-1">Authentic Handloom</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg border border-brand-gold/20 text-center shadow-sm">
+                <h4 class="font-serif text-2xl font-bold text-brand-burgundy">50+</h4>
+                <p class="text-[10px] uppercase tracking-wider text-brand-charcoal/70 font-semibold mt-1">Weaving Clusters</p>
+              </div>
+              <div class="bg-white p-4 rounded-lg border border-brand-gold/20 text-center shadow-sm">
+                <h4 class="font-serif text-2xl font-bold text-brand-burgundy">1,200+</h4>
+                <p class="text-[10px] uppercase tracking-wider text-brand-charcoal/70 font-semibold mt-1">Master Artisans</p>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- The 3 Raga Promises -->
+        <div class="mt-8 text-center">
+          <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-2 block">Our Commitment To You</span>
+          <h3 class="font-serif text-2xl sm:text-3xl font-bold text-brand-burgundy mb-10">The Raga Promise</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <div class="bg-white p-8 rounded-lg border border-brand-gold/20 shadow-sm hover:shadow-md transition duration-300">
+              <div class="w-12 h-12 rounded-full bg-brand-burgundy/10 text-brand-burgundy flex items-center justify-center mb-5">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <h4 class="font-serif text-lg font-bold text-brand-burgundy mb-2">Silk Mark Certified</h4>
+              <p class="text-xs text-brand-charcoal/80 leading-relaxed">Every silk saree comes with a Silk Mark certification, guaranteeing 100% pure silk and genuine weaving quality.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg border border-brand-gold/20 shadow-sm hover:shadow-md transition duration-300">
+              <div class="w-12 h-12 rounded-full bg-brand-burgundy/10 text-brand-burgundy flex items-center justify-center mb-5">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <h4 class="font-serif text-lg font-bold text-brand-burgundy mb-2">Empowering Artisans</h4>
+              <p class="text-xs text-brand-charcoal/80 leading-relaxed">We work directly with weaving clusters across India, cutting out middlemen to ensure fair wages and sustainable livelihoods.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg border border-brand-gold/20 shadow-sm hover:shadow-md transition duration-300">
+              <div class="w-12 h-12 rounded-full bg-brand-burgundy/10 text-brand-burgundy flex items-center justify-center mb-5">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </div>
+              <h4 class="font-serif text-lg font-bold text-brand-burgundy mb-2">Handpicked Elegance</h4>
+              <p class="text-xs text-brand-charcoal/80 leading-relaxed">Every piece in our boutique is personally selected for its exceptional drape, authentic color palette, and artisanal beauty.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- Customer Favourites Section -->
-    <section class="bg-white border-t border-b border-brand-gold/10 py-16">
+    <!-- Customer Favourites Section (Below The Raga Promise) -->
+    <section id="customer-favourites" class="bg-white border-t border-b border-brand-gold/10 py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-2.5 block">Most Liked
-            Drapes</span>
+          <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-2.5 block">Most Liked Drapes</span>
           <h2 class="font-serif text-3xl font-bold text-brand-burgundy">Customer Favourites</h2>
           <div class="h-0.5 w-16 bg-brand-gold mx-auto mt-4"></div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="favorites-grid">
-          <!-- Populated Dynamically via products.js -->
+        <div class="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto sm:overflow-x-visible no-scrollbar pb-4 sm:pb-0 snap-x snap-mandatory sm:snap-none" id="favorites-grid">
+          <!-- Populated Dynamically via orders -->
         </div>
       </div>
     </section>
 
-    <!-- Testimonials Section (Matching Taneira screenshots) -->
+    <!-- Testimonials Section -->
     <section class="bg-brand-cream/20 py-16 border-t border-b border-brand-gold/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
 
         <!-- Large Quotation Icon -->
         <div class="text-[#702152]/25 font-serif text-8xl leading-[0.1] select-none mb-4">“</div>
-        <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-2 block">TESTIMONIAL</span>
+        <span class="text-xs uppercase tracking-[0.25em] text-brand-gold font-bold mb-2 block">TESTIMONIALS</span>
         <h2 class="font-serif text-3xl font-bold text-brand-charcoal mb-8">Speaking from their hearts</h2>
 
         <!-- Grid layout for reviews -->
@@ -522,48 +474,54 @@
 
         </div>
 
-        <a href="#"
+        <a href="#collections"
           class="inline-block bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3.5 px-8 rounded-full border-b border-brand-gold transition duration-300">
-          View All Reviews
+          Explore All Weaves
         </a>
       </div>
     </section>
 
     <!-- SEO / Info Accordion Block -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-brand-gold/10">
-      <div class="border border-brand-gold/20 bg-white">
+      <div class="border border-brand-gold/20 bg-white rounded-lg overflow-hidden">
 
         <!-- Accordion Header -->
         <button onclick="toggleAccordion('seo-content')"
-          class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
+          class="w-full flex items-center justify-between p-6 text-left focus:outline-none bg-brand-cream/30">
           <h3 class="font-serif text-lg font-bold text-brand-burgundy uppercase tracking-wider">Raga Boutique: Woven in
             Heritage, Worn in Grace</h3>
           <span id="accordion-icon" class="text-brand-gold text-xl font-bold transition-transform duration-300">+</span>
         </button>
 
-        <!-- Accordion Content -->
-        <div id="seo-content" class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-          <div
-            class="p-6 border-t border-brand-gold/10 text-xs sm:text-sm text-brand-charcoal/80 space-y-4 leading-relaxed bg-brand-cream/10">
-            <p>
-              Welcome to <strong>Raga Boutique</strong>, your premium destination for authentic Indian handloom sarees and
-              designer ethnic wear. Backed by traditional weaving heritage and the fine art of Indian handlooms, we host
-              an unmatched selection of silk, cotton, linen, organza, and tussar products.
-            </p>
-            <h4 class="font-serif font-bold text-brand-burgundy uppercase tracking-wider text-xs">Exquisite Saree
-              Collections Online</h4>
-            <p>
-              Explore our heavy Kanjivaram and Banarasi wedding sarees, casual linen block prints, lightweight mulmul
-              cottons, and tissue silk sarees. Every drape carries a certificate of authenticity (Silk Mark and Handloom
-              Mark) to assure premium quality and raw purity.
-            </p>
-            <h4 class="font-serif font-bold text-brand-burgundy uppercase tracking-wider text-xs">Designer Kurtas & Suit
-              Sets</h4>
-            <p>
-              Raga Boutique offers a premium range of ethnic wear for women. Browse hand-embroidered Anarkalis, cotton A-Line
-              printed suits, pastel Chanderi straight kurtas, and indigo block-printed short kurtis. Perfect for office
-              wear, casual daytime events, and festive dinner gatherings.
-            </p>
+        <!-- Accordion Body -->
+        <div id="seo-content" class="p-6 border-t border-brand-gold/20 hidden bg-brand-cream/10">
+          <p class="text-xs text-brand-charcoal/80 leading-relaxed mb-4">
+            Founded with a vision to sustain India's priceless handloom traditions, Raga Boutique stands at the
+            intersection of classical weaving heritage and contemporary luxury. Our collections are ethically sourced
+            directly from master artisans across Banaras, Kanchipuram, Chanderi, and Bengal.
+          </p>
+          <p class="text-xs text-brand-charcoal/80 leading-relaxed mb-4">
+            From the auspicious zari of Kanjivaram silks to the ethereal feather-weight feel of Bengal Jamdani and
+            hand-block printed Chanderis, every saree is Silk Mark certified and crafted to be an heirloom passed down
+            through generations.
+          </p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-brand-gold/15 text-center">
+            <div>
+              <div class="font-serif text-xl font-bold text-brand-burgundy">100%</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wider">Pure Silk</div>
+            </div>
+            <div>
+              <div class="font-serif text-xl font-bold text-brand-burgundy">500+</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wider">Weavers Empowered</div>
+            </div>
+            <div>
+              <div class="font-serif text-xl font-bold text-brand-burgundy">10,000+</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wider">Drapes Delivered</div>
+            </div>
+            <div>
+              <div class="font-serif text-xl font-bold text-brand-burgundy">4.9 ★</div>
+              <div class="text-[10px] text-gray-500 uppercase tracking-wider">Customer Rating</div>
+            </div>
           </div>
         </div>
 
@@ -572,7 +530,7 @@
 
   </main>
 
-  <!-- Global Dynamic Footer -->
+  <!-- Dynamic Footer Component -->
   <div id="global-footer"></div>
 
   <!-- Javascript Modules -->
@@ -631,102 +589,141 @@
       const icon = document.getElementById("accordion-icon");
       if (!content) return;
 
-      if (content.style.maxHeight && content.style.maxHeight !== "0px") {
-        content.style.maxHeight = "0px";
-        icon.textContent = "+";
-        icon.style.transform = "rotate(0deg)";
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+      if (content.classList.contains("hidden")) {
+        content.classList.remove("hidden");
         icon.textContent = "-";
-        icon.style.transform = "rotate(180deg)";
+      } else {
+        content.classList.add("hidden");
+        icon.textContent = "+";
       }
     }
 
-    // 3. Dynamically populate Product Collections
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof ProductsDB !== "undefined") {
-        renderNewArrivals();
-        renderCustomerFavourites();
-      }
-    });
+    // Homepage Product Fetching & Rendering Script
+    function initHomepageProducts() {
+      renderNewArrivals();
+      renderCustomerFavourites();
+    }
+
+    document.addEventListener("DOMContentLoaded", initHomepageProducts);
+    document.addEventListener("ragaProductsLoaded", initHomepageProducts);
+    window.addEventListener("ragaProductsLoaded", initHomepageProducts);
+    document.addEventListener("ragaLikesUpdated", renderNewArrivals);
+    window.addEventListener("ragaLikesUpdated", renderNewArrivals);
+
+    if (typeof ProductsDB !== "undefined" && ProductsDB.getAll().length > 0) {
+      initHomepageProducts();
+    }
 
     function renderNewArrivals() {
       const carousel = document.getElementById("new-arrivals-carousel");
-      if (!carousel) return;
+      if (!carousel || typeof ProductsDB === "undefined") return;
 
-      const newArrivals = ProductsDB.getAll().slice(0, 6);
-      let html = "";
+      const prods = ProductsDB.getLikedProducts();
 
-      newArrivals.forEach(product => {
-        html += createProductCardHTML(product);
-      });
-
-      carousel.innerHTML = html;
-      document.dispatchEvent(new CustomEvent("wishlistButtonsSync"));
+      if (prods && prods.length > 0) {
+        let html = "";
+        prods.forEach(product => {
+          html += createProductCardHTML(product);
+        });
+        carousel.innerHTML = html;
+      }
+      
+      if (typeof syncAllHeartButtons === "function") syncAllHeartButtons();
     }
 
-    function renderCustomerFavourites() {
+    async function renderCustomerFavourites() {
       const grid = document.getElementById("favorites-grid");
-      if (!grid) return;
+      if (!grid || typeof ProductsDB === "undefined") return;
 
-      const favourites = ProductsDB.getAll().slice(6, 10);
-      let html = "";
+      let orders = [];
+      try {
+        const oRes = await fetch('api/get_orders.php');
+        if (oRes.ok) {
+          orders = await oRes.json();
+          try { localStorage.setItem('raga_orders', JSON.stringify(orders)); } catch(e){}
+        }
+      } catch(e) {}
 
-      favourites.forEach(product => {
-        html += createProductCardHTML(product);
-      });
+      if (orders.length === 0) {
+        try {
+          orders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+        } catch(e){}
+      }
 
-      grid.innerHTML = html;
-      document.dispatchEvent(new CustomEvent("wishlistButtonsSync"));
+      const favourites = ProductsDB.getCustomerFavourites(orders);
+
+      if (favourites && favourites.length > 0) {
+        let html = "";
+        favourites.forEach(product => {
+          html += createProductCardHTML(product, true);
+        });
+        grid.innerHTML = html;
+      }
     }
 
     // Product Card Template Generator
-    function createProductCardHTML(product) {
-      const discountPercentage = product.originalPrice > product.price
+    function createProductCardHTML(product, isGrid = false) {
+      const discountPercentage = product.discount > 0
         ? `<span class="bg-green-700 text-white text-[9px] font-bold px-1.5 py-0.5 absolute top-2 left-2 z-10 uppercase tracking-widest">${product.discount}% OFF</span>`
         : "";
 
+      const cardClass = isGrid 
+        ? "w-[82vw] max-w-[300px] sm:w-full flex-shrink-0 sm:flex-shrink snap-start bg-white border border-brand-gold/15 group relative flex flex-col justify-between rounded shadow-sm hover:shadow-md transition duration-300 overflow-hidden"
+        : "w-[82vw] max-w-[300px] sm:w-72 flex-shrink-0 snap-start bg-white border border-brand-gold/15 group relative flex flex-col justify-between rounded shadow-sm hover:shadow-md transition duration-300 overflow-hidden";
+
       return `
-        <div class="flex-shrink-0 w-64 bg-white border border-brand-gold/10 group relative flex flex-col justify-between">
+        <div class="${cardClass}">
           <div class="relative h-80 overflow-hidden bg-brand-cream/10">
             ${discountPercentage}
-            
-            <!-- Wishlist Heart Button -->
-            <button data-wishlist-toggle="${product.id}" class="absolute top-2 right-2 z-10 p-1.5 bg-white/80 hover:bg-white text-brand-burgundy rounded-full shadow-sm hover:scale-105 transition" aria-label="Add to Wishlist">
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button>
 
             <!-- Product Images -->
-            <a href="${product.category === 'sarees' ? 'sarees.html' : 'kurtas.html'}" class="block h-full w-full">
+            <div class="h-full w-full">
               <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover zoom-image absolute inset-0">
-            </a>
+            </div>
           </div>
 
           <!-- Description / Price Block -->
-          <div class="p-4 bg-white flex-grow flex flex-col justify-between">
+          <div class="p-2.5 sm:p-4 bg-white flex-grow flex flex-col justify-between">
             <div>
-              <p class="text-[10px] text-brand-gold uppercase tracking-widest font-semibold mb-1">${product.fabric} | ${product.weave}</p>
-              <h3 class="font-serif text-sm font-semibold text-brand-charcoal line-clamp-2 hover:text-brand-burgundy transition-colors duration-200">
-                <a href="${product.category === 'sarees' ? 'sarees.html' : 'kurtas.html'}">${product.name}</a>
+              <p class="text-[9px] sm:text-[10px] text-brand-gold uppercase tracking-widest font-semibold mb-1 truncate">${product.fabric} | ${product.weave}</p>
+              <h3 class="font-serif text-xs sm:text-sm font-semibold text-brand-charcoal line-clamp-2 hover:text-brand-burgundy transition-colors duration-200 leading-tight">
+                ${product.name}
               </h3>
             </div>
             
-            <div class="flex items-center justify-between pt-3 mt-auto border-t border-brand-gold/10">
-              <div class="flex items-baseline space-x-2.5">
-                <span class="text-sm font-bold text-brand-burgundy">₹ ${product.price.toLocaleString("en-IN")}</span>
-                ${product.originalPrice > product.price ? `
-                  <span class="text-[11px] text-gray-400 line-through">₹ ${product.originalPrice.toLocaleString("en-IN")}</span>
+            <div class="flex items-center justify-between pt-2.5 sm:pt-3 mt-2.5 sm:mt-3 border-t border-brand-gold/10 gap-1.5 sm:gap-2">
+              <div class="flex flex-col min-w-0">
+                <span class="text-xs sm:text-base font-extrabold text-brand-burgundy whitespace-nowrap tracking-tight">₹ ${product.price.toLocaleString("en-IN")}</span>
+                ${(product.originalPrice > 0 && product.originalPrice !== product.price) ? `
+                  <span class="text-[9px] sm:text-xs text-gray-400 line-through whitespace-nowrap mt-0.5">₹ ${product.originalPrice.toLocaleString("en-IN")}</span>
                 ` : ""}
               </div>
-              <button onclick="addToCart('${product.id}', 1, false); window.location.href='cart.html'" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-[9px] uppercase tracking-widest font-bold py-1.5 px-3 rounded-sm shadow-sm transition duration-300">
-                Buy Now
+              <button onclick="addToCart('${product.id}', 1, true)" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-[9px] sm:text-[11px] uppercase tracking-wider font-bold py-1.5 px-2.5 sm:px-3 rounded-sm shadow-xs transition duration-300 whitespace-nowrap flex-shrink-0 ml-auto">
+                Add to Cart
               </button>
             </div>
           </div>
         </div>
       `;
+    }
+
+    // Safe video hover playback for Shop The Look
+    function playHoverVideo(card) {
+      const vid = card.querySelector('video');
+      if (vid) {
+        const p = vid.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => {});
+        }
+      }
+    }
+
+    function pauseHoverVideo(card) {
+      const vid = card.querySelector('video');
+      if (vid) {
+        vid.pause();
+        vid.currentTime = 0;
+      }
     }
   </script>
 </body>

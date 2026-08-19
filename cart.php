@@ -59,8 +59,8 @@
       </div>
       <h3 class="font-serif text-lg font-bold text-brand-burgundy mb-2">Your Shopping Bag is Empty</h3>
       <p class="text-xs text-gray-400 max-w-[280px] mb-6">You haven't added any traditional Indian weaves to your bag yet.</p>
-      <a href="sarees.html" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3.5 px-8 border-b-2 border-brand-gold transition duration-300">
-        Browse Our Collection
+      <a href="collections.php" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3.5 px-8 border-b-2 border-brand-gold transition duration-300">
+        Browse Collections
       </a>
     </div>
 
@@ -69,7 +69,16 @@
       
       <!-- Left Column: Cart Items List -->
       <div class="w-full lg:flex-1 bg-white p-6 border border-brand-gold/15 shadow-sm space-y-6">
-        <h3 class="font-serif text-lg font-bold text-brand-burgundy border-b border-brand-gold/10 pb-3">Bag Items</h3>
+        <div class="flex items-center justify-between border-b border-brand-gold/10 pb-3">
+          <div class="flex items-center space-x-2.5">
+            <button type="button" onclick="if(window.history.length > 1){ window.history.back(); } else { window.location.href='collections.php'; }" class="p-1.5 text-brand-burgundy hover:text-brand-gold transition-colors duration-200 focus:outline-none flex items-center justify-center rounded-full hover:bg-brand-cream/60" title="Go Back">
+              <svg class="h-5 w-5 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </button>
+            <h3 class="font-serif text-lg font-bold text-brand-burgundy">Bag Items</h3>
+          </div>
+        </div>
         <div id="cart-page-items-list" class="divide-y divide-brand-gold/10">
           <!-- Dynamically populated via JS -->
         </div>
@@ -94,14 +103,16 @@
               <span class="text-gray-600">GST / Taxes (Included):</span>
               <span id="summary-tax" class="font-semibold text-gray-400">Included</span>
             </div>
-            
-
+            <div id="summary-discount-row" class="hidden flex justify-between text-green-700 font-semibold">
+              <span>Discount Applied:</span>
+              <span id="summary-discount">- ₹ 0</span>
+            </div>
 
             <hr class="border-brand-gold/15 my-4">
 
             <div class="flex justify-between text-base font-bold text-brand-burgundy pt-1">
               <span>Order Total:</span>
-              <span id="summary-total">₹ 0</span>
+              <span id="summary-total" class="text-brand-burgundy">₹ 0</span>
             </div>
           </div>
         </div>
@@ -146,13 +157,17 @@
             <div class="pt-4 border-t border-brand-gold/10">
               <label class="block font-bold text-brand-burgundy uppercase mb-2">Payment Method</label>
               <div class="space-y-2">
-                <label class="flex items-center p-2.5 border border-brand-gold/10 bg-brand-cream/10 cursor-pointer">
-                  <input type="radio" name="payment" value="cod" checked class="custom-checkbox h-4 w-4 mr-2.5">
-                  <span>Cash on Delivery (COD)</span>
-                </label>
-                <label class="flex items-center p-2.5 border border-brand-gold/10 bg-brand-cream/10 cursor-pointer">
-                  <input type="radio" name="payment" value="card" class="custom-checkbox h-4 w-4 mr-2.5">
-                  <span>UPI / Credit Card / Debit Card (Simulated)</span>
+                <label class="flex items-center justify-between p-3 border-2 border-brand-burgundy bg-brand-cream/30 cursor-pointer rounded">
+                  <div class="flex items-center">
+                    <input type="radio" name="payment" value="upi" checked class="custom-checkbox h-4 w-4 mr-3 text-brand-burgundy focus:ring-brand-burgundy">
+                    <div>
+                      <span class="font-bold text-brand-burgundy text-xs block">UPI Payment (Instant & Secure)</span>
+                      <span class="text-[10px] text-gray-500 block mt-0.5">Google Pay / PhonePe / Paytm / BHIM / Cred UPI</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-1.5 bg-white px-2 py-1 border border-brand-gold/30 rounded shadow-xs">
+                    <span class="text-[11px] font-bold text-brand-burgundy tracking-wider">UPI</span>
+                  </div>
                 </label>
               </div>
             </div>
@@ -227,9 +242,19 @@
     let couponDiscountRate = 0;
     let discountAppliedVal = 0;
 
-    document.addEventListener("DOMContentLoaded", () => {
+    function initCartPage() {
+      if (typeof loadState === "function") loadState();
       renderCartPage();
-    });
+    }
+
+    document.addEventListener("DOMContentLoaded", initCartPage);
+    document.addEventListener("ragaProductsLoaded", initCartPage);
+    window.addEventListener("ragaProductsLoaded", initCartPage);
+    document.addEventListener("ragaCartUpdated", initCartPage);
+    window.addEventListener("storage", initCartPage);
+
+    // Immediate attempt
+    initCartPage();
 
     // Render cart items listing and totals
     function renderCartPage() {
@@ -237,14 +262,33 @@
       const emptyState = document.getElementById("cart-empty-state");
       const layout = document.getElementById("cart-main-layout");
       
-      if (!itemsList || !emptyState || !layout || typeof ProductsDB === "undefined") return;
+      if (!itemsList || !emptyState || !layout) return;
 
-      const cartItems = typeof cart !== "undefined" ? cart : [];
+      // Ensure state is loaded
+      let cartItems = (typeof cart !== "undefined" && Array.isArray(cart)) ? cart : [];
+      if (cartItems.length === 0) {
+        try {
+          const saved = sessionStorage.getItem("raga_cart") || localStorage.getItem("raga_cart");
+          if (saved) {
+            cartItems = JSON.parse(saved);
+            if (typeof cart !== "undefined") cart = cartItems;
+          }
+        } catch(e) {}
+      }
 
       if (cartItems.length === 0) {
         layout.classList.add("hidden");
         emptyState.classList.remove("hidden");
         return;
+      }
+
+      let allProducts = [];
+      if (typeof ProductsDB !== "undefined" && ProductsDB.getAll().length > 0) {
+        allProducts = ProductsDB.getAll();
+      } else {
+        try {
+          allProducts = JSON.parse(localStorage.getItem('raga_admin_products_v2') || '[]');
+        } catch(e) {}
       }
 
       emptyState.classList.add("hidden");
@@ -253,48 +297,108 @@
       let html = "";
       checkoutSubtotal = 0;
 
-      cartItems.forEach(item => {
-        const product = ProductsDB.getById(item.id);
-        if (!product) return;
+      const isSingle = cartItems.length === 1;
+      const countBadge = document.getElementById("cart-items-count-badge");
+      if (countBadge) {
+        countBadge.textContent = `${cartItems.length} ${cartItems.length === 1 ? 'Item' : 'Items'}`;
+      }
 
-        const sub = product.price * item.quantity;
+      // If more than 1 item, fix the height to align harmoniously with the right side summary box
+      if (isSingle) {
+        itemsList.className = "divide-y divide-brand-gold/10";
+      } else {
+        itemsList.className = "divide-y divide-brand-gold/10 max-h-[640px] overflow-y-auto pr-1.5 custom-scrollbar";
+      }
+
+      cartItems.forEach(item => {
+        let product = allProducts.find(p => String(p.id).trim() === String(item.id).trim());
+        if (!product) {
+          product = {
+            id: item.id,
+            name: item.name || 'Handcrafted Traditional Saree / Garment',
+            price: Number(item.price) || 2899,
+            image: item.image || 'images/img-saree-red.jpg',
+            fabric: item.fabric || 'Silk',
+            weave: item.weave || 'Traditional Weave'
+          };
+        }
+
+        const sub = product.price * (item.quantity || 1);
         checkoutSubtotal += sub;
 
-        html += `
-          <div class="flex flex-col sm:flex-row py-6 first:pt-0 last:pb-0 gap-6">
-            <!-- Swipeable Image Gallery Container -->
-            <div class="h-80 w-full sm:h-[450px] sm:w-[320px] flex-shrink-0 flex overflow-x-auto snap-x snap-mandatory no-scrollbar border border-brand-gold/10 relative shadow-sm">
-              <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover flex-shrink-0 snap-center">
-              ${product.hoverImage ? `<img src="${product.hoverImage}" alt="${product.name} Alternate" class="h-full w-full object-cover flex-shrink-0 snap-center">` : ''}
-              ${product.hoverImage ? `<div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur-sm rounded-full p-1.5 shadow-sm pointer-events-none">
-                <svg class="w-4 h-4 text-brand-burgundy animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>` : ''}
-            </div>
-            <div class="flex-1 flex flex-col justify-between py-1">
+        if (isSingle) {
+          // 1 Item: Prominent Full-Size Presentation
+          html += `
+            <div class="flex flex-col sm:flex-row py-6 first:pt-0 last:pb-0 gap-6">
+              <!-- Full Size Image Container -->
+              <div class="h-80 w-full sm:h-[450px] sm:w-[320px] flex-shrink-0 flex overflow-x-auto snap-x snap-mandatory no-scrollbar border border-brand-gold/10 relative shadow-sm">
+                <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover flex-shrink-0 snap-center">
+                ${product.hoverImage ? `<img src="${product.hoverImage}" alt="${product.name} Alternate" class="h-full w-full object-cover flex-shrink-0 snap-center">` : ''}
+              </div>
+              <div class="flex-1 flex flex-col justify-between py-1">
                 <div>
-                  <div class="flex justify-between items-start text-brand-charcoal mb-1">
-                    <h4 class="text-xl sm:text-2xl font-bold pr-4 hover:text-brand-burgundy transition-colors leading-tight">${product.name}</h4>
-                    <p class="text-brand-burgundy text-xl sm:text-2xl font-bold whitespace-nowrap">₹ ${(product.price * item.quantity).toLocaleString("en-IN")}</p>
+                  <div class="flex justify-between items-start text-brand-charcoal mb-1 sm:block">
+                    <h4 class="text-lg sm:text-2xl font-bold pr-2 sm:pr-0 hover:text-brand-burgundy transition-colors leading-tight">${product.name}</h4>
+                    <p class="sm:hidden text-brand-burgundy text-lg font-bold whitespace-nowrap">₹ ${(product.price * item.quantity).toLocaleString("en-IN")}</p>
                   </div>
-                  <p class="text-sm text-brand-gold uppercase tracking-widest font-semibold mt-3">${product.fabric} | ${product.weave}</p>
+                  <p class="text-xs sm:text-sm text-brand-gold uppercase tracking-widest font-semibold mt-1 sm:mt-2">${product.fabric} | ${product.weave}</p>
+                  
+                  <div class="hidden sm:block mt-3">
+                    <p class="text-brand-burgundy text-2xl font-extrabold whitespace-nowrap">₹ ${(product.price * item.quantity).toLocaleString("en-IN")}</p>
+                  </div>
                 </div>
                 <div class="flex items-center justify-between text-sm pt-5">
-                <div class="flex items-center border border-brand-gold/30 bg-brand-cream/30 text-sm">
-                  <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity - 1})" class="px-3 py-1 font-semibold text-brand-charcoal hover:bg-brand-gold/10">-</button>
-                  <span class="px-3 py-1 font-semibold text-brand-burgundy">${item.quantity}</span>
-                  <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity + 1})" class="px-3 py-1 font-semibold text-brand-charcoal hover:bg-brand-gold/10">+</button>
+                  <div class="flex items-center border border-brand-gold/30 bg-brand-cream/30 text-sm">
+                    <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity - 1})" class="px-3 py-1 font-semibold text-brand-charcoal hover:bg-brand-gold/10">-</button>
+                    <span class="px-3 py-1 font-semibold text-brand-burgundy">${item.quantity}</span>
+                    <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity + 1})" class="px-3 py-1 font-semibold text-brand-charcoal hover:bg-brand-gold/10">+</button>
+                  </div>
+                  
+                  <button type="button" onclick="removeFromCartPage('${product.id}')" class="font-semibold text-brand-burgundy/80 hover:text-brand-burgundy flex items-center">
+                    <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Remove item
+                  </button>
                 </div>
-                
-                <button type="button" onclick="removeFromCartPage('${product.id}')" class="font-semibold text-brand-burgundy/80 hover:text-brand-burgundy flex items-center">
-                  <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  Remove item
-                </button>
               </div>
             </div>
-          </div>
-        `;
+          `;
+        } else {
+          // Multiple Items: Adjustable Compact Layout matching right box height
+          html += `
+            <div class="flex flex-row py-4 first:pt-0 last:pb-0 gap-4 sm:gap-5 items-center">
+              <!-- Compact Item Image -->
+              <div class="h-28 w-24 sm:h-36 sm:w-28 flex-shrink-0 overflow-hidden border border-brand-gold/15 relative shadow-xs">
+                <img src="${product.image}" alt="${product.name}" class="h-full w-full object-cover">
+              </div>
+              <div class="flex-1 flex flex-col justify-between py-0.5 min-w-0">
+                <div>
+                  <div class="flex justify-between items-start text-brand-charcoal mb-0.5">
+                    <h4 class="text-sm sm:text-base font-bold pr-2 hover:text-brand-burgundy transition-colors leading-snug line-clamp-2">${product.name}</h4>
+                  </div>
+                  <p class="text-[11px] sm:text-xs text-brand-gold uppercase tracking-wider font-semibold truncate">${product.fabric} | ${product.weave}</p>
+                  <p class="text-brand-burgundy text-base sm:text-lg font-bold mt-1 whitespace-nowrap">₹ ${(product.price * item.quantity).toLocaleString("en-IN")}</p>
+                </div>
+
+                <div class="flex items-center justify-between text-xs pt-2.5 mt-1 border-t border-brand-gold/5">
+                  <div class="flex items-center border border-brand-gold/30 bg-brand-cream/30">
+                    <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity - 1})" class="px-2.5 py-0.5 font-semibold text-brand-charcoal hover:bg-brand-gold/10">-</button>
+                    <span class="px-2.5 py-0.5 font-semibold text-brand-burgundy">${item.quantity}</span>
+                    <button onclick="updateCartQuantityPage('${product.id}', ${item.quantity + 1})" class="px-2.5 py-0.5 font-semibold text-brand-charcoal hover:bg-brand-gold/10">+</button>
+                  </div>
+                  
+                  <button type="button" onclick="removeFromCartPage('${product.id}')" class="text-xs font-semibold text-brand-burgundy/80 hover:text-brand-burgundy flex items-center">
+                    <svg class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
       });
 
       itemsList.innerHTML = html;
@@ -309,29 +413,35 @@
       const discountField = document.getElementById("summary-discount");
       const totalField = document.getElementById("summary-total");
 
-      // Calculate shipping
-      const shippingFee = checkoutSubtotal >= 1999 ? 0 : 150;
+      // Calculate shipping (FREE on all orders or threshold >= 1999)
+      const shippingFee = (typeof checkoutSubtotal === 'number' && checkoutSubtotal > 0) ? (checkoutSubtotal >= 1999 ? 0 : 0) : 0;
       
       // Calculate discount
-      discountAppliedVal = checkoutSubtotal * couponDiscountRate;
+      discountAppliedVal = (typeof checkoutSubtotal === 'number') ? checkoutSubtotal * couponDiscountRate : 0;
       
-      const grandTotal = checkoutSubtotal + shippingFee - discountAppliedVal;
+      const grandTotal = Math.max(0, (checkoutSubtotal || 0) + shippingFee - discountAppliedVal);
 
-      if (subtotalField) subtotalField.textContent = `₹ ${checkoutSubtotal.toLocaleString("en-IN")}`;
+      if (subtotalField) {
+        subtotalField.textContent = `₹ ${(checkoutSubtotal || 0).toLocaleString("en-IN")}`;
+      }
       
       if (shippingField) {
         shippingField.textContent = shippingFee === 0 ? "FREE" : `₹ ${shippingFee}`;
         shippingField.className = shippingFee === 0 ? "font-semibold text-green-700" : "font-semibold text-brand-charcoal";
       }
 
-      if (discountAppliedVal > 0) {
-        discountRow.classList.remove("hidden");
-        discountField.textContent = `- ₹ ${discountAppliedVal.toLocaleString("en-IN")}`;
-      } else {
-        discountRow.classList.add("hidden");
+      if (discountRow && discountField) {
+        if (discountAppliedVal > 0) {
+          discountRow.classList.remove("hidden");
+          discountField.textContent = `- ₹ ${discountAppliedVal.toLocaleString("en-IN")}`;
+        } else {
+          discountRow.classList.add("hidden");
+        }
       }
 
-      if (totalField) totalField.textContent = `₹ ${grandTotal.toLocaleString("en-IN")}`;
+      if (totalField) {
+        totalField.textContent = `₹ ${grandTotal.toLocaleString("en-IN")}`;
+      }
     }
 
     // Intermediary logic wrapping cart updates
@@ -382,23 +492,35 @@
       // Populate success modal info
       const orderId = `#RAGA-${Math.floor(10000000 + Math.random() * 90000000)}`;
       document.getElementById("order-ref").textContent = orderId;
-      document.getElementById("order-name").textContent = fullName;
-      document.getElementById("order-pay").textContent = payMethod === "cod" ? "Cash on Delivery (COD)" : "Prepaid Online Card/UPI";
+      document.getElementById("order-pay").textContent = "UPI Payment";
       document.getElementById("order-amount").textContent = `₹ ${finalAmount.toLocaleString("en-IN")}`;
 
-      // Save order to localStorage for Admin Panel
+      const prodIds = (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.map(i => i.id) : [];
+      const prodNames = (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.map(i => i.name).join(', ') : '';
+
+      // Save order to database & localStorage
       const newOrder = {
         id: orderId,
         date: new Date().toISOString(),
         customer: fullName,
-        items: cart.length,
+        items: (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.length : 1,
         amount: finalAmount,
         payment: payMethod,
-        status: "Processing"
+        product_ids: prodIds,
+        product_name: prodNames
       };
-      const existingOrders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
-      existingOrders.unshift(newOrder);
-      localStorage.setItem('raga_orders', JSON.stringify(existingOrders));
+
+      try {
+        let existingOrders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+        existingOrders.unshift(newOrder);
+        localStorage.setItem('raga_orders', JSON.stringify(existingOrders));
+      } catch(e){}
+      
+      fetch('api/place_order.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newOrder)
+      }).catch(err => console.error('Failed to save order to database', err));
 
       // Open Success modal
       const modal = document.getElementById("success-modal");
@@ -419,7 +541,7 @@
       }
 
       // Redirect to home
-      window.location.href = "index.html";
+      window.location.href = "index.php";
     }
   </script>
 </body>

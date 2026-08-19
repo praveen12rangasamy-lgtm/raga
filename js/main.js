@@ -1,60 +1,114 @@
-// Raga Boutique E-Commerce Global State & Interactivity Handler
-
 // Initialize State
 let cart = [];
 let wishlist = [];
+
+// Immediate synchronous load from storage
+loadState();
 
 document.addEventListener("DOMContentLoaded", () => {
   loadState();
   updateCartBadge();
   updateWishlistBadge();
-  setupGlobalEventListeners();
 });
 
-// Load state from localStorage
+document.addEventListener("ragaProductsLoaded", () => {
+  loadState();
+  updateCartBadge();
+  updateWishlistBadge();
+  setupGlobalEventListeners();
+  handleInitialHashScroll();
+});
+
+window.addEventListener("ragaProductsLoaded", () => {
+  loadState();
+  updateCartBadge();
+  updateWishlistBadge();
+});
+
+// Smooth scroll to section with sticky header offset
+function scrollToSection(targetId) {
+  const targetEl = document.getElementById(targetId);
+  if (targetEl) {
+    const header = document.getElementById("global-header");
+    const headerHeight = header ? header.offsetHeight : 88;
+    const elementPosition = targetEl.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerHeight + 2;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+  }
+}
+
+// Scroll to hash section on load if present
+function handleInitialHashScroll() {
+  if (window.location.hash) {
+    const targetId = window.location.hash.substring(1);
+    setTimeout(() => {
+      scrollToSection(targetId);
+    }, 250);
+  }
+}
+
+// Load state from sessionStorage / localStorage
 function loadState() {
   try {
-    const savedCart = localStorage.getItem("raga_cart");
-    const savedWishlist = localStorage.getItem("raga_wishlist");
+    const savedCart = sessionStorage.getItem("raga_cart") || localStorage.getItem("raga_cart");
+    const savedWishlist = sessionStorage.getItem("raga_wishlist") || localStorage.getItem("raga_wishlist");
     
     if (savedCart) cart = JSON.parse(savedCart);
     if (savedWishlist) wishlist = JSON.parse(savedWishlist);
   } catch (e) {
-    console.error("Error loading localStorage state:", e);
+    console.error("Error loading cart/wishlist state:", e);
   }
 }
 
-// Save state to localStorage
+// Save state to sessionStorage & localStorage
 function saveCart() {
-  localStorage.setItem("raga_cart", JSON.stringify(cart));
+  try {
+    const cartJSON = JSON.stringify(cart);
+    sessionStorage.setItem("raga_cart", cartJSON);
+    localStorage.setItem("raga_cart", cartJSON);
+  } catch(e) {}
   updateCartBadge();
   updateCartUI();
+  document.dispatchEvent(new CustomEvent("ragaCartUpdated", { detail: { cart } }));
 }
 
-// Save wishlist to localStorage
+// Save wishlist to sessionStorage & localStorage
 function saveWishlist() {
-  localStorage.setItem("raga_wishlist", JSON.stringify(wishlist));
+  try {
+    const wishJSON = JSON.stringify(wishlist);
+    sessionStorage.setItem("raga_wishlist", wishJSON);
+    localStorage.setItem("raga_wishlist", wishJSON);
+  } catch(e) {}
   updateWishlistBadge();
   updateWishlistButtonsState();
 }
 
-// Badge counters update
+// Badge counters update (Desktop & Mobile)
 function updateCartBadge() {
-  const badge = document.getElementById("cart-badge");
-  if (!badge) return;
+  const badges = [
+    document.getElementById("cart-badge"),
+    document.getElementById("mobile-cart-badge")
+  ];
   
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-  if (totalItems > 0) {
-    badge.textContent = totalItems;
-    badge.classList.remove("hidden");
-    // Scale animation feedback
-    badge.classList.add("scale-125", "transition-transform", "duration-200");
-    setTimeout(() => {
-      badge.classList.remove("scale-125", "transition-transform", "duration-200");
-    }, 200);
-  } else {
-    badge.classList.add("hidden");
-  }
+  const totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+  
+  badges.forEach(badge => {
+    if (!badge) return;
+    if (totalItems > 0) {
+      badge.textContent = totalItems;
+      badge.classList.remove("hidden");
+      badge.classList.add("scale-125", "transition-transform", "duration-200");
+      setTimeout(() => {
+        badge.classList.remove("scale-125", "transition-transform", "duration-200");
+      }, 200);
+    } else {
+      badge.classList.add("hidden");
+    }
+  });
 }
 
 function updateWishlistBadge() {
@@ -76,26 +130,57 @@ function updateWishlistBadge() {
 
 // Cart Action Handlers
 function buyNow(productId) {
-  cart = [{ id: productId, quantity: 1 }];
+  const prod = typeof ProductsDB !== "undefined" ? ProductsDB.getById(productId) : null;
+  cart = [{
+    id: productId,
+    quantity: 1,
+    name: prod ? prod.name : '',
+    price: prod ? prod.price : 0,
+    image: prod ? prod.image : '',
+    fabric: prod ? prod.fabric : '',
+    weave: prod ? prod.weave : ''
+  }];
   saveCart();
-  window.location.href = 'cart.html';
+  window.location.href = 'cart.php';
 }
 
 function addToCart(productId, quantity = 1, showDrawer = true) {
-  const existingItem = cart.find(item => item.id === productId);
+  const prod = typeof ProductsDB !== "undefined" ? ProductsDB.getById(productId) : null;
+  const cleanId = String(productId).trim();
+  const existingItem = cart.find(item => String(item.id).trim() === cleanId);
+  
   if (existingItem) {
     existingItem.quantity += quantity;
+    if (prod && !existingItem.price) {
+      existingItem.name = prod.name;
+      existingItem.price = prod.price;
+      existingItem.image = prod.image;
+      existingItem.fabric = prod.fabric;
+      existingItem.weave = prod.weave;
+    }
   } else {
-    cart.push({ id: productId, quantity });
+    cart.push({
+      id: productId,
+      quantity,
+      name: prod ? prod.name : '',
+      price: prod ? prod.price : 0,
+      image: prod ? prod.image : '',
+      fabric: prod ? prod.fabric : '',
+      weave: prod ? prod.weave : ''
+    });
   }
   
   saveCart();
   showToast("Added to Bag!");
   
   if (showDrawer) {
-    // Open Cart Drawer automatically
-    const cartToggle = document.getElementById("cart-drawer-toggle");
-    if (cartToggle) cartToggle.click();
+    // Open Cart Drawer automatically and show all items
+    if (typeof window.openCartDrawer === "function") {
+      window.openCartDrawer();
+    } else {
+      const cartToggle = document.getElementById("cart-drawer-toggle") || document.getElementById("mobile-cart-toggle");
+      if (cartToggle) cartToggle.click();
+    }
   }
 }
 
@@ -174,7 +259,7 @@ function updateCartUI() {
         </svg>
         <p class="text-sm font-semibold mb-2">Your shopping bag is empty</p>
         <p class="text-xs text-gray-400 max-w-[200px] mb-4">Add some beautiful handcrafted garments to your bag.</p>
-        <a href="sarees.html" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-wider font-bold py-2.5 px-6 border-b-2 border-brand-gold transition duration-300">Shop Sarees</a>
+        <a href="collections.php" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-wider font-bold py-2.5 px-6 border-b-2 border-brand-gold transition duration-300">Shop Collections</a>
       </div>
     `;
     if (summaryBlock) summaryBlock.classList.add("hidden");
@@ -203,7 +288,7 @@ function updateCartUI() {
           <div>
             <div class="flex justify-between text-xs font-semibold text-brand-charcoal">
               <h4 class="line-clamp-2 pr-2 hover:text-brand-burgundy transition-colors">
-                <a href="${product.category === 'sarees' ? 'sarees.html' : 'kurtas.html'}">${product.name}</a>
+                <a href="${product.category === 'sarees' ? 'sarees.php' : 'kurtas.php'}">${product.name}</a>
               </h4>
               <p class="ml-4 text-brand-burgundy whitespace-nowrap">₹ ${product.price.toLocaleString("en-IN")}</p>
             </div>
@@ -240,7 +325,74 @@ function updateCartUI() {
 // Global Event Listeners Delegation
 function setupGlobalEventListeners() {
   document.addEventListener("click", (event) => {
-    
+    // Intercept clicks to Home page links to prevent refresh when already on home page
+    const anchor = event.target.closest("a");
+    if (anchor && anchor.target !== "_blank") {
+      const href = anchor.getAttribute("href");
+      if (href) {
+        const isHomeHref = href === "index.php" || 
+                           href === "/" || 
+                           href === "./" || 
+                           href === "./index.php" || 
+                           href.startsWith("index.php#") || 
+                           href.startsWith("/#") || 
+                           href.startsWith("./index.php#") ||
+                           (href.startsWith("#") && href.length > 1);
+                           
+        if (isHomeHref) {
+          const currentPath = window.location.pathname;
+          const isHomePage = currentPath === '/' || 
+                             currentPath === '' || 
+                             currentPath.endsWith('/index.php') || 
+                             currentPath.endsWith('/');
+                             
+          if (isHomePage) {
+            // Prevent default navigation (refresh/reload)
+            event.preventDefault();
+            
+            // Handle smooth scrolling to sections or top
+            const hashIndex = href.indexOf("#");
+            if (hashIndex !== -1) {
+              const targetId = href.substring(hashIndex + 1);
+              scrollToSection(targetId);
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+            
+            // Close mobile menu drawer if open
+            const mobileMenuCloseBtn = document.getElementById("mobile-menu-close");
+            const mobileMenuDrawer = document.getElementById("mobile-menu-drawer");
+            if (mobileMenuCloseBtn && mobileMenuDrawer && !mobileMenuDrawer.classList.contains("hidden")) {
+              mobileMenuCloseBtn.click();
+            }
+            
+            // Close cart drawer if open
+            const cartCloseBtn = document.getElementById("cart-close");
+            const cartDrawer = document.getElementById("cart-drawer");
+            if (cartCloseBtn && cartDrawer && !cartDrawer.classList.contains("hidden")) {
+              cartCloseBtn.click();
+            }
+            
+            // Close info modal if open
+            const infoCloseBtn = document.getElementById("info-close");
+            const infoModal = document.getElementById("info-modal");
+            if (infoCloseBtn && infoModal && !infoModal.classList.contains("hidden")) {
+              infoCloseBtn.click();
+            }
+            
+            // Close quick view modal if open
+            const qvCloseBtn = document.getElementById("quick-view-close");
+            const qvModal = document.getElementById("quick-view-modal");
+            if (qvCloseBtn && qvModal && !qvModal.classList.contains("hidden")) {
+              qvCloseBtn.click();
+            }
+            
+            return;
+          }
+        }
+      }
+    }
+
     // 1. Wishlist toggle delegation
     const wishlistBtn = event.target.closest("[data-wishlist-toggle]");
     if (wishlistBtn) {
@@ -800,13 +952,13 @@ const INFO_DATA = {
       <p class="mb-4">Navigate easily through the major branches of our store.</p>
       <div class="grid grid-cols-2 gap-4 text-xs font-semibold text-brand-charcoal font-sans">
         <ul class="space-y-1.5">
-          <li><a href="index.html" class="hover:text-brand-burgundy">✦ Home Page</a></li>
-          <li><a href="sarees.html" class="hover:text-brand-burgundy">✦ Sarees</a></li>
-          <li><a href="kurtas.html" class="hover:text-brand-burgundy">✦ Kurtas</a></li>
+          <li><a href="index.php" class="hover:text-brand-burgundy">✦ Home Page</a></li>
+          <li><a href="sarees.php" class="hover:text-brand-burgundy">✦ Sarees</a></li>
+          <li><a href="kurtas.php" class="hover:text-brand-burgundy">✦ Kurtas</a></li>
         </ul>
         <ul class="space-y-1.5">
-          <li><a href="wishlist.html" class="hover:text-brand-burgundy">✦ Wishlist</a></li>
-          <li><a href="cart.html" class="hover:text-brand-burgundy">✦ Shopping Bag</a></li>
+          <li><a href="contact.php" class="hover:text-brand-burgundy">✦ Contact Us</a></li>
+          <li><a href="cart.php" class="hover:text-brand-burgundy">✦ Shopping Bag</a></li>
         </ul>
       </div>
     `

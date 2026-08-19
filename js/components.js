@@ -1,6 +1,6 @@
 // Reusable Components Injector for Raga Boutique Website
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("ragaProductsLoaded", () => {
   injectHeader();
   injectFooter();
   injectDrawersAndModals();
@@ -12,6 +12,8 @@ function injectHeader() {
   const headerContainer = document.getElementById("global-header");
   if (!headerContainer) return;
 
+  headerContainer.className = "sticky top-0 z-50 w-full bg-white shadow-md transition-all duration-300";
+
   headerContainer.innerHTML = `
     <!-- Top Promotion Bar -->
     <div class="bg-brand-burgundy text-white text-[11px] py-2 px-4 overflow-hidden border-b border-brand-gold/20">
@@ -21,15 +23,15 @@ function injectHeader() {
           <span class="hidden md:inline">|</span>
           <span>🚚 Free shipping across India on orders above ₹1,999</span>
           <span class="hidden md:inline">|</span>
-          <span>⚜️ 100% Authentic Handlooms - Silk Mark Certified</span>
+          <span>🏷️ 100% Authentic Handlooms - Silk Mark Certified</span>
         </div>
       </div>
     </div>
 
     <!-- Main Header -->
-    <div class="sticky-header sticky top-0 z-40 bg-white/95 border-b border-brand-gold/10">
+    <div class="relative z-40 bg-white border-b border-brand-gold/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
+        <div class="flex items-center justify-between h-14 py-1">
           
           <!-- Hamburger menu (Mobile) -->
           <div class="flex items-center lg:hidden">
@@ -42,97 +44,50 @@ function injectHeader() {
 
           <!-- Brand Logo -->
           <div class="flex-shrink-0 flex items-center">
-            <a href="index.html" class="flex items-center">
+            <a href="index.php" class="flex items-center">
               <img src="images/raga_logo.png?v=3" alt="Raga Boutique Logo" class="h-11 w-auto hover:opacity-90 transition duration-300">
             </a>
           </div>
+          <!-- Desktop Nav Links -->
+          <nav class="hidden lg:flex flex-1 justify-center space-x-8 xl:space-x-10">
+            <a href="index.php" class="text-[15px] font-logo text-brand-burgundy hover:text-brand-gold transition-all duration-200 tracking-wide">Home</a>
+            <a href="index.php#new-arrivals" class="text-[15px] font-logo text-brand-burgundy hover:text-brand-gold transition-all duration-200 tracking-wide">New Arrivals</a>
+            <a href="collections.php" class="text-[15px] font-logo text-brand-burgundy hover:text-brand-gold transition-all duration-200 tracking-wide">Collections</a>
+            <a href="index.php#about" class="text-[15px] font-logo text-brand-burgundy hover:text-brand-gold transition-all duration-200 tracking-wide">About Us</a>
+            <a href="contact.php" class="text-[15px] font-logo text-brand-burgundy hover:text-brand-gold transition-all duration-200 tracking-wide">Contact Us</a>
+          </nav>
 
-          <!-- Desktop Search Bar + Login/Signup Buttons -->
-          <div class="hidden md:flex flex-1 items-center gap-3 mx-6">
-            <div class="relative flex-1">
-              <input type="text" id="desktop-search-input" placeholder="Search For Sarees, Kurtas, Crafts..."
-                class="w-full bg-brand-cream/40 text-xs text-brand-charcoal pl-4 pr-10 py-3 border border-brand-gold/25 rounded-sm focus:outline-none focus:border-brand-burgundy transition-colors duration-300">
-              <div class="absolute right-3.5 top-3.5 text-brand-burgundy cursor-pointer">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <!-- Desktop Search Bar & Cart Icon (Right of Search Bar) -->
+          <div class="hidden md:flex items-center gap-4">
+            <div class="relative w-64 xl:w-80">
+              <input type="text" id="desktop-search-input" placeholder="Search..."
+                class="w-full bg-brand-cream/40 text-xs text-brand-charcoal pl-4 pr-10 py-2.5 border border-brand-gold/25 rounded-md focus:outline-none focus:border-brand-burgundy transition-colors duration-300">
+              <div class="absolute right-3.5 top-2.5 text-brand-burgundy cursor-pointer">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
             </div>
-            <a href="javascript:void(0)" onclick="openAdminLoginModal()" id="header-login-btn" class="whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-bold px-4 py-2.5 border border-brand-burgundy text-brand-burgundy hover:bg-brand-burgundy hover:text-white transition-all duration-200 rounded-sm">Login</a>
-            <a href="javascript:void(0)" onclick="openAdminLoginModal()" id="header-signup-btn" class="whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-bold px-4 py-2.5 bg-brand-burgundy text-white hover:bg-brand-burgundyLight transition-all duration-200 rounded-sm border-b-2 border-brand-gold">Sign Up</a>
-            <a href="admin.html" id="header-admin-btn" style="display:none;" class="whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-bold px-4 py-2.5 bg-brand-gold text-brand-burgundy hover:bg-brand-goldDark transition-all duration-200 rounded-sm border-b-2 border-brand-burgundy">Admin Panel</a>
-          </div>
 
-          <!-- Right Action Icons -->
-          <div class="flex items-center space-x-2 sm:space-x-5">
-            
-            <!-- User Icon & Tooltip Dropdown (Matching screenshot) -->
-            <div class="relative group">
-              <button id="account-btn" class="p-2 text-brand-charcoal hover:text-brand-gold transition duration-300" aria-label="Account">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </button>
-              
-              <!-- User Dropdown Panel -->
-              <div class="absolute right-0 mt-2 w-72 bg-white border border-gray-100 shadow-2xl p-6 hidden group-hover:block z-50 text-left rounded-lg transition-all duration-300 animate-toast">
-                <!-- Dropdown Header -->
-                <div class="flex items-center space-x-3 pb-4 border-b border-gray-100 mb-4">
-                  <div class="text-gray-400">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <h4 class="font-serif text-base font-semibold text-brand-charcoal">User</h4>
-                </div>
-                
-                <!-- Options list -->
-                <div class="space-y-4 text-xs font-semibold text-brand-charcoal/90 mb-6">
-                  <div class="flex justify-between items-center">
-                    <span class="text-gray-500 font-medium">Currency</span>
-                    <div class="flex items-center space-x-2">
-                      <span class="text-brand-burgundy border-b-2 border-brand-burgundy cursor-pointer">₹ INR</span>
-                      <span class="text-gray-300">|</span>
-                      <span class="text-gray-400 hover:text-brand-burgundy cursor-pointer">$ USD</span>
-                    </div>
-                  </div>
-                  <a href="#" class="block hover:text-brand-burgundy transition">FAQs</a>
-                  <a href="#" class="block hover:text-brand-burgundy transition">Terms Of Use</a>
-                  <a href="#" class="block hover:text-brand-burgundy transition">Privacy Notice</a>
-                </div>
-
-                <!-- Login Button -->
-                <a href="javascript:void(0)" onclick="openAdminLoginModal()" class="w-full flex items-center justify-center space-x-2 bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3 px-4 rounded-full transition duration-300">
-                  <span>LOGIN/SIGNUP</span>
-                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <!-- Wishlist Icon -->
-            <a href="wishlist.html" class="p-2 text-brand-charcoal hover:text-brand-gold transition duration-300 relative" aria-label="Wishlist">
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span id="wishlist-badge" class="absolute top-0.5 right-0.5 bg-brand-burgundy text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">
-                0
-              </span>
-            </a>
-
-            <!-- Cart/Bag Icon -->
-            <button id="cart-drawer-toggle" class="p-2 text-brand-charcoal hover:text-brand-gold transition duration-300 relative" aria-label="Shopping Bag">
+            <!-- Cart Icon (Right of Search Bar) -->
+            <button id="cart-drawer-toggle" type="button" class="relative p-2 text-brand-burgundy hover:text-brand-gold transition duration-200 focus:outline-none flex items-center justify-center flex-shrink-0" aria-label="Shopping Bag" title="View Shopping Bag">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span id="cart-badge" class="absolute top-0.5 right-0.5 bg-brand-gold text-brand-burgundy text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">
-                0
-              </span>
+              <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-brand-burgundy text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border border-white hidden shadow-sm">0</span>
+            </button>
+          </div>
+
+          <!-- Mobile Cart Icon (Header Right) -->
+          <div class="flex items-center md:hidden">
+            <button id="mobile-cart-toggle" type="button" class="relative p-2 text-brand-burgundy hover:text-brand-gold transition duration-200 focus:outline-none flex items-center justify-center" aria-label="Shopping Bag" title="View Shopping Bag">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              <span id="mobile-cart-badge" class="absolute -top-0.5 -right-0.5 bg-brand-burgundy text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border border-white hidden shadow-sm">0</span>
             </button>
           </div>
         </div>
-        
         <!-- Mobile Search (only visible on small screens under md) -->
         <div class="md:hidden pb-4 px-2">
           <div class="relative">
@@ -147,285 +102,6 @@ function injectHeader() {
         </div>
 
       </div>
-
-      <!-- Navigation Bar Links (Desktop Menu - Matching Taneira screenshots with Megamenus) -->
-      <nav class="hidden lg:block bg-brand-cream border-t border-b border-l border-r border-brand-gold/15 max-w-7xl mx-auto relative">
-        <div class="px-6 relative">
-          <div class="flex justify-between items-center w-full">
-            
-            <!-- HOME LINK -->
-            <a href="index.html" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy py-3 hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Home</a>
-
-            <!-- SAREES MEGAMENU ITEM (Full-Width relative wrapper) -->
-            <div class="group py-3">
-              <a href="sarees.html" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Sarees</a>
-              
-              <!-- 7-Column Mega Dropdown -->
-              <div class="absolute left-0 right-0 w-full bg-white border border-gray-100 shadow-2xl p-8 hidden group-hover:grid grid-cols-7 gap-4 z-50 rounded-lg mt-3 text-left animate-toast">
-                
-                <!-- Col 1: Shop By Occasion -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Occasion</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="sarees.html?fabric=Linen" class="hover:text-brand-burgundy">Summer Sarees</a></li>
-                    <li><a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy">Summer Wedding Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Silk" class="hover:text-brand-burgundy">Formal Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Cotton" class="hover:text-brand-burgundy">Casual Sarees</a></li>
-                    <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy">Festive Sarees</a></li>
-                    <li><a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy">Bridal Sarees</a></li>
-                    <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy">Party Wear Sarees</a></li>
-                    <li><a href="sarees.html?color=Yellow" class="hover:text-brand-burgundy">Haldi Sarees</a></li>
-                    <li><a href="sarees.html?color=Red" class="hover:text-brand-burgundy">Engagement Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Linen" class="hover:text-brand-burgundy">Farewell & Graduation Sarees</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 2: Shop By Fabric -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Fabric</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="sarees.html?fabric=Cotton" class="hover:text-brand-burgundy">Cotton Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Cotton" class="hover:text-brand-burgundy">Kota Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Cotton" class="hover:text-brand-burgundy">Khadi Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Linen" class="hover:text-brand-burgundy">Linen Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Georgette" class="hover:text-brand-burgundy">Crepe Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Silk" class="hover:text-brand-burgundy">Silk Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Silk" class="hover:text-brand-burgundy">Pattu Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Tissue" class="hover:text-brand-burgundy">Tissue Sarees</a></li>
-                    <li><a href="sarees.html?fabric=Organza" class="hover:text-brand-burgundy">Chiffon Sarees</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 3: Shop By Colour -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Colour</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="sarees.html?color=Off-White" class="hover:text-brand-burgundy">White Sarees</a></li>
-                    <li><a href="sarees.html?color=Pastel" class="hover:text-brand-burgundy">Pastel-Sarees</a></li>
-                    <li><a href="sarees.html?color=Pastel" class="hover:text-brand-burgundy">Pink Sarees</a></li>
-                    <li><a href="sarees.html?color=Blue" class="hover:text-brand-burgundy">Blue Sarees</a></li>
-                    <li><a href="sarees.html?color=Yellow" class="hover:text-brand-burgundy">Yellow Sarees</a></li>
-                    <li><a href="sarees.html?color=Red" class="hover:text-brand-burgundy">Black Sarees</a></li>
-                    <li><a href="sarees.html?color=Red" class="hover:text-brand-burgundy">Red Sarees</a></li>
-                    <li><a href="sarees.html?color=Gold" class="hover:text-brand-burgundy">Gold Sarees</a></li>
-                    <li><a href="sarees.html?color=Green" class="hover:text-brand-burgundy">Green Sarees</a></li>
-                    <li><a href="sarees.html?color=Pastel" class="hover:text-brand-burgundy">Peach Sarees</a></li>
-                    <li><a href="sarees.html?color=Gold" class="hover:text-brand-burgundy">Multicoloured Sarees</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 4: Heirloom Pieces -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Heirloom Pieces</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy">Kanchipuram Sarees</a></li>
-                    <li><a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy">Banarasi Sarees</a></li>
-                    <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy">Paithani Sarees</a></li>
-                    <li><a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy">Patola Sarees</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 5: Shop By Price -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Price Range</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="sarees.html?priceRange=under-2000" class="hover:text-brand-burgundy">Sarees Under 2000</a></li>
-                    <li><a href="sarees.html?priceRange=2000-5000" class="hover:text-brand-burgundy">Sarees Under 5000</a></li>
-                    <li><a href="sarees.html?priceRange=above-5000" class="hover:text-brand-burgundy">Sarees Under 10000</a></li>
-                    <li><a href="sarees.html?priceRange=above-5000" class="hover:text-brand-burgundy">Sarees Under 15000</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 6: Shop By Region -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Region</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80 leading-tight">
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Rajasthan Sarees</a></li>
-                    <li><a href="sarees.html?weave=Jamdani" class="hover:text-brand-burgundy">Bengal Sarees</a></li>
-                    <li><a href="sarees.html?weave=Tussar" class="hover:text-brand-burgundy">Bhagalpuri Sarees</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Murshidabad Sarees</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Gujarati Sarees</a></li>
-                    <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy">Chanderi Sarees</a></li>
-                    <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy">Maheshwari Sarees</a></li>
-                    <li><a href="sarees.html?weave=Jamdani" class="hover:text-brand-burgundy">Pochampalli Sarees</a></li>
-                    <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy">Kanjivaram Sarees</a></li>
-                    <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy">South Indian Sarees</a></li>
-                    <li><a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy">Banaras Sarees</a></li>
-                    <li><a href="sarees.html?weave=Tussar" class="hover:text-brand-burgundy">Assam Sarees</a></li>
-                    <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy">Madhya Pradesh Sarees</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 7: Shop By Look -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Look</h5>
-                  <ul class="space-y-2 text-[11px] font-semibold text-brand-charcoal/80 leading-tight">
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Floral Sarees</a></li>
-                    <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy">Handloom Sarees</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Bandhani Sarees</a></li>
-                    <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy">Chikankari Sarees</a></li>
-                    <li><a href="sarees.html" class="hover:text-brand-burgundy">Plain Sarees</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Ajrakh Sarees</a></li>
-                    <li><a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy">Embroidery</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Printed Sarees</a></li>
-                    <li><a href="sarees.html?weave=Jamdani" class="hover:text-brand-burgundy">Jamdani Sarees</a></li>
-                    <li><a href="sarees.html?weave=Tussar" class="hover:text-brand-burgundy">Kalamkari Sarees</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Block Printed Sarees</a></li>
-                    <li><a href="sarees.html?weave=Printed" class="hover:text-brand-burgundy">Tie And Dye</a></li>
-                    <li><a href="sarees.html?weave=Jamdani" class="hover:text-brand-burgundy">Ikat Sarees</a></li>
-                  </ul>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- KURTAS MEGAMENU ITEM (Centered relative wrapper) -->
-            <div class="group relative py-3">
-              <a href="kurtas.html" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Kurtas</a>
-              
-              <!-- 3-Column Megamenu Dropdown -->
-              <div class="absolute left-0 mt-3 w-144 bg-white border border-gray-100 shadow-2xl p-6 hidden group-hover:grid grid-cols-3 gap-6 z-50 rounded-lg text-left animate-toast">
-                <!-- Col 1: Shop By Fabric -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Fabric</h5>
-                  <ul class="space-y-2.5 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="kurtas.html?fabric=Cotton" class="hover:text-brand-burgundy">Cotton</a></li>
-                    <li><a href="kurtas.html?fabric=Silk%20Blend" class="hover:text-brand-burgundy">Silk</a></li>
-                    <li><a href="kurtas.html?fabric=Georgette" class="hover:text-brand-burgundy">Viscose</a></li>
-                    <li><a href="kurtas.html?fabric=Chanderi" class="hover:text-brand-burgundy">Linen</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 2: Shop By Type -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Type</h5>
-                  <ul class="space-y-2.5 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="kurtas.html?weave=Chanderi%20Weave" class="hover:text-brand-burgundy">Embroidered</a></li>
-                    <li><a href="kurtas.html?weave=Printed" class="hover:text-brand-burgundy">Printed</a></li>
-                    <li><a href="kurtas.html?weave=Printed" class="hover:text-brand-burgundy">Block Printed</a></li>
-                    <li><a href="kurtas.html?weave=Khadi%20Weave" class="hover:text-brand-burgundy">Chikankari</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 3: Shop By Colour -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Colour</h5>
-                  <ul class="space-y-2.5 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="kurtas.html?color=Red" class="hover:text-brand-burgundy">Red</a></li>
-                    <li><a href="kurtas.html?color=Pastel" class="hover:text-brand-burgundy">Pink</a></li>
-                    <li><a href="kurtas.html?color=Blue" class="hover:text-brand-burgundy">Blue</a></li>
-                    <li><a href="kurtas.html?color=Red" class="hover:text-brand-burgundy">Black</a></li>
-                    <li><a href="kurtas.html?color=Off-White" class="hover:text-brand-burgundy">White</a></li>
-                    <li><a href="kurtas.html?color=Blue" class="hover:text-brand-burgundy">Violet</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <!-- DRESS MATERIALS MEGAMENU ITEM (2 Columns) -->
-            <div class="group relative py-3">
-              <a href="sarees.html?fabric=Linen" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Dress Materials</a>
-              
-              <!-- 2-Column Megamenu Dropdown -->
-              <div class="absolute left-0 mt-3 w-96 bg-white border border-gray-100 shadow-2xl p-6 hidden group-hover:grid grid-cols-2 gap-6 z-50 rounded-lg text-left animate-toast">
-                <!-- Col 1: Shop By Fabric -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Fabric</h5>
-                  <ul class="space-y-2.5 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="kurtas.html?fabric=Georgette" class="hover:text-brand-burgundy">Viscose Suits</a></li>
-                    <li><a href="kurtas.html?fabric=Silk%20Blend" class="hover:text-brand-burgundy">Silk Cotton Suits</a></li>
-                    <li><a href="sarees.html?fabric=Tissue" class="hover:text-brand-burgundy">Tissue Suits</a></li>
-                    <li><a href="kurtas.html?fabric=Cotton" class="hover:text-brand-burgundy">Cotton Suits</a></li>
-                    <li><a href="kurtas.html?fabric=Cotton" class="hover:text-brand-burgundy">Linen Suits</a></li>
-                  </ul>
-                </div>
-
-                <!-- Col 2: Shop By Colour -->
-                <div>
-                  <h5 class="text-xs font-bold text-brand-gold uppercase tracking-wider mb-3">Shop By Colour</h5>
-                  <ul class="space-y-2.5 text-[11px] font-semibold text-brand-charcoal/80">
-                    <li><a href="kurtas.html?color=Blue" class="hover:text-brand-burgundy">Blue Suits</a></li>
-                    <li><a href="kurtas.html?color=Pastel" class="hover:text-brand-burgundy">Pink Suits</a></li>
-                    <li><a href="kurtas.html?color=Red" class="hover:text-brand-burgundy">Red Suits</a></li>
-                    <li><a href="kurtas.html?color=Yellow" class="hover:text-brand-burgundy">Yellow Suits</a></li>
-                    <li><a href="kurtas.html?color=Red" class="hover:text-brand-burgundy">Black Suits</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <!-- OTHER NAV ITEMS -->
-            <a href="sarees.html?weave=Chanderi" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy py-3 hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Blouses</a>
-            <a href="kurtas.html?weave=Printed" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy py-3 hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Short Kurtis & Tops</a>
-            <a href="sarees.html?sort=rating" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy py-3 hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">New Arrivals</a>
-
-            <!-- SALE MEGAMENU ITEM -->
-            <div class="group relative py-3">
-              <a href="sarees.html?priceRange=under-2000" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Sale</a>
-              <div class="absolute left-0 mt-3 w-48 bg-white border border-gray-100 shadow-2xl p-4 hidden group-hover:block z-50 rounded-lg text-left animate-toast">
-                <ul class="space-y-3 text-[11px] font-semibold text-brand-charcoal/80">
-                  <li><a href="sarees.html?priceRange=under-2000" class="hover:text-brand-burgundy block transition">Sarees Sale</a></li>
-                  <li><a href="kurtas.html?priceRange=under-2000" class="hover:text-brand-burgundy block transition">Kurta Sale</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- GIFTING MEGAMENU ITEM -->
-            <div class="group relative py-3">
-              <a href="sarees.html?weave=Kanjivaram" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Gifting</a>
-              <div class="absolute left-0 mt-3 w-48 bg-white border border-gray-100 shadow-2xl p-4 hidden group-hover:block z-50 rounded-lg text-left animate-toast">
-                <ul class="space-y-3 text-[11px] font-semibold text-brand-charcoal/80">
-                  <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy block transition">Raga Boutique E-Gift Card</a></li>
-                  <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy block transition">Gifting For Women</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- COLLECTIONS MEGAMENU ITEM -->
-            <div class="group relative py-3">
-              <a href="index.html#occasions" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Collections</a>
-              <div class="absolute left-0 mt-3 w-56 bg-white border border-gray-100 shadow-2xl p-5 hidden group-hover:block z-50 rounded-lg text-left animate-toast">
-                <ul class="space-y-3 text-[11px] font-semibold text-brand-charcoal/80">
-                  <li><a href="sarees.html?fabric=Linen" class="hover:text-brand-burgundy block transition">Summer Essentials</a></li>
-                  <li><a href="sarees.html" class="hover:text-brand-burgundy block transition">RAAS Collection</a></li>
-                  <li><a href="sarees.html?fabric=Cotton" class="hover:text-brand-burgundy block transition">Summer Songs</a></li>
-                  <li><a href="sarees.html?fabric=Organza" class="hover:text-brand-burgundy block transition">Miara Collection</a></li>
-                  <li><a href="kurtas.html" class="hover:text-brand-burgundy block transition">Tarini Edit</a></li>
-                  <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy block transition">Queen's Choice</a></li>
-                  <li><a href="sarees.html?priceRange=under-2000" class="hover:text-brand-burgundy block transition">End Of Season Sale</a></li>
-                  <li><a href="sarees.html?fabric=Tissue" class="hover:text-brand-burgundy block transition">Inaya Collection</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- WISHLIST LINK -->
-            <a href="wishlist.html" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy py-3 hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Wishlist</a>
-
-            <!-- SHOPPING BAG LINK -->
-            <a href="cart.html" class="text-[10px] uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy py-3 hover:border-b-2 hover:border-brand-burgundy transition-all duration-200 pb-1">Shopping Bag</a>
-
-            <!-- MORE MEGAMENU ITEM -->
-            <div class="group relative py-3">
-              <span class="text-[10px] cursor-pointer uppercase tracking-[0.2em] font-semibold text-brand-charcoal hover:text-brand-burgundy pb-1">More</span>
-              <div class="absolute right-0 mt-3 w-64 bg-white border border-gray-100 shadow-2xl p-6 hidden group-hover:block z-50 rounded-lg text-left animate-toast">
-                <ul class="space-y-3.5 text-[11px] font-semibold text-brand-charcoal/80">
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Track Order</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">About Us</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Blogs</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Find A Store</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Reviews</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Shipping</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Golden Cocoon</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Delivery Information</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Return & Cancellations</a></li>
-                  <li><a href="#" class="hover:text-brand-burgundy block transition">Encircle & Raga Boutique NeuPass</a></li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </nav>
     </div>
   `;
 }
@@ -435,30 +111,11 @@ function injectFooter() {
   const footerContainer = document.getElementById("global-footer");
   if (!footerContainer) return;
 
-  footerContainer.innerHTML = `
-    <!-- Top Footer Bar - Popular Searches -->
-    <div class="bg-[#702152]/5 border-t border-brand-gold/15 py-10 text-xs">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="space-y-3 leading-relaxed">
-          <h4 class="font-serif text-sm font-bold text-brand-burgundy uppercase tracking-wider mb-2">Popular Searches</h4>
-          <p class="text-brand-charcoal/80 space-x-1.5 flex-wrap">
-            <a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy transition">Summer Wedding Sarees</a> |
-            <a href="sarees.html" class="hover:text-brand-burgundy transition">RAAS Collection</a> |
-            <a href="sarees.html?fabric=Linen" class="hover:text-brand-burgundy transition">Summer Essentials</a> |
-            <a href="sarees.html" class="hover:text-brand-burgundy transition">Formal Sarees</a> |
-            <a href="sarees.html?fabric=Cotton" class="hover:text-brand-burgundy transition">Casual Sarees</a> |
-            <a href="sarees.html" class="hover:text-brand-burgundy transition">Farewell Sarees</a> |
-            <a href="sarees.html?fabric=Silk" class="hover:text-brand-burgundy transition">Festive Sarees</a> |
-            <a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy transition">Wedding sarees</a> |
-            <a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy transition">Bridal Saree</a> |
-            <a href="sarees.html?color=Yellow" class="hover:text-brand-burgundy transition">Yellow saree for haldi</a> |
-            <a href="sarees.html?weave=Banarasi" class="hover:text-brand-burgundy transition">Banarasi sarees</a>
-          </p>
-          <a href="javascript:void(0)" onclick="openInfoModal('about')" class="inline-block text-brand-burgundy font-bold hover:underline">Read More</a>
-        </div>
-      </div>
-    </div>
+  const isCollectionsPage = window.location.pathname.endsWith('collections.php') || 
+                            footerContainer.hasAttribute('data-no-popular-searches') ||
+                            footerContainer.classList.contains('no-popular-searches');
 
+  footerContainer.innerHTML = `
     <!-- Main Footer -->
     <footer class="bg-brand-cream border-t border-brand-gold/15 pt-16 pb-8 text-brand-charcoal">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -468,15 +125,15 @@ function injectFooter() {
           <div>
             <h4 class="font-serif text-[13px] font-bold text-brand-burgundy uppercase tracking-wider mb-6">Quick Links</h4>
             <ul class="space-y-3.5 text-xs font-semibold text-brand-charcoal/80">
-              <li><a href="sarees.html" class="hover:text-brand-burgundy transition">Sarees</a></li>
-              <li><a href="sarees.html?weave=Chanderi" class="hover:text-brand-burgundy transition">Blouses</a></li>
-              <li><a href="kurtas.html" class="hover:text-brand-burgundy transition">Kurtas & Kurta Sets</a></li>
-              <li><a href="kurtas.html?weave=Printed" class="hover:text-brand-burgundy transition">Short Kurtis & Tops</a></li>
-              <li><a href="sarees.html?fabric=Linen" class="hover:text-brand-burgundy transition">Dress Materials</a></li>
-              <li><a href="kurtas.html" class="hover:text-brand-burgundy transition">Lehengas & Skirts</a></li>
-              <li><a href="sarees.html" class="hover:text-brand-burgundy transition">Inskirts</a></li>
-              <li><a href="kurtas.html" class="hover:text-brand-burgundy transition">Trousers</a></li>
-              <li><a href="sarees.html?weave=Kanjivaram" class="hover:text-brand-burgundy transition">Giftings</a></li>
+              <li><a href="sarees.php" class="hover:text-brand-burgundy transition">Sarees</a></li>
+              <li><a href="sarees.php?weave=Chanderi" class="hover:text-brand-burgundy transition">Blouses</a></li>
+              <li><a href="kurtas.php" class="hover:text-brand-burgundy transition">Kurtas & Kurta Sets</a></li>
+              <li><a href="kurtas.php?weave=Printed" class="hover:text-brand-burgundy transition">Short Kurtis & Tops</a></li>
+              <li><a href="sarees.php?fabric=Linen" class="hover:text-brand-burgundy transition">Dress Materials</a></li>
+              <li><a href="kurtas.php" class="hover:text-brand-burgundy transition">Lehengas & Skirts</a></li>
+              <li><a href="sarees.php" class="hover:text-brand-burgundy transition">Inskirts</a></li>
+              <li><a href="kurtas.php" class="hover:text-brand-burgundy transition">Trousers</a></li>
+              <li><a href="sarees.php?weave=Kanjivaram" class="hover:text-brand-burgundy transition">Giftings</a></li>
             </ul>
           </div>
 
@@ -590,21 +247,15 @@ function injectDrawersAndModals() {
             <!-- Menu Links list (Matching screenshot links) -->
             <div class="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
               <nav class="space-y-4 text-sm font-semibold">
-                <a href="index.html" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Home</a>
-                <a href="sarees.html" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Sarees</a>
-                <a href="kurtas.html" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Kurtas</a>
-                <a href="sarees.html?fabric=Linen" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Dress Materials</a>
-                <a href="sarees.html?weave=Chanderi" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Blouses</a>
-                <a href="kurtas.html?weave=Printed" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Short Kurtis & Tops</a>
-                <a href="sarees.html?sort=rating" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">New Arrivals</a>
-                <a href="sarees.html?priceRange=under-2000" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Sale</a>
-                <a href="sarees.html?weave=Kanjivaram" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Gifting</a>
-                <a href="wishlist.html" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">My Wishlist</a>
-                <a href="cart.html" class="block text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Shopping Bag</a>
+                <a href="index.php" class="block font-logo text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Home</a>
+                <a href="index.php#new-arrivals" class="block font-logo text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">New Arrivals</a>
+                <a href="collections.php" class="block font-logo text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Collections</a>
+                <a href="index.php#about" class="block font-logo text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">About Us</a>
+                <a href="contact.php" class="block font-logo text-brand-charcoal hover:text-brand-burgundy py-2 border-b border-brand-gold/5">Contact Us</a>
               </nav>
 
               <div class="mt-8 pt-8 border-t border-brand-gold/15 space-y-4 text-xs font-semibold">
-                <a href="#" class="flex items-center text-brand-charcoal hover:text-brand-burgundy">
+                <a href="contact.php" class="flex items-center text-brand-charcoal hover:text-brand-burgundy">
                   <svg class="h-5 w-5 text-brand-gold mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -660,7 +311,7 @@ function injectDrawersAndModals() {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 <p class="text-sm font-semibold mb-2">Your shopping bag is empty</p>
-                <a href="sarees.html" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-wider font-bold py-2.5 px-6 border-b-2 border-brand-gold transition duration-300">Shop Sarees</a>
+                <a href="collections.php" class="bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-wider font-bold py-2.5 px-6 border-b-2 border-brand-gold transition duration-300">Shop Collections</a>
               </div>
             </div>
 
@@ -672,8 +323,8 @@ function injectDrawersAndModals() {
               </div>
               <p class="text-xs text-gray-500 mb-4">Shipping and taxes calculated at checkout.</p>
               <div class="space-y-3">
-                <a href="cart.html" class="w-full flex items-center justify-center bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-sm uppercase tracking-widest font-bold py-3 transition duration-300 border-b-2 border-brand-gold">
-                  Proceed to Checkout
+                <a href="cart.php" class="w-full flex items-center justify-center bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs uppercase tracking-widest font-bold py-3.5 transition duration-300 border-b-2 border-brand-gold shadow-md rounded-sm">
+                  Buy Now
                 </a>
                 <button id="cart-drawer-continue" class="w-full text-center text-xs font-semibold text-brand-burgundy hover:text-brand-gold transition duration-200">
                   Continue Shopping
@@ -758,80 +409,6 @@ function injectDrawersAndModals() {
         </div>
       </div>
     </div>
-
-    <!-- In-Page Admin Login Modal -->
-    <div id="admin-login-modal" class="fixed inset-0 z-[100] overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-      <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
-        <!-- Overlay -->
-        <div class="fixed inset-0 bg-black/60 transition-opacity" onclick="closeAdminLoginModal()"></div>
-
-        <!-- Modal panel -->
-        <div class="relative inline-block align-middle text-left shadow-2xl transform transition-all sm:my-8 sm:max-w-[420px] w-full rounded-2xl overflow-hidden" style="background-color: #311124; border: 1px solid rgba(212,178,112,0.15);">
-          
-          <div class="p-8 pb-6 flex flex-col items-center border-b border-white/5">
-            <img src="images/raga_logo_silver.png?v=3" alt="Raga Boutique" class="h-12 mb-6" onerror="this.style.display='none'">
-            <h2 class="text-[10px] font-bold tracking-[0.25em] text-[#d4b270] uppercase mb-3">Admin Portal</h2>
-            <h1 class="font-serif text-3xl font-bold text-white mb-2">Welcome Back</h1>
-            <p class="text-[13px] text-white/60">Sign in to manage your boutique</p>
-          </div>
-
-          <div class="p-8 pt-6">
-            <form id="admin-login-form-modal" onsubmit="handleAdminLoginSubmit(event)">
-              <div id="login-error-modal" class="hidden mb-4 p-3 bg-red-900/30 border border-red-500/30 rounded-lg text-red-200 text-xs text-center"></div>
-              
-              <div class="mb-5">
-                <label class="block text-[11px] font-bold text-[#d4b270] tracking-widest uppercase mb-2">Username</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <svg class="h-4 w-4 text-[#d4b270]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <input type="text" id="admin-user-modal" required placeholder="Enter username" 
-                    class="block w-full pl-11 pr-4 py-3.5 bg-[#421731] border border-[#d4b270]/30 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#d4b270] transition-colors"
-                    value="admin">
-                </div>
-              </div>
-
-              <div class="mb-8">
-                <label class="block text-[11px] font-bold text-[#d4b270] tracking-widest uppercase mb-2">Password</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <svg class="h-4 w-4 text-[#d4b270]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                  </div>
-                  <input type="password" id="admin-pass-modal" required placeholder="Enter password" 
-                    class="block w-full pl-11 pr-11 py-3.5 bg-[#421731] border border-[#d4b270]/30 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#d4b270] transition-colors"
-                    value="raga@admin2024">
-                  <div class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer text-[#d4b270]/60 hover:text-[#d4b270]" onclick="togglePasswordVisibilityModal()">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="eye-icon-modal">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <button type="submit" class="w-full py-4 bg-[#d4b270] hover:bg-[#bfa061] text-[#311124] text-xs font-bold tracking-[0.15em] uppercase rounded-xl transition duration-300">
-                Sign in to Admin Panel
-              </button>
-            </form>
-            
-            <div class="mt-6 text-center">
-              <a href="javascript:void(0)" onclick="closeAdminLoginModal()" class="text-xs text-white/50 hover:text-white transition flex items-center justify-center gap-2">
-                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                Back to Raga Boutique
-              </a>
-            </div>
-          </div>
-          
-          <div class="bg-black/20 py-4 text-center">
-            <p class="text-[9px] font-bold text-white/30 tracking-[0.2em] uppercase">Raga Boutique • Admin Portal • Restricted Access</p>
-          </div>
-        </div>
-      </div>
-    </div>
   `;
 }
 
@@ -865,48 +442,66 @@ function initializeComponentInteractivity() {
       }, 300);
     };
 
-    mobileMenuClose.addEventListener("click", closeMobileMenu);
-    mobileMenuOverlay.addEventListener("click", closeMobileMenu);
+    if (mobileMenuClose) mobileMenuClose.addEventListener("click", closeMobileMenu);
+    if (mobileMenuOverlay) mobileMenuOverlay.addEventListener("click", closeMobileMenu);
   }
+
+// Global Cart Drawer Open / Close
+function openCartDrawer() {
+  const cartDrawer = document.getElementById("cart-drawer");
+  const cartOverlay = document.getElementById("cart-overlay");
+  const cartPanel = document.getElementById("cart-panel");
+  if (!cartDrawer) return;
+
+  cartDrawer.classList.remove("hidden");
+  if (typeof updateCartUI === "function") {
+    updateCartUI();
+  }
+  setTimeout(() => {
+    if (cartOverlay) {
+      cartOverlay.classList.remove("opacity-0");
+      cartOverlay.classList.add("opacity-100");
+    }
+    if (cartPanel) {
+      cartPanel.classList.remove("translate-x-full");
+      cartPanel.classList.add("translate-x-0");
+    }
+  }, 50);
+}
+window.openCartDrawer = openCartDrawer;
+
+function closeCartDrawer() {
+  const cartDrawer = document.getElementById("cart-drawer");
+  const cartOverlay = document.getElementById("cart-overlay");
+  const cartPanel = document.getElementById("cart-panel");
+  if (!cartDrawer) return;
+
+  if (cartOverlay) {
+    cartOverlay.classList.remove("opacity-100");
+    cartOverlay.classList.add("opacity-0");
+  }
+  if (cartPanel) {
+    cartPanel.classList.remove("translate-x-0");
+    cartPanel.classList.add("translate-x-full");
+  }
+  setTimeout(() => {
+    cartDrawer.classList.add("hidden");
+  }, 300);
+}
+window.closeCartDrawer = closeCartDrawer;
 
   // Cart drawer interactivity
   const cartToggle = document.getElementById("cart-drawer-toggle");
-  const cartDrawer = document.getElementById("cart-drawer");
+  const mobileCartToggle = document.getElementById("mobile-cart-toggle");
   const cartClose = document.getElementById("cart-close");
   const cartOverlay = document.getElementById("cart-overlay");
-  const cartPanel = document.getElementById("cart-panel");
   const cartContinue = document.getElementById("cart-drawer-continue");
 
-  if (cartToggle && cartDrawer) {
-    const openCart = () => {
-      cartDrawer.classList.remove("hidden");
-      if (typeof updateCartUI === "function") {
-        updateCartUI();
-      }
-      setTimeout(() => {
-        cartOverlay.classList.remove("opacity-0");
-        cartOverlay.classList.add("opacity-100");
-        cartPanel.classList.remove("translate-x-full");
-        cartPanel.classList.add("translate-x-0");
-      }, 50);
-    };
-
-    cartToggle.addEventListener("click", openCart);
-
-    const closeCart = () => {
-      cartOverlay.classList.remove("opacity-100");
-      cartOverlay.classList.add("opacity-0");
-      cartPanel.classList.remove("translate-x-0");
-      cartPanel.classList.add("translate-x-full");
-      setTimeout(() => {
-        cartDrawer.classList.add("hidden");
-      }, 300);
-    };
-
-    cartClose.addEventListener("click", closeCart);
-    cartContinue.addEventListener("click", closeCart);
-    cartOverlay.addEventListener("click", closeCart);
-  }
+  if (cartToggle) cartToggle.addEventListener("click", openCartDrawer);
+  if (mobileCartToggle) mobileCartToggle.addEventListener("click", openCartDrawer);
+  if (cartClose) cartClose.addEventListener("click", closeCartDrawer);
+  if (cartContinue) cartContinue.addEventListener("click", closeCartDrawer);
+  if (cartOverlay) cartOverlay.addEventListener("click", closeCartDrawer);
 
   // Search input interactivity
   const desktopSearchInput = document.getElementById("desktop-search-input");
@@ -916,7 +511,7 @@ function initializeComponentInteractivity() {
     if (event.key === "Enter") {
       const query = event.target.value.trim();
       if (query !== "") {
-        window.location.href = `sarees.html?search=${encodeURIComponent(query)}`;
+        window.location.href = `sarees.php?search=${encodeURIComponent(query)}`;
       }
     }
   };
@@ -927,62 +522,4 @@ function initializeComponentInteractivity() {
   if (mobileSearchInput) {
     mobileSearchInput.addEventListener("keydown", handleSearchSubmit);
   }
-
-  // ── Auth-aware header buttons ──
-  // Show Admin Panel link and hide Login/Signup when admin session is active
-  (function updateHeaderAuthState() {
-    const isAdmin = sessionStorage.getItem('raga_admin_auth') === 'true';
-    const loginBtn = document.getElementById('header-login-btn');
-    const signupBtn = document.getElementById('header-signup-btn');
-    const adminBtn = document.getElementById('header-admin-btn');
-    if (isAdmin) {
-      if (loginBtn) loginBtn.style.display = 'none';
-      if (signupBtn) signupBtn.style.display = 'none';
-      if (adminBtn) adminBtn.style.display = '';
-    } else {
-      if (loginBtn) loginBtn.style.display = '';
-      if (signupBtn) signupBtn.style.display = '';
-      if (adminBtn) adminBtn.style.display = 'none';
-    }
-  })();
 }
-
-// ── Admin Login Modal Logic ──
-window.openAdminLoginModal = function() {
-  const modal = document.getElementById('admin-login-modal');
-  if (modal) modal.classList.remove('hidden');
-};
-
-window.closeAdminLoginModal = function() {
-  const modal = document.getElementById('admin-login-modal');
-  if (modal) modal.classList.add('hidden');
-};
-
-window.togglePasswordVisibilityModal = function() {
-  const input = document.getElementById('admin-pass-modal');
-  const eye = document.getElementById('eye-icon-modal');
-  if (input.type === 'password') {
-    input.type = 'text';
-    eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />`;
-  } else {
-    input.type = 'password';
-    eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
-  }
-};
-
-window.handleAdminLoginSubmit = function(e) {
-  e.preventDefault();
-  const u = document.getElementById('admin-user-modal').value.trim();
-  const p = document.getElementById('admin-pass-modal').value;
-  const err = document.getElementById('login-error-modal');
-  
-  if (u === 'admin' && p === 'raga@admin2024') {
-    err.classList.add('hidden');
-    sessionStorage.setItem('raga_admin_auth', 'true');
-    sessionStorage.setItem('raga_admin_user', u);
-    window.location.href = 'admin.html';
-  } else {
-    err.textContent = 'Invalid username or password.';
-    err.classList.remove('hidden');
-  }
-};
