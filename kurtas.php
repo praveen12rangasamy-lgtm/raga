@@ -56,7 +56,7 @@
       </div>
 
       <!-- Left Sidebar: Filters Panel -->
-      <aside id="filter-sidebar" class="hidden lg:block lg:w-64 bg-white p-6 border border-brand-gold/15 h-fit sticky top-24 shadow-sm z-30">
+      <aside id="filter-sidebar" class="hidden lg:block lg:w-64 bg-white p-6 border border-brand-gold/15 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto shadow-sm z-30 flex-shrink-0">
         
         <!-- Sidebar Header (only for mobile drawer view) -->
         <div class="flex items-center justify-between border-b border-brand-gold/15 pb-4 mb-4 lg:hidden">
@@ -517,7 +517,7 @@
 
       const closeFilterDrawer = () => {
         if (sidebar) {
-          sidebar.className = "hidden lg:block lg:w-64 bg-white p-6 border border-brand-gold/15 h-fit sticky top-24 shadow-sm z-30";
+          sidebar.className = "hidden lg:block lg:w-64 bg-white p-6 border border-brand-gold/15 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto shadow-sm z-30 flex-shrink-0";
         }
         const overlay = document.getElementById("filter-overlay");
         if (overlay) overlay.remove();

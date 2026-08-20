@@ -58,12 +58,25 @@ CREATE TABLE IF NOT EXISTS users (
 INSERT INTO users (username, password_hash) VALUES 
 ('admin', '$2y$10$/J.0NiW9VRmZvAJVecQC2eMxikm2o0.n7l/ChWJR9QTdkJbK//Dd.');
 
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
   id VARCHAR(50) PRIMARY KEY,
   customer_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) DEFAULT NULL,
+  phone VARCHAR(50) DEFAULT NULL,
+  address TEXT DEFAULT NULL,
+  pincode VARCHAR(20) DEFAULT NULL,
+  city VARCHAR(100) DEFAULT NULL,
   items INT NOT NULL,
   amount DECIMAL(10, 2) NOT NULL,
+  subtotal DECIMAL(10, 2) DEFAULT 0,
+  discount DECIMAL(10, 2) DEFAULT 0,
+  shipping DECIMAL(10, 2) DEFAULT 0,
   payment_method VARCHAR(50) NOT NULL,
   status VARCHAR(50) DEFAULT 'Processing',
+  payment_status VARCHAR(50) DEFAULT 'Success',
+  product_ids JSON DEFAULT NULL,
+  product_name VARCHAR(255) DEFAULT NULL,
+  items_detail JSON DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

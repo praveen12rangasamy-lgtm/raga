@@ -111,8 +111,29 @@
 
       const allProducts = typeof ProductsDB !== "undefined" ? ProductsDB.getAll() : [];
 
-      container.innerHTML = categories.map(cat => {
-        const prodCount = allProducts.filter(p => p.category === cat.id).length;
+      // Filter: Only display categories that have at least 1 product (0-product categories are only visible in admin panel)
+      const visibleCategories = categories.filter(cat => {
+        const prodCount = allProducts.filter(p => String(p.category || '').toLowerCase().trim() === String(cat.id || '').toLowerCase().trim()).length;
+        return prodCount > 0;
+      });
+
+      if (visibleCategories.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-16 bg-[#24061a] border border-brand-gold/20 rounded-lg p-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-gold/10 text-brand-gold mb-4">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white mb-2">No Active Collections Available</h3>
+            <p class="text-xs text-white/70 max-w-sm mx-auto">Categories with published products will automatically appear here once added from the admin panel.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = visibleCategories.map(cat => {
+        const prodCount = allProducts.filter(p => String(p.category || '').toLowerCase().trim() === String(cat.id || '').toLowerCase().trim()).length;
         
         let targetHref = `sarees.php?category=${encodeURIComponent(cat.id)}`;
         if (cat.id === 'sarees') {
@@ -139,7 +160,7 @@
                   <a href="${targetHref}">${cat.name}</a>
                 </h3>
                 <span class="text-[9px] sm:text-[10px] font-semibold text-brand-gold bg-brand-gold/10 border border-brand-gold/25 px-2 py-0.5 rounded-full whitespace-nowrap">
-                  ${prodCount > 0 ? `${prodCount} Products` : 'Collection'}
+                  ${prodCount} ${prodCount === 1 ? 'Product' : 'Products'}
                 </span>
               </div>
 

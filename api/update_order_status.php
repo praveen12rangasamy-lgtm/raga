@@ -2,7 +2,11 @@
 session_start();
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+$isAuth = (isset($_SESSION['admin_auth']) && $_SESSION['admin_auth'] === true) || 
+          (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) ||
+          isset($_SESSION['admin_user']);
+
+if (!$isAuth) {
     http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit;
@@ -20,14 +24,19 @@ if (empty($id) || empty($status)) {
 }
 
 try {
-    $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
-    $stmt->execute([$status, $id]);
-
-    if ($stmt->rowCount() > 0) {
-        echo json_encode(['success' => true]);
+    $chk = $pdo->prepare("SELECT COUNT(*) FROM orders WHERE id = ?");
+    $chk->execute([$id]);
+    if ((int)$chk->fetchColumn() === 0) {
+        // Check if legacy id without Raga- exists
+        $altId = '#RAGA-' . preg_replace('/[^0-9]/', '', $id);
+        $stmtAlt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmtAlt->execute([$status, $altId]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Order not found']);
+        $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->execute([$status, $id]);
     }
+
+    echo json_encode(['success' => true]);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 }

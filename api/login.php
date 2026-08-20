@@ -23,6 +23,7 @@ try {
     if ($user && password_verify($password, $user['password_hash'])) {
         // Authentication successful
         $_SESSION['admin_auth'] = true;
+        $_SESSION['authenticated'] = true;
         $_SESSION['admin_user'] = $user['username'];
         echo json_encode(['success' => true]);
     } else {

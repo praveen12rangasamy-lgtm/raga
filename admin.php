@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="images/raga_favicon.png">
   <meta name="robots" content="noindex, nofollow">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -38,6 +39,11 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.07);border-left-color:rgba(212,178,112,.4);}
     .nav-item.active{color:#fff;background:rgba(255,255,255,.12);border-left-color:#d4b270;}
     .nav-item svg{width:17px;height:17px;flex-shrink:0;}
+    .nav-dropdown-wrapper{width:100%;}
+    .nav-submenu{background:rgba(0,0,0,.15);border-left:2px solid rgba(212,178,112,.3);margin-left:18px;}
+    .nav-subitem{display:flex;align-items:center;padding:7px 12px;color:rgba(255,255,255,.65);font-size:12px;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;background:none;border:none;width:100%;text-align:left;}
+    .nav-subitem:hover{color:#fff;background:rgba(255,255,255,.08);}
+    .nav-subitem.active{color:#d4b270;font-weight:600;background:rgba(212,178,112,.15);}
     .logout-btn{margin:auto 14px 20px;padding:9px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(212,178,112,.2);border-radius:8px;color:rgba(255,255,255,.55);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;width:calc(100% - 28px);}
     .logout-btn:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:#fca5a5;}
 
@@ -105,9 +111,9 @@
 
     /* ─ Table ─ */
     .admin-table{width:100%;border-collapse:collapse;}
-    .admin-table th{background:#702152;color:#fff;padding:11px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+    .admin-table th{background:#702152;color:#fff;padding:12px 14px;text-align:center;vertical-align:middle;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
     .admin-table th:first-child{border-radius:8px 0 0 0;}.admin-table th:last-child{border-radius:0 8px 0 0;}
-    .admin-table td{padding:10px 14px;font-size:12px;border-bottom:1px solid rgba(212,178,112,.08);color:#2c2c2c;}
+    .admin-table td{padding:12px 14px;font-size:12px;border-bottom:1px solid rgba(212,178,112,.08);color:#2c2c2c;text-align:center;vertical-align:middle;white-space:nowrap;}
     .admin-table tr:hover td{background:rgba(112,33,82,.02);}
     .admin-table tr:last-child td{border-bottom:none;}
 
@@ -189,10 +195,30 @@
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
       Orders
     </button>
-    <button class="nav-item" id="nav-transactions" onclick="switchView('transactions')">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-      Transactions
-    </button>
+    
+    <!-- Transactions Dropdown Menu in Sidebar -->
+    <div class="nav-dropdown-wrapper">
+      <button class="nav-item flex justify-between items-center" id="nav-transactions-parent" onclick="toggleTransactionsDropdown(event)">
+        <div class="flex items-center gap-2.5">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span>Transactions</span>
+        </div>
+        <svg id="transactions-chevron" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div id="transactions-submenu" class="nav-submenu pl-6 pr-2 py-1 space-y-1 hidden">
+        <button class="nav-subitem" id="nav-transactions" onclick="switchView('transactions')">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/60 inline-block mr-2"></span>
+          <span>Transactions</span>
+        </button>
+        <button class="nav-subitem" id="nav-transaction-history" onclick="switchView('transaction-history')">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/60 inline-block mr-2"></span>
+          <span>Transaction History</span>
+        </button>
+      </div>
+    </div>
+
     <button class="nav-item" id="nav-messages" onclick="switchView('messages')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Messages
@@ -423,7 +449,6 @@
                 <th>Customer</th>
                 <th>Items</th>
                 <th>Amount</th>
-                <th>Payment</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -438,30 +463,219 @@
     </div>
 
     <!-- ═══ TRANSACTIONS ═══ -->
-    <div id="view-transactions" class="view fade-in">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold text-brand-burgundy font-serif">Transaction History</h2>
+    <div id="view-transactions" class="view fade-in" style="display:none;">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+        <div>
+          <h2 class="text-xl font-bold text-brand-burgundy font-serif">Transactions</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Overview of all real-time transactions across payment states.</p>
+        </div>
+        <div>
+          <button onclick="exportTransactionsExcel()" class="btn-primary flex items-center gap-2 text-xs py-2 px-4 shadow-sm hover:shadow transition">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Download Excel</span>
+          </button>
+        </div>
       </div>
 
       <div class="bg-white rounded-xl border overflow-hidden" style="border-color:rgba(212,178,112,.18);box-shadow:0 2px 12px rgba(112,33,82,.06);">
+        <!-- Filter Controls Bar -->
+        <div class="p-4 border-b flex flex-wrap gap-3 items-center justify-between bg-white" style="border-color:rgba(212,178,112,.12); background:rgba(250,246,240,.4);">
+          <!-- Filters Left -->
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- Preset Period Filter -->
+            <div class="flex items-center gap-1.5">
+              <label for="trx-preset-filter" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Period:</label>
+              <select id="trx-preset-filter" onchange="renderTransactions()" class="border rounded-lg px-3 py-1.5 text-xs font-medium focus:outline-none text-gray-700 bg-white" style="border-color:rgba(212,178,112,.3);">
+                <option value="all">All</option>
+                <option value="today">Today</option>
+                <option value="last-week">Last Week</option>
+                <option value="last-month">Last Month</option>
+              </select>
+            </div>
+
+            <!-- Specific Date Filter -->
+            <div class="flex items-center gap-1.5">
+              <label for="trx-date-filter" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Date:</label>
+              <input type="date" id="trx-date-filter" onchange="renderTransactions()" class="border rounded-lg px-2.5 py-1.5 text-xs focus:outline-none text-gray-700 bg-white" style="border-color:rgba(212,178,112,.3);">
+              <button type="button" onclick="document.getElementById('trx-date-filter').value=''; renderTransactions();" class="text-xs text-gray-400 hover:text-brand-burgundy font-medium px-2 py-1 border rounded bg-white hover:bg-brand-cream/30" title="Clear Date">Clear</button>
+            </div>
+          </div>
+
+          <!-- Search Right -->
+          <div class="relative w-full sm:w-64">
+            <svg class="h-4 w-4 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="trx-search" oninput="renderTransactions()" placeholder="Search TRX, Order, Customer…" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none w-full shadow-xs" style="border-color:rgba(212,178,112,.3);">
+          </div>
+        </div>
+
+        <!-- Table -->
         <div class="overflow-x-auto">
           <table class="admin-table">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Transaction ID</th>
+                <th>Order ID</th>
                 <th>Date & Time</th>
                 <th>Customer</th>
+                <th>Phone Number</th>
+                <th>Email</th>
                 <th>Amount</th>
-                <th>Payment Method</th>
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody id="transactions-tbody">
-              
-            </tbody>
+            <tbody id="transactions-tbody"></tbody>
           </table>
         </div>
-        <div id="transactions-table-empty" class="text-center py-12 text-gray-400 text-sm hidden">No transactions found.</div>
+        <div id="transactions-table-empty" class="text-center py-12 text-gray-400 text-sm hidden">No transactions found matching your filter.</div>
+      </div>
+    </div>
+
+    <!-- ═══ TRANSACTION HISTORY (Revenue & Payment Analytics Graph) ═══ -->
+    <div id="view-transaction-history" class="view fade-in" style="display:none;">
+      <div class="mb-5">
+        <h2 class="text-xl font-bold text-brand-burgundy font-serif">Revenue & Transaction Analytics</h2>
+        <p class="text-xs text-gray-400 mt-0.5">Visual revenue trends, completed payment metrics, and date breakdown.</p>
+      </div>
+
+      <!-- ── Analytics KPI Summary Cards (Successful Payments Only) ── -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <!-- Total Completed Revenue -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Total Completed Revenue</p>
+              <h3 id="trx-analytics-revenue" class="text-2xl font-bold font-serif text-brand-burgundy mt-1">₹ 0</h3>
+              <p class="text-[11px] text-green-700 font-semibold flex items-center gap-1 mt-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Success Status Only</span>
+              </p>
+            </div>
+            <div class="stat-icon bg-emerald-50 text-emerald-600 border border-emerald-200">
+              <span class="text-lg font-bold">₹</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Successful Orders Count -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Successful Orders</p>
+              <h3 id="trx-analytics-count" class="text-2xl font-bold font-serif text-brand-charcoal mt-1">0</h3>
+              <p class="text-[11px] text-gray-400 font-medium mt-1.5">Verified & Paid Transactions</p>
+            </div>
+            <div class="stat-icon bg-blue-50 text-blue-600 border border-blue-200">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Average Order Value (AOV) -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Avg. Transaction Value</p>
+              <h3 id="trx-analytics-aov" class="text-2xl font-bold font-serif text-brand-gold mt-1">₹ 0</h3>
+              <p class="text-[11px] text-gray-400 font-medium mt-1.5">Per Completed Order</p>
+            </div>
+            <div class="stat-icon bg-amber-50 text-amber-600 border border-amber-200">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Analytics Chart Container ── -->
+      <div class="bg-white rounded-xl border overflow-hidden" style="border-color:rgba(212,178,112,.18);box-shadow:0 2px 12px rgba(112,33,82,.06);">
+        <!-- Filter Controls Bar with Month & Year in Single Picker -->
+        <div class="p-4 border-b flex flex-wrap gap-3 items-center justify-between bg-white" style="border-color:rgba(212,178,112,.12); background:rgba(250,246,240,.4);">
+          <!-- Filters Left -->
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- Preset Period Filter -->
+            <div class="flex items-center gap-1.5">
+              <label for="trx-hist-preset-filter" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Period:</label>
+              <select id="trx-hist-preset-filter" onchange="handleTrxHistPresetChange()" class="border rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none text-gray-700 bg-white shadow-xs" style="border-color:rgba(212,178,112,.3);">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="last-week">This Week</option>
+                <option value="this-month">This Month</option>
+                <option value="last-month">Last Month</option>
+                <option value="this-year">This Year</option>
+              </select>
+            </div>
+
+            <!-- Year Dropdown -->
+            <div class="flex items-center gap-1.5">
+              <label for="trx-hist-year-select" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Year:</label>
+              <select id="trx-hist-year-select" onchange="handleTrxHistYearMonthChange()" class="border rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none text-gray-700 bg-white shadow-xs" style="border-color:rgba(212,178,112,.3);">
+                <option value="all">All Years</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+
+            <!-- Month Dropdown -->
+            <div class="flex items-center gap-1.5">
+              <label for="trx-hist-month-select" class="text-xs font-semibold text-gray-500 whitespace-nowrap">Month:</label>
+              <select id="trx-hist-month-select" onchange="handleTrxHistYearMonthChange()" class="border rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none text-gray-700 bg-white shadow-xs" style="border-color:rgba(212,178,112,.3);">
+                <option value="all">All Months (Full Year)</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+
+            <!-- Reset Button -->
+            <button type="button" onclick="clearTrxHistFilters()" class="text-xs text-gray-500 hover:text-brand-burgundy font-medium px-2.5 py-1.5 border rounded-lg bg-white hover:bg-brand-cream/30 transition cursor-pointer shadow-xs" title="Reset All Filters">Reset</button>
+          </div>
+
+          <!-- Active Period Label Badge -->
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] font-medium text-gray-400">Active View:</span>
+            <span id="trx-chart-period-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-brand-burgundy text-white tracking-wide shadow-xs">All Time Overview</span>
+          </div>
+        </div>
+
+        <!-- Chart Section Header -->
+        <div class="px-6 pt-5 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h4 class="text-base font-bold text-brand-burgundy font-serif flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <span>Completed UPI Revenue Analytics Graph</span>
+            </h4>
+            <p class="text-xs text-gray-400 mt-0.5" id="trx-chart-subtitle">Showing successful payment timeline and earnings distribution.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 text-xs font-medium text-gray-600">
+              <span class="w-3 h-3 rounded-full bg-brand-burgundy inline-block"></span>
+              <span>Completed Revenue (₹)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Canvas Container -->
+        <div class="p-4 sm:p-6 pt-2 relative" style="min-height:360px;">
+          <div class="w-full h-[320px] sm:h-[360px] relative">
+            <canvas id="trx-analytics-chart"></canvas>
+          </div>
+          <div id="trx-chart-empty" class="absolute inset-0 flex flex-col items-center justify-center bg-white/95 text-gray-400 text-sm hidden z-10">
+            <svg class="w-12 h-12 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span class="font-medium text-gray-500">No successful transactions found for the selected filter.</span>
+            <span class="text-xs text-gray-400 mt-1">Try choosing another month or clicking Reset.</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -741,6 +955,106 @@
   </div>
 </div>
 
+<!-- ── MODAL: View Full Order Details ── -->
+<div class="modal-overlay" id="modal-view-order" onclick="if(event.target===this)closeModal('modal-view-order')">
+  <div class="modal-box" style="max-width:680px; max-height:90vh; overflow-y:auto;">
+    <div class="modal-header flex justify-between items-center bg-gradient-to-r from-brand-burgundy to-brand-burgundyLight text-white px-6 py-4">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <h3 class="font-serif text-lg font-bold text-white" id="order-detail-modal-id">Order Details</h3>
+          <span id="order-detail-modal-badge" class="px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-brand-gold/40 text-white">Processing</span>
+        </div>
+        <p class="text-[11px] text-white/80 mt-0.5" id="order-detail-modal-date">Placed on —</p>
+      </div>
+      <button onclick="closeModal('modal-view-order')" class="text-white/70 hover:text-white p-1 rounded-md hover:bg-white/10 transition">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body p-6 space-y-5 text-xs text-brand-charcoal">
+      
+      <!-- Customer & Delivery Info Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Customer Info Card -->
+        <div class="bg-brand-cream/40 p-4 rounded-xl border border-brand-gold/20 space-y-2">
+          <div class="flex items-center gap-2 text-brand-burgundy font-bold text-xs uppercase tracking-wider pb-1 border-b border-brand-gold/15">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <span>Customer Details</span>
+          </div>
+          <div><span class="text-gray-400">Name:</span> <strong id="order-modal-cust-name" class="text-brand-charcoal font-semibold ml-1">—</strong></div>
+          <div><span class="text-gray-400">Phone:</span> <a id="order-modal-cust-phone" href="#" class="text-brand-burgundy font-semibold hover:underline ml-1">—</a></div>
+          <div><span class="text-gray-400">Email:</span> <a id="order-modal-cust-email" href="#" class="text-brand-burgundy font-semibold hover:underline ml-1">—</a></div>
+        </div>
+
+        <!-- Shipping Address Card -->
+        <div class="bg-brand-cream/40 p-4 rounded-xl border border-brand-gold/20 space-y-2">
+          <div class="flex items-center gap-2 text-brand-burgundy font-bold text-xs uppercase tracking-wider pb-1 border-b border-brand-gold/15">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>Delivery Address</span>
+          </div>
+          <div><span class="text-gray-400">Address:</span> <span id="order-modal-cust-address" class="font-medium ml-1">—</span></div>
+          <div><span class="text-gray-400">City / State:</span> <span id="order-modal-cust-city" class="font-medium ml-1">—</span></div>
+          <div><span class="text-gray-400">Pincode:</span> <span id="order-modal-cust-pincode" class="font-semibold text-brand-burgundy ml-1">—</span></div>
+        </div>
+      </div>
+
+      <!-- Items Ordered -->
+      <div>
+        <h4 class="font-serif text-xs font-bold text-brand-burgundy uppercase tracking-wider mb-2 flex items-center justify-between">
+          <span>Items in Order (<span id="order-modal-items-count">0</span>)</span>
+        </h4>
+        <div class="border border-brand-gold/20 rounded-xl overflow-hidden bg-white">
+          <div id="order-modal-items-list" class="divide-y divide-brand-gold/10">
+            <!-- Items rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Breakdown & Payment Mode -->
+      <div class="bg-white p-4 rounded-xl border border-brand-gold/20 space-y-2">
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-500">Items Subtotal:</span>
+          <span id="order-modal-subtotal" class="font-semibold text-brand-charcoal">₹ 0</span>
+        </div>
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-500">Shipping Charges:</span>
+          <span id="order-modal-shipping" class="font-semibold text-green-700">Free</span>
+        </div>
+        <div id="order-modal-discount-row" class="flex justify-between items-center text-xs text-brand-burgundy font-semibold">
+          <span>Coupon Discount:</span>
+          <span id="order-modal-discount">- ₹ 0</span>
+        </div>
+        <div class="flex justify-between items-center text-sm font-bold pt-2 border-t border-brand-gold/15">
+          <span class="text-brand-burgundy font-serif">Grand Total:</span>
+          <span id="order-modal-grandtotal" class="text-brand-burgundy text-base">₹ 0</span>
+        </div>
+      </div>
+
+      <!-- Order Status Update Action (Shown only in Orders view) -->
+      <div id="order-modal-status-box" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 bg-brand-cream/30 border border-brand-gold/20 rounded-xl">
+        <div class="flex items-center gap-2">
+          <label for="order-modal-status-select" class="font-bold text-brand-burgundy text-xs uppercase tracking-wider">Change Status:</label>
+          <select id="order-modal-status-select" class="border border-brand-gold/30 rounded px-3 py-1.5 text-xs font-semibold focus:outline-none focus:border-brand-burgundy bg-white">
+            <option value="Processing">Processing</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <button id="order-modal-save-status-btn" onclick="saveOrderStatusFromModal()" class="btn-primary text-xs py-1.5 px-4 rounded">
+          Save Status
+        </button>
+      </div>
+
+    </div>
+
+    <div class="modal-footer flex justify-end items-center p-4 border-t border-brand-gold/15 bg-brand-cream/20">
+      <button class="btn-cancel" onclick="closeModal('modal-view-order')">Close</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/products.js"></script>
 <script>
   // ── Auth Guard ──
@@ -880,7 +1194,7 @@
       window.history.replaceState(null, null, '#' + view);
     }
     document.querySelectorAll('.view').forEach(v => { v.classList.remove('active'); v.style.display = 'none'; });
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-item, .nav-subitem').forEach(n => n.classList.remove('active'));
     
     const viewEl = document.getElementById('view-' + view);
     if (viewEl) {
@@ -891,13 +1205,25 @@
     if (navEl) {
       navEl.classList.add('active');
     }
+
+    // Auto expand Transactions dropdown if viewing transactions or transaction-history
+    const submenu = document.getElementById('transactions-submenu');
+    const chevron = document.getElementById('transactions-chevron');
+    if (view === 'transactions' || view === 'transaction-history') {
+      if (submenu) submenu.classList.remove('hidden');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+      document.getElementById('nav-transactions-parent')?.classList.add('active');
+    } else {
+      document.getElementById('nav-transactions-parent')?.classList.remove('active');
+    }
     
     const titles = { 
       dashboard: ['Dashboard', 'Raga Boutique Admin Panel'], 
       products: ['Products', 'Manage your product catalog'],
       categories: ['Categories', 'Manage your product categories'],
       orders: ['Orders Management', 'Track, filter, update statuses, and view customer order details.'],
-      transactions: ['Transactions', 'View all financial transactions.'],
+      transactions: ['Transactions', 'Overview of all real-time transactions across payment states.'],
+      'transaction-history': ['Transaction History', 'Archive of verified and successful payments with downloadable CSV reports.'],
       messages: ['Messages & Inquiries', 'View and track all customer contact messages submitted on the website.'],
       settings: ['Settings', 'Manage boutique configurations.']
     };
@@ -914,11 +1240,27 @@
       renderTable(adminProducts);
       updateStats();
     }
-    if (view === 'orders') {
-      renderOrders();
+    if (view === 'orders') renderOrders();
+    if (view === 'transactions') renderTransactions();
+    if (view === 'transaction-history') {
+      renderTransactionHistory();
+      setTimeout(renderTransactionHistory, 50);
     }
-    if (view === 'messages') {
-      renderMessages();
+    if (view === 'messages') renderMessages();
+  }
+
+  function toggleTransactionsDropdown(e) {
+    if (e) e.preventDefault();
+    const submenu = document.getElementById('transactions-submenu');
+    const chevron = document.getElementById('transactions-chevron');
+    if (!submenu) return;
+    const isHidden = submenu.classList.contains('hidden');
+    if (isHidden) {
+      submenu.classList.remove('hidden');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    } else {
+      submenu.classList.add('hidden');
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
     }
   }
 
@@ -1589,20 +1931,30 @@
     }
   }
 
+  // ── ORDERS & TRANSACTIONS LOGIC ──
+  let currentViewingOrder = null;
+
   function renderOrders() {
     const tbody = document.getElementById('orders-tbody');
     const empty = document.getElementById('orders-table-empty');
     if (!tbody || !empty) return;
     
     let orders = [...adminOrders];
+    if (orders.length === 0) {
+      try {
+        orders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+      } catch(e){}
+    }
     
     const totalOrders = orders.length;
     let revenue = 0;
     let counts = { pending: 0, confirmed: 0, packed: 0, shipped: 0, delivered: 0, cancelled: 0, returned: 0 };
 
     orders.forEach(o => {
-      revenue += Number(o.amount) || 0;
       const status = (o.status || '').toLowerCase();
+      if (status !== 'cancelled') {
+        revenue += Number(o.amount) || 0;
+      }
       if (status === 'processing' || status === 'pending') counts.pending++;
       else if (counts[status] !== undefined) counts[status]++;
     });
@@ -1623,7 +1975,8 @@
        orders = orders.filter(o => 
          (o.id && o.id.toLowerCase().includes(q)) || 
          (o.customer && o.customer.toLowerCase().includes(q)) || 
-         (o.payment && o.payment.toLowerCase().includes(q)) ||
+         (o.email && o.email.toLowerCase().includes(q)) ||
+         (o.phone && o.phone.toLowerCase().includes(q)) ||
          (o.product_name && o.product_name.toLowerCase().includes(q)) ||
          (o.status && o.status.toLowerCase().includes(q))
        );
@@ -1642,7 +1995,7 @@
        });
     }
 
-    // Default sorting to newest first
+    // Sort newest first
     orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     if (orders.length === 0) {
@@ -1652,58 +2005,952 @@
     }
     
     empty.classList.add('hidden');
-    tbody.innerHTML = orders.map((o, index) => `
-      <tr class="border-b border-brand-gold/10 last:border-0 hover:bg-brand-cream/10 transition-colors">
-        <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold">${index + 1}</td>
-        <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold">${o.id}</td>
-        <td class="p-4 text-xs text-gray-500">${new Date(o.date).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
-        <td class="p-4 font-medium text-sm">${esc(o.customer)}</td>
-        <td class="p-4 text-sm">${o.items} item(s)</td>
-        <td class="p-4 font-semibold text-brand-charcoal">₹${Number(o.amount).toLocaleString('en-IN')}</td>
-        <td class="p-4 text-xs text-gray-500">${o.payment === 'upi' ? 'UPI Payment' : (o.payment === 'cod' ? 'Cash on Delivery' : (o.payment === 'card' ? 'Prepaid / Cards' : esc(o.payment)))}</td>
-        <td class="p-4"><span class="inline-block px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-brand-gold/20 text-brand-charcoal">${esc(o.status)}</span></td>
-        <td class="p-4">
-          <div class="flex gap-2">
-            <button class="text-brand-burgundy text-xs hover:underline font-semibold" onclick="alert('Order details coming soon!')">View</button>
-            <button class="text-red-500 text-xs hover:underline font-semibold" onclick="deleteOrder('${o.id}')">Delete</button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = orders.map((o, index) => {
+      const displayId = String(o.id).startsWith('Raga-') ? o.id : (o.id.startsWith('#RAGA-') ? `Raga-${o.id.replace('#RAGA-', '').padStart(3, '0')}` : o.id);
+      const statusLower = (o.status || '').toLowerCase();
+      let statusBadgeClass = 'bg-brand-gold/20 text-brand-charcoal';
+      if (statusLower === 'delivered') statusBadgeClass = 'bg-green-100 text-green-800';
+      else if (statusLower === 'shipped') statusBadgeClass = 'bg-blue-100 text-blue-800';
+      else if (statusLower === 'cancelled') statusBadgeClass = 'bg-red-100 text-red-800';
+      else if (statusLower === 'confirmed') statusBadgeClass = 'bg-purple-100 text-purple-800';
+
+      return `
+        <tr class="border-b border-brand-gold/10 last:border-0 hover:bg-brand-cream/10 transition-colors">
+          <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold text-center whitespace-nowrap">${index + 1}</td>
+          <td class="p-4 font-mono text-xs text-brand-burgundy font-bold cursor-pointer hover:underline text-center whitespace-nowrap" onclick="viewOrderDetails('${o.id}', 'orders')" title="Click to view details">${displayId}</td>
+          <td class="p-4 text-xs text-gray-500 text-center whitespace-nowrap">${new Date(o.date).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
+          <td class="p-4 font-medium text-sm text-brand-charcoal text-center whitespace-nowrap">${esc(o.customer)}</td>
+          <td class="p-4 text-xs text-gray-600 text-center whitespace-nowrap">${o.items || 1} item(s)</td>
+          <td class="p-4 font-bold text-brand-burgundy text-center whitespace-nowrap">₹${Number(o.amount).toLocaleString('en-IN')}</td>
+          <td class="p-4 text-center whitespace-nowrap"><span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold ${statusBadgeClass}">${esc(o.status || 'Processing')}</span></td>
+          <td class="p-4 text-center whitespace-nowrap">
+            <div class="flex items-center justify-center gap-2">
+              <button class="px-3 py-1.5 bg-brand-burgundy hover:bg-brand-burgundyLight text-white text-xs font-semibold rounded-md shadow-xs flex items-center gap-1.5 transition cursor-pointer" onclick="viewOrderDetails('${o.id}', 'orders')">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <span>View</span>
+              </button>
+              <button class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition cursor-pointer" title="Delete Order" onclick="deleteOrder('${o.id}')">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
+  // ── Helper to filter records by Date, Month, Year, and Preset ──
+  function filterRecordsByDateAndPreset(records, dateVal, presetVal, searchVal, monthVal = '', yearVal = '') {
+    let list = [...records];
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    if (presetVal === 'today') {
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        return d >= startOfToday;
+      });
+    } else if (presetVal === 'last-week') {
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        return d >= sevenDaysAgo;
+      });
+    } else if (presetVal === 'this-month') {
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+      });
+    } else if (presetVal === 'last-month') {
+      const prevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        return d.getFullYear() === prevMonth.getFullYear() && d.getMonth() === prevMonth.getMonth();
+      });
+    } else if (presetVal === 'this-year') {
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        return d.getFullYear() === now.getFullYear();
+      });
+    }
+
+    // Filter by Year if specified
+    if (yearVal && yearVal !== 'all') {
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        if (isNaN(d.getTime())) return false;
+        return String(d.getFullYear()) === String(yearVal);
+      });
+    }
+
+    // Filter by Month if specified (e.g. '01', '08', etc. or 'YYYY-MM')
+    if (monthVal && monthVal !== 'all') {
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        if (isNaN(d.getTime())) return false;
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        if (monthVal.includes('-')) {
+          const [yyyy, m] = monthVal.split('-');
+          return d.getFullYear() === parseInt(yyyy, 10) && mm === m;
+        }
+        return mm === monthVal;
+      });
+    }
+
+    if (dateVal) {
+      list = list.filter(r => {
+        if (!r.date && !r.created_at) return false;
+        const d = new Date(r.date || r.created_at);
+        if (isNaN(d.getTime())) return false;
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}` === dateVal;
+      });
+    }
+
+    if (searchVal) {
+      const q = searchVal.toLowerCase().trim();
+      list = list.filter(r => {
+        const numPart = String(r.id || '').replace(/^#?RAGA-?/i, '');
+        const trxId = `TRX-${numPart.padStart(3, '0')}`.toLowerCase();
+        const orderId = String(r.id || '').toLowerCase();
+        const cust = String(r.customer || r.customer_name || '').toLowerCase();
+        const phone = String(r.phone || '').toLowerCase();
+        const email = String(r.email || '').toLowerCase();
+        const amount = String(r.amount || '');
+        return trxId.includes(q) || orderId.includes(q) || cust.includes(q) || phone.includes(q) || email.includes(q) || amount.includes(q);
+      });
+    }
+
+    return list;
+  }
+
+  let trxAnalyticsChartInstance = null;
+
+  // ── Handlers for Transaction History Filter Controls ──
+  function handleTrxHistPresetChange() {
+    const preset = document.getElementById('trx-hist-preset-filter')?.value || 'all';
+    const now = new Date();
+    const curYear = String(now.getFullYear());
+    const curMonth = String(now.getMonth() + 1).padStart(2, '0');
+
+    if (preset === 'this-year') {
+      if (document.getElementById('trx-hist-year-select')) document.getElementById('trx-hist-year-select').value = curYear;
+      if (document.getElementById('trx-hist-month-select')) document.getElementById('trx-hist-month-select').value = 'all';
+    } else if (preset === 'this-month') {
+      if (document.getElementById('trx-hist-year-select')) document.getElementById('trx-hist-year-select').value = curYear;
+      if (document.getElementById('trx-hist-month-select')) document.getElementById('trx-hist-month-select').value = curMonth;
+    } else if (preset === 'last-month') {
+      const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      if (document.getElementById('trx-hist-year-select')) document.getElementById('trx-hist-year-select').value = String(prevDate.getFullYear());
+      if (document.getElementById('trx-hist-month-select')) document.getElementById('trx-hist-month-select').value = String(prevDate.getMonth() + 1).padStart(2, '0');
+    } else {
+      if (document.getElementById('trx-hist-year-select')) document.getElementById('trx-hist-year-select').value = 'all';
+      if (document.getElementById('trx-hist-month-select')) document.getElementById('trx-hist-month-select').value = 'all';
+    }
+
+    renderTransactionHistory();
+  }
+
+  function handleTrxHistYearMonthChange() {
+    if (document.getElementById('trx-hist-preset-filter')) document.getElementById('trx-hist-preset-filter').value = 'all';
+    renderTransactionHistory();
+  }
+
+  function clearTrxHistFilters() {
+    if (document.getElementById('trx-hist-preset-filter')) document.getElementById('trx-hist-preset-filter').value = 'all';
+    if (document.getElementById('trx-hist-year-select')) document.getElementById('trx-hist-year-select').value = 'all';
+    if (document.getElementById('trx-hist-month-select')) document.getElementById('trx-hist-month-select').value = 'all';
+    renderTransactionHistory();
+  }
+
+  // ── Render All Transactions (Tracks Real Payment Status for UPI Gateway) ──
   function renderTransactions() {
     const tbody = document.getElementById('transactions-tbody');
     const empty = document.getElementById('transactions-table-empty');
     if (!tbody || !empty) return;
     
-    // Using orders as the basis for transactions, filtering for successful payments
-    let orders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+    let orders = (Array.isArray(adminOrders) && adminOrders.length > 0)
+      ? adminOrders
+      : JSON.parse(localStorage.getItem('raga_orders') || '[]');
     
-    if (orders.length === 0) {
+    const dateVal = document.getElementById('trx-date-filter')?.value || '';
+    const presetVal = document.getElementById('trx-preset-filter')?.value || 'all';
+    const searchVal = document.getElementById('trx-search')?.value || '';
+
+    const filtered = filterRecordsByDateAndPreset(orders, dateVal, presetVal, searchVal);
+
+    if (filtered.length === 0) {
       tbody.innerHTML = '';
       empty.classList.remove('hidden');
       return;
     }
     
     empty.classList.add('hidden');
-    tbody.innerHTML = orders.map(o => {
-      const paymentDisplay = o.payment === 'upi' ? 'UPI Payment' : (o.payment === 'cod' ? 'Cash on Delivery' : (o.payment === 'card' ? 'Prepaid / Cards' : esc(o.payment)));
-      // Assume all orders recorded have a 'Success' payment status for now
-      const statusDisplay = o.status.toLowerCase() === 'cancelled' ? 'Refunded' : 'Success';
-      const statusClass = statusDisplay === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+    tbody.innerHTML = filtered.map((o, idx) => {
+      const numPart = String(o.id || '').replace(/^#?RAGA-?/i, '');
+      const trxId = `TRX-${numPart.padStart(3, '0')}`;
+      const orderDisplayId = String(o.id).startsWith('Raga-') ? o.id : `Raga-${numPart.padStart(3, '0')}`;
+      
+      const paySt = (o.payment_status || (o.status === 'Cancelled' ? 'Refunded' : 'Success')).toLowerCase();
+      let statusDisplay = 'Success';
+      let statusClass = 'bg-green-100 text-green-800';
+      if (paySt === 'cancelled' || paySt === 'refunded') {
+        statusDisplay = 'Refunded';
+        statusClass = 'bg-red-100 text-red-800';
+      } else if (paySt === 'failed') {
+        statusDisplay = 'Failed';
+        statusClass = 'bg-red-100 text-red-800';
+      } else if (paySt === 'pending') {
+        statusDisplay = 'Pending';
+        statusClass = 'bg-yellow-100 text-yellow-800';
+      }
+
+      const phoneStr = (o.phone && String(o.phone).trim()) ? String(o.phone).trim() : '—';
+      const emailStr = (o.email && String(o.email).trim()) ? String(o.email).trim() : '—';
 
       return `
-      <tr class="border-b border-brand-gold/10 last:border-0 hover:bg-brand-cream/10 transition-colors">
-        <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold">TRX-${o.id.replace('#RAGA-', '')}</td>
-        <td class="p-4 text-xs text-gray-500">${new Date(o.date).toLocaleString()}</td>
-        <td class="p-4 font-medium text-sm">${esc(o.customer)}</td>
-        <td class="p-4 font-semibold text-brand-charcoal">₹${Number(o.amount).toLocaleString('en-IN')}</td>
-        <td class="p-4 text-xs text-gray-500">${paymentDisplay}</td>
-        <td class="p-4"><span class="inline-block px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-semibold ${statusClass}">${statusDisplay}</span></td>
-      </tr>
+        <tr class="border-b border-brand-gold/10 last:border-0 hover:bg-brand-cream/10 transition-colors">
+          <td class="p-4 font-mono text-xs text-brand-burgundy font-semibold text-center whitespace-nowrap">${idx + 1}</td>
+          <td class="p-4 font-mono text-xs text-brand-burgundy font-bold text-center whitespace-nowrap">${trxId}</td>
+          <td class="p-4 font-mono text-xs text-brand-burgundy font-bold cursor-pointer hover:underline text-center whitespace-nowrap" onclick="viewOrderDetails('${o.id}', 'transactions')" title="Click to view details">${orderDisplayId}</td>
+          <td class="p-4 text-xs text-gray-500 text-center whitespace-nowrap">${new Date(o.date).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
+          <td class="p-4 font-medium text-sm text-brand-charcoal text-center whitespace-nowrap">${esc(o.customer)}</td>
+          <td class="p-4 text-xs text-gray-600 font-mono text-center whitespace-nowrap">${phoneStr !== '—' ? `<a href="tel:${phoneStr.replace(/[^0-9]/g, '')}" class="text-brand-burgundy font-semibold hover:underline">${esc(phoneStr)}</a>` : '<span class="text-gray-400 font-normal">—</span>'}</td>
+          <td class="p-4 text-xs text-gray-600 text-center whitespace-nowrap">${emailStr !== '—' ? `<a href="mailto:${emailStr}" class="text-brand-burgundy font-semibold hover:underline">${esc(emailStr)}</a>` : '<span class="text-gray-400 font-normal">—</span>'}</td>
+          <td class="p-4 font-bold text-brand-burgundy text-center whitespace-nowrap">₹${Number(o.amount).toLocaleString('en-IN')}</td>
+          <td class="p-4 text-center whitespace-nowrap"><span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold ${statusClass}">${statusDisplay}</span></td>
+        </tr>
       `;
     }).join('');
+  }
+
+  let trxHistYearsPopulated = false;
+  function populateTrxHistYearDropdown() {
+    const yearSelect = document.getElementById('trx-hist-year-select');
+    if (!yearSelect || trxHistYearsPopulated) return;
+    
+    let orders = (Array.isArray(adminOrders) && adminOrders.length > 0)
+      ? adminOrders
+      : JSON.parse(localStorage.getItem('raga_orders') || '[]');
+    
+    const curYear = new Date().getFullYear();
+    const yearSet = new Set([curYear, curYear - 1, curYear - 2, 2026, 2025, 2024]);
+    
+    orders.forEach(o => {
+      if (o.date || o.created_at) {
+        const d = new Date(o.date || o.created_at);
+        if (!isNaN(d.getFullYear())) yearSet.add(d.getFullYear());
+      }
+    });
+
+    const currentSelected = yearSelect.value || 'all';
+    const sortedYears = Array.from(yearSet).sort((a, b) => b - a);
+
+    let html = '<option value="all">All Years</option>';
+    sortedYears.forEach(y => {
+      html += `<option value="${y}" ${String(currentSelected) === String(y) ? 'selected' : ''}>${y}</option>`;
+    });
+    
+    yearSelect.innerHTML = html;
+    trxHistYearsPopulated = true;
+  }
+
+  // ── Render Transaction History (Dynamic Revenue Analytics Graph — Success Only) ──
+  function renderTransactionHistory() {
+    populateTrxHistYearDropdown();
+    let orders = (Array.isArray(adminOrders) && adminOrders.length > 0)
+      ? adminOrders
+      : JSON.parse(localStorage.getItem('raga_orders') || '[]');
+    
+    // Filter ONLY paid and verified successful transactions
+    orders = orders.filter(o => {
+      const paySt = (o.payment_status || (o.status === 'Cancelled' ? 'Refunded' : 'Success')).toLowerCase();
+      return paySt === 'success';
+    });
+
+    const yearVal = document.getElementById('trx-hist-year-select')?.value || 'all';
+    const monthVal = document.getElementById('trx-hist-month-select')?.value || 'all';
+    const presetVal = document.getElementById('trx-hist-preset-filter')?.value || 'all';
+
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const shortMonthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const filtered = filterRecordsByDateAndPreset(orders, '', presetVal, '', monthVal, yearVal);
+
+    // Calculate Analytics KPIs (Success only)
+    const totalSuccessRevenue = filtered.reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+    const totalSuccessCount = filtered.length;
+    const avgOrderVal = totalSuccessCount > 0 ? (totalSuccessRevenue / totalSuccessCount) : 0;
+
+    const revEl = document.getElementById('trx-analytics-revenue');
+    if (revEl) revEl.textContent = '₹ ' + Number(totalSuccessRevenue).toLocaleString('en-IN');
+
+    const countEl = document.getElementById('trx-analytics-count');
+    if (countEl) countEl.textContent = totalSuccessCount;
+
+    const aovEl = document.getElementById('trx-analytics-aov');
+    if (aovEl) aovEl.textContent = '₹ ' + Math.round(avgOrderVal).toLocaleString('en-IN');
+
+    // Update active period badge & subtitle
+    const badge = document.getElementById('trx-chart-period-badge');
+    const subtitle = document.getElementById('trx-chart-subtitle');
+    let viewTitle = 'All Time Overview';
+    let viewSubtitle = 'Completed revenue distribution across all transactions.';
+
+    if (yearVal !== 'all' && monthVal !== 'all') {
+      const mIdx = parseInt(monthVal, 10) - 1;
+      viewTitle = `${monthNames[mIdx]} ${yearVal}`;
+      viewSubtitle = `Daily revenue breakdown for ${monthNames[mIdx]} ${yearVal}.`;
+    } else if (yearVal !== 'all' && monthVal === 'all') {
+      viewTitle = `Year ${yearVal} (All 12 Months)`;
+      viewSubtitle = `Monthly completed revenue breakdown for Year ${yearVal}.`;
+    } else if (yearVal === 'all' && monthVal !== 'all') {
+      const mIdx = parseInt(monthVal, 10) - 1;
+      viewTitle = `Month: ${monthNames[mIdx]} (All Years)`;
+      viewSubtitle = `Completed revenue for ${monthNames[mIdx]} across all recorded years.`;
+    } else if (presetVal === 'today') {
+      viewTitle = "Today's Revenue";
+      viewSubtitle = "Hourly completed revenue distribution for today.";
+    } else if (presetVal === 'last-week') {
+      viewTitle = 'This Week';
+      viewSubtitle = "Completed revenue over the last 7 days.";
+    } else if (presetVal === 'this-month') {
+      const now = new Date();
+      viewTitle = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+      viewSubtitle = `Daily completed revenue breakdown for ${viewTitle}.`;
+    } else if (presetVal === 'last-month') {
+      const prev = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+      viewTitle = `${monthNames[prev.getMonth()]} ${prev.getFullYear()}`;
+      viewSubtitle = `Daily completed revenue breakdown for ${viewTitle}.`;
+    } else if (presetVal === 'this-year') {
+      viewTitle = `Year ${new Date().getFullYear()} (All 12 Months)`;
+      viewSubtitle = `Monthly completed revenue breakdown for Year ${new Date().getFullYear()}.`;
+    }
+
+    if (badge) badge.textContent = viewTitle;
+    if (subtitle) subtitle.textContent = viewSubtitle;
+
+    const canvas = document.getElementById('trx-analytics-chart');
+    const emptyEl = document.getElementById('trx-chart-empty');
+    if (!canvas) return;
+
+    if (filtered.length === 0) {
+      if (emptyEl) emptyEl.classList.remove('hidden');
+      if (trxAnalyticsChartInstance) {
+        trxAnalyticsChartInstance.destroy();
+        trxAnalyticsChartInstance = null;
+      }
+      return;
+    }
+
+    if (emptyEl) emptyEl.classList.add('hidden');
+
+    // Build chart labels & data dynamically
+    let labels = [];
+    let revenueData = [];
+
+    // Case 1: Filter by Today
+    if (presetVal === 'today') {
+      const hourSlots = ['6 AM', '8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM', '10 PM'];
+      labels = hourSlots;
+      const hourlyRev = {};
+      hourSlots.forEach(h => hourlyRev[h] = 0);
+
+      filtered.forEach(o => {
+        const d = new Date(o.date || o.created_at);
+        const h = d.getHours();
+        let slot = '12 PM';
+        if (h < 7) slot = '6 AM';
+        else if (h < 9) slot = '8 AM';
+        else if (h < 11) slot = '10 AM';
+        else if (h < 13) slot = '12 PM';
+        else if (h < 15) slot = '2 PM';
+        else if (h < 17) slot = '4 PM';
+        else if (h < 19) slot = '6 PM';
+        else if (h < 21) slot = '8 PM';
+        else slot = '10 PM';
+        hourlyRev[slot] = (hourlyRev[slot] || 0) + (Number(o.amount) || 0);
+      });
+      revenueData = hourSlots.map(h => hourlyRev[h]);
+
+    }
+    // Case 2: Specific Year selected with All Months (Annual view Jan-Dec)
+    else if (yearVal !== 'all' && monthVal === 'all') {
+      labels = shortMonthNames;
+      const monthTotals = Array(12).fill(0);
+      filtered.forEach(o => {
+        const d = new Date(o.date || o.created_at);
+        const m = d.getMonth();
+        if (m >= 0 && m < 12) {
+          monthTotals[m] += (Number(o.amount) || 0);
+        }
+      });
+      revenueData = monthTotals;
+
+    }
+    // Case 3: Specific Month selected (Daily breakdown in that month)
+    else if (monthVal !== 'all') {
+      const dayMap = {};
+      filtered.forEach(o => {
+        const d = new Date(o.date || o.created_at);
+        const dayNum = d.getDate();
+        const label = `${dayNum} ${d.toLocaleString('default', { month: 'short' })}`;
+        dayMap[label] = (dayMap[label] || 0) + (Number(o.amount) || 0);
+      });
+
+      const sortedKeys = Object.keys(dayMap);
+      labels = sortedKeys;
+      revenueData = sortedKeys.map(k => dayMap[k]);
+
+    }
+    // Case 4: Preset 'this-year'
+    else if (presetVal === 'this-year') {
+      labels = shortMonthNames;
+      const monthTotals = Array(12).fill(0);
+      filtered.forEach(o => {
+        const d = new Date(o.date || o.created_at);
+        const m = d.getMonth();
+        if (m >= 0 && m < 12) {
+          monthTotals[m] += (Number(o.amount) || 0);
+        }
+      });
+      revenueData = monthTotals;
+
+    }
+    // Case 5: All Time or custom date ranges
+    else {
+      const groupMap = {};
+      const sortedOrders = [...filtered].sort((a,b) => new Date(a.date || a.created_at) - new Date(b.date || b.created_at));
+      
+      sortedOrders.forEach(o => {
+        const d = new Date(o.date || o.created_at);
+        const key = `${d.toLocaleString('default', { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`;
+        groupMap[key] = (groupMap[key] || 0) + (Number(o.amount) || 0);
+      });
+      labels = Object.keys(groupMap);
+      revenueData = Object.values(groupMap);
+    }
+
+    if (trxAnalyticsChartInstance) {
+      trxAnalyticsChartInstance.destroy();
+    }
+
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+    gradient.addColorStop(0, 'rgba(112, 33, 82, 0.85)');
+    gradient.addColorStop(1, 'rgba(212, 178, 112, 0.25)');
+
+    trxAnalyticsChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Completed Revenue (₹)',
+          data: revenueData,
+          backgroundColor: gradient,
+          borderColor: '#702152',
+          borderWidth: 1.5,
+          borderRadius: 6,
+          borderSkipped: false,
+          maxBarThickness: 52,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 600,
+          easing: 'easeOutQuart'
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#2c2c2c',
+            titleFont: { family: 'Inter', size: 12, weight: 'bold' },
+            bodyFont: { family: 'Inter', size: 13, weight: '600' },
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(context) {
+                const val = context.parsed.y || 0;
+                return ` Completed Revenue: ₹${Number(val).toLocaleString('en-IN')}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              font: { family: 'Inter', size: 11, weight: '500' },
+              color: '#6b7280'
+            }
+          },
+          y: {
+            grid: {
+              color: 'rgba(212, 178, 112, 0.15)',
+              drawBorder: false
+            },
+            ticks: {
+              font: { family: 'Inter', size: 11, weight: '500' },
+              color: '#6b7280',
+              callback: function(value) {
+                if (value >= 100000) return '₹' + (value / 100000).toFixed(1) + 'L';
+                if (value >= 1000) return '₹' + (value / 1000).toFixed(0) + 'k';
+                return '₹' + value;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ── Download Excel Export for All Transactions ──
+  function exportTransactionsExcel() {
+    let orders = (Array.isArray(adminOrders) && adminOrders.length > 0)
+      ? adminOrders
+      : JSON.parse(localStorage.getItem('raga_orders') || '[]');
+
+    const dateVal = document.getElementById('trx-date-filter')?.value || '';
+    const presetVal = document.getElementById('trx-preset-filter')?.value || 'all';
+    const searchVal = document.getElementById('trx-search')?.value || '';
+
+    const filtered = filterRecordsByDateAndPreset(orders, dateVal, presetVal, searchVal);
+
+    if (filtered.length === 0) {
+      alert('No transaction records found matching your selected filter to download.');
+      return;
+    }
+
+    // Calculate sum of SUCCESS status only
+    const totalSuccessAmount = filtered
+      .filter(o => (o.payment_status || (o.status === 'Cancelled' ? 'Refunded' : 'Success')).toLowerCase() === 'success')
+      .reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+
+    const headers = ['S.No', 'Transaction ID', 'Order ID', 'Date & Time', 'Customer Name', 'Phone Number', 'Email Address', 'Amount (INR)', 'Payment Status'];
+    const rows = filtered.map((o, idx) => {
+      const numPart = String(o.id || '').replace(/^#?RAGA-?/i, '');
+      const trxId = `TRX-${numPart.padStart(3, '0')}`;
+      const orderId = String(o.id).startsWith('Raga-') ? o.id : `Raga-${numPart.padStart(3, '0')}`;
+      const dateStr = o.date ? new Date(o.date).toLocaleString('en-IN') : '—';
+      const cust = `"${String(o.customer || '').replace(/"/g, '""')}"`;
+      const phone = `"${String(o.phone || '—').replace(/"/g, '""')}"`;
+      const email = `"${String(o.email || '—').replace(/"/g, '""')}"`;
+      const amount = Number(o.amount || 0).toFixed(2);
+      const paySt = o.payment_status || (o.status === 'Cancelled' ? 'Refunded' : 'Success');
+
+      return [idx + 1, trxId, orderId, `"${dateStr}"`, cust, phone, email, amount, paySt].join(',');
+    });
+
+    // Append final summary total row at the very bottom
+    rows.push(['', '', '', '', '', '', 'Total Amount', Number(totalSuccessAmount).toFixed(2), '']);
+
+    const csvString = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const todayStr = new Date().toISOString().split('T')[0];
+    link.href = url;
+    link.download = `raga_transactions_${todayStr}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  // ── Download CSV Export for Transaction History (Only Successful) ──
+  function exportTransactionsCSV() {
+    let orders = (Array.isArray(adminOrders) && adminOrders.length > 0)
+      ? adminOrders
+      : JSON.parse(localStorage.getItem('raga_orders') || '[]');
+
+    // Only successful transactions for History
+    orders = orders.filter(o => {
+      const paySt = (o.payment_status || (o.status === 'Cancelled' ? 'Refunded' : 'Success')).toLowerCase();
+      return paySt === 'success';
+    });
+
+    const dateVal = document.getElementById('trx-hist-date-filter')?.value || '';
+    const presetVal = document.getElementById('trx-hist-preset-filter')?.value || 'all';
+    const yearVal = document.getElementById('trx-hist-year-select')?.value || 'all';
+    const monthVal = document.getElementById('trx-hist-month-select')?.value || 'all';
+
+    const filtered = filterRecordsByDateAndPreset(orders, dateVal, presetVal, '', monthVal, yearVal);
+
+    if (filtered.length === 0) {
+      alert('No successful transaction history records found matching your selected filter to download.');
+      return;
+    }
+
+    const totalSuccessAmount = filtered.reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+
+    const headers = ['S.No', 'Transaction ID', 'Order ID', 'Date & Time', 'Customer Name', 'Phone Number', 'Email Address', 'Amount (INR)', 'Payment Status'];
+    const rows = filtered.map((o, idx) => {
+      const numPart = String(o.id || '').replace(/^#?RAGA-?/i, '');
+      const trxId = `TRX-${numPart.padStart(3, '0')}`;
+      const orderId = String(o.id).startsWith('Raga-') ? o.id : `Raga-${numPart.padStart(3, '0')}`;
+      const dateStr = o.date ? new Date(o.date).toLocaleString('en-IN') : '—';
+      const cust = `"${String(o.customer || '').replace(/"/g, '""')}"`;
+      const phone = `"${String(o.phone || '—').replace(/"/g, '""')}"`;
+      const email = `"${String(o.email || '—').replace(/"/g, '""')}"`;
+      const amount = Number(o.amount || 0).toFixed(2);
+      const status = 'Success';
+
+      return [idx + 1, trxId, orderId, `"${dateStr}"`, cust, phone, email, amount, status].join(',');
+    });
+
+    // Append final summary total row at the very bottom
+    rows.push(['', '', '', '', '', '', 'Total Amount', Number(totalSuccessAmount).toFixed(2), '']);
+
+    const csvString = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const todayStr = new Date().toISOString().split('T')[0];
+    link.href = url;
+    link.download = `raga_transaction_history_${todayStr}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  // ── Find order by any ID format ──
+  function findOrderById(id) {
+    if (!id) return null;
+    const targetStr = String(id).trim().toLowerCase();
+    const cleanTarget = targetStr.replace(/^#?raga-?/i, '');
+
+    let allOrders = [];
+    if (Array.isArray(adminOrders)) allOrders.push(...adminOrders);
+    try {
+      const local = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+      if (Array.isArray(local)) allOrders.push(...local);
+    } catch(e){}
+
+    return allOrders.find(o => {
+      if (!o) return false;
+      const oId = String(o.id || '').trim().toLowerCase();
+      if (oId === targetStr) return true;
+      const cleanOId = oId.replace(/^#?raga-?/i, '');
+      return cleanOId === cleanTarget;
+    }) || null;
+  }
+
+  // ── View Order / Transaction Details Modal Handler ──
+  function viewOrderDetails(id, viewMode = 'orders') {
+    try {
+      let order = findOrderById(id);
+      if (!order) {
+        console.warn('Record details not found for ID: ' + id);
+        return;
+      }
+
+      currentViewingOrder = order;
+
+      const numPart = String(order.id || '').replace(/^#?RAGA-?/i, '');
+      const displayId = String(order.id).startsWith('Raga-') ? order.id : `Raga-${numPart.padStart(3, '0')}`;
+      const trxId = `TRX-${numPart.padStart(3, '0')}`;
+      
+      const modalIdEl = document.getElementById('order-detail-modal-id');
+      const badge = document.getElementById('order-detail-modal-badge');
+      const statusBox = document.getElementById('order-modal-status-box');
+
+      if (viewMode === 'transactions' || viewMode === 'transaction-history') {
+        // HIDE Order Fulfillment Status Dropdown on Transactions (Tracked via UPI Gateway)
+        if (modalIdEl) modalIdEl.textContent = `Transaction ${trxId} (${displayId})`;
+        if (statusBox) statusBox.style.display = 'none';
+
+        const paySt = (order.payment_status || (order.status === 'Cancelled' ? 'Refunded' : 'Success')).toLowerCase();
+        if (badge) {
+          if (paySt === 'success') {
+            badge.textContent = 'Payment: Success';
+            badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-green-500 text-white';
+          } else if (paySt === 'pending') {
+            badge.textContent = 'Payment: Pending';
+            badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-yellow-500 text-white';
+          } else if (paySt === 'failed') {
+            badge.textContent = 'Payment: Failed';
+            badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-red-500 text-white';
+          } else {
+            badge.textContent = 'Payment: ' + (order.payment_status || 'Success');
+            badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-blue-500 text-white';
+          }
+        }
+      } else {
+        // Orders view: Show order lifecycle updater
+        if (modalIdEl) modalIdEl.textContent = `Order ${displayId}`;
+        if (statusBox) statusBox.style.display = '';
+
+        if (badge) {
+          const st = (order.status || 'Processing').toLowerCase();
+          badge.textContent = order.status || 'Processing';
+          if (st === 'delivered') badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-green-500 text-white';
+          else if (st === 'shipped') badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-blue-500 text-white';
+          else if (st === 'cancelled') badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-red-500 text-white';
+          else badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-brand-gold/50 text-white';
+        }
+      }
+
+      const dateEl = document.getElementById('order-detail-modal-date');
+      if (dateEl) {
+        dateEl.textContent = order.date 
+          ? `Placed on ${new Date(order.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}` 
+          : 'Placed recently';
+      }
+
+      const nameEl = document.getElementById('order-modal-cust-name');
+      if (nameEl) nameEl.textContent = (order.customer && order.customer.trim()) ? order.customer.trim() : '—';
+      
+      const phoneEl = document.getElementById('order-modal-cust-phone');
+      if (phoneEl) {
+        if (order.phone && String(order.phone).trim()) {
+          const ph = String(order.phone).trim();
+          phoneEl.textContent = ph;
+          phoneEl.href = `tel:${ph.replace(/[^0-9]/g, '')}`;
+          phoneEl.className = 'text-brand-burgundy font-semibold hover:underline ml-1';
+        } else {
+          phoneEl.textContent = 'Not provided';
+          phoneEl.removeAttribute('href');
+          phoneEl.className = 'text-gray-400 font-normal ml-1';
+        }
+      }
+
+      const emailEl = document.getElementById('order-modal-cust-email');
+      if (emailEl) {
+        if (order.email && String(order.email).trim()) {
+          const em = String(order.email).trim();
+          emailEl.textContent = em;
+          emailEl.href = `mailto:${em}`;
+          emailEl.className = 'text-brand-burgundy font-semibold hover:underline ml-1';
+        } else {
+          emailEl.textContent = 'Not provided';
+          emailEl.removeAttribute('href');
+          emailEl.className = 'text-gray-400 font-normal ml-1';
+        }
+      }
+
+      const addrEl = document.getElementById('order-modal-cust-address');
+      if (addrEl) {
+        addrEl.textContent = (order.address && String(order.address).trim()) ? String(order.address).trim() : 'Not provided';
+        addrEl.className = (order.address && String(order.address).trim()) ? 'font-medium ml-1 text-brand-charcoal' : 'font-normal ml-1 text-gray-400';
+      }
+
+      const cityEl = document.getElementById('order-modal-cust-city');
+      if (cityEl) {
+        cityEl.textContent = (order.city && String(order.city).trim()) ? String(order.city).trim() : 'Not provided';
+        cityEl.className = (order.city && String(order.city).trim()) ? 'font-medium ml-1 text-brand-charcoal' : 'font-normal ml-1 text-gray-400';
+      }
+
+      const pinEl = document.getElementById('order-modal-cust-pincode');
+      if (pinEl) {
+        pinEl.textContent = (order.pincode && String(order.pincode).trim()) ? String(order.pincode).trim() : 'Not provided';
+        pinEl.className = (order.pincode && String(order.pincode).trim()) ? 'font-semibold ml-1 text-brand-burgundy' : 'font-normal ml-1 text-gray-400';
+      }
+
+      const amountVal = Number(order.amount) || 0;
+      const subtotalVal = (Number(order.subtotal) > 0) ? Number(order.subtotal) : amountVal;
+      const discountVal = Number(order.discount) || 0;
+      const shippingVal = (Number(order.shipping) > 0) ? Number(order.shipping) : (subtotalVal >= 1999 ? 0 : 150);
+
+      const subtotalEl = document.getElementById('order-modal-subtotal');
+      if (subtotalEl) subtotalEl.textContent = `₹ ${subtotalVal.toLocaleString('en-IN')}`;
+
+      const shipEl = document.getElementById('order-modal-shipping');
+      if (shipEl) shipEl.textContent = shippingVal === 0 ? 'Free Shipping' : `₹ ${shippingVal.toLocaleString('en-IN')}`;
+      
+      const discRow = document.getElementById('order-modal-discount-row');
+      if (discRow) {
+        if (discountVal > 0) {
+          discRow.classList.remove('hidden');
+          const discEl = document.getElementById('order-modal-discount');
+          if (discEl) discEl.textContent = `- ₹ ${discountVal.toLocaleString('en-IN')}`;
+        } else {
+          discRow.classList.add('hidden');
+        }
+      }
+
+      const grandEl = document.getElementById('order-modal-grandtotal');
+      if (grandEl) grandEl.textContent = `₹ ${amountVal.toLocaleString('en-IN')}`;
+      
+      const payMethodDisplay = order.payment === 'upi' ? 'UPI Payment (Instant UPI)' : (order.payment === 'cod' ? 'Cash on Delivery (COD)' : (order.payment === 'card' ? 'Credit / Debit Card' : (order.payment || 'UPI Payment')));
+      const payEl = document.getElementById('order-modal-payment');
+      if (payEl) payEl.textContent = payMethodDisplay;
+
+      // Extract items safely
+      let items = order.items_detail;
+      if (typeof items === 'string') {
+        try { items = JSON.parse(items); } catch(e) { items = []; }
+      }
+      if (!Array.isArray(items) || items.length === 0) {
+        let pIds = order.product_ids;
+        if (typeof pIds === 'string') {
+          try { pIds = JSON.parse(pIds); } catch(e) { pIds = []; }
+        }
+        const pName = (order.product_name && order.product_name.trim()) ? order.product_name : 'Handcrafted Traditional Silk Saree';
+        const pImg = 'images/img-saree-red.jpg';
+        items = [{
+          id: (Array.isArray(pIds) && pIds[0]) ? pIds[0] : 'item-1',
+          name: pName,
+          price: subtotalVal / (order.items || 1),
+          quantity: order.items || 1,
+          image: pImg,
+          fabric: 'Pure Silk Blend',
+          weave: 'Authentic Handloom'
+        }];
+      }
+
+      const countEl = document.getElementById('order-modal-items-count');
+      if (countEl) countEl.textContent = items.length;
+
+      const itemsContainer = document.getElementById('order-modal-items-list');
+      if (itemsContainer) {
+        itemsContainer.innerHTML = items.map(item => `
+          <div class="p-3 flex items-center gap-3.5 bg-white hover:bg-brand-cream/10 transition">
+            <div class="w-14 h-16 rounded-lg overflow-hidden border border-brand-gold/20 flex-shrink-0 bg-brand-cream/20">
+              <img src="${item.image || 'images/img-saree-red.jpg'}" alt="${esc(item.name || 'Garment')}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+              <h5 class="font-bold text-xs text-brand-charcoal truncate">${esc(item.name || 'Handloom Garment')}</h5>
+              <p class="text-[10px] text-brand-gold font-semibold uppercase tracking-wider mt-0.5">${esc(item.fabric || 'Silk')} | ${esc(item.weave || 'Handloom')}</p>
+              <div class="text-[11px] text-gray-500 mt-1">
+                <span>Qty: <strong class="text-brand-charcoal">${item.quantity || 1}</strong></span>
+                <span class="mx-2 text-gray-300">•</span>
+                <span>Price: <strong class="text-brand-charcoal">₹ ${Number(item.price || 0).toLocaleString('en-IN')}</strong></span>
+              </div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <span class="font-bold text-sm text-brand-burgundy">₹ ${(Number(item.price || 0) * Number(item.quantity || 1)).toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const statusSelect = document.getElementById('order-modal-status-select');
+      if (statusSelect) {
+        statusSelect.value = order.status || 'Processing';
+      }
+
+      openModal('modal-view-order');
+    } catch(err) {
+      console.error('Error opening order details modal:', err);
+      alert('Error opening order details: ' + err.message);
+    }
+  }
+
+  async function saveOrderStatusFromModal() {
+    if (!currentViewingOrder) return;
+    const statusSelect = document.getElementById('order-modal-status-select');
+    if (!statusSelect) return;
+    const newStatus = statusSelect.value;
+
+    const btn = document.getElementById('order-modal-save-status-btn');
+    if (btn) btn.textContent = 'Saving…';
+
+    try {
+      const res = await fetch('api/update_order_status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentViewingOrder.id, status: newStatus })
+      });
+      const data = await res.json();
+      if (data.success) {
+        currentViewingOrder.status = newStatus;
+        const oInList = adminOrders.find(o => o.id === currentViewingOrder.id);
+        if (oInList) oInList.status = newStatus;
+        
+        try {
+          let local = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+          const idx = local.findIndex(o => o.id === currentViewingOrder.id);
+          if (idx >= 0) {
+            local[idx].status = newStatus;
+            localStorage.setItem('raga_orders', JSON.stringify(local));
+          }
+        } catch(e){}
+
+        renderOrders();
+        renderTransactions();
+        renderTransactionHistory();
+        updateStats();
+
+        const badge = document.getElementById('order-detail-modal-badge');
+        if (badge) {
+          badge.textContent = newStatus;
+          const st = newStatus.toLowerCase();
+          if (st === 'delivered') badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-green-500 text-white';
+          else if (st === 'shipped') badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-blue-500 text-white';
+          else if (st === 'cancelled') badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-red-500 text-white';
+          else badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-brand-gold/50 text-white';
+        }
+
+        if (btn) {
+          btn.textContent = 'Saved! ✓';
+          btn.classList.add('bg-green-600');
+          setTimeout(() => {
+            if (btn) {
+              btn.textContent = 'Save Status';
+              btn.classList.remove('bg-green-600');
+            }
+          }, 1500);
+        }
+      } else {
+        console.error('Failed to update status:', data.message);
+      }
+    } catch(e) {
+      console.error('Error updating order status:', e);
+    } finally {
+      if (btn && btn.textContent !== 'Saved! ✓') btn.textContent = 'Save Status';
+    }
+  }
+
+  function printOrderInvoice() {
+    if (!currentViewingOrder) return;
+    window.print();
+  }
+
+  async function deleteOrder(id) {
+    if (!id) return;
+
+    try {
+      const res = await fetch('api/delete_order.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await res.json();
+      if (data.success) {
+        adminOrders = adminOrders.filter(o => String(o.id) !== String(id));
+        try {
+          let local = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+          local = local.filter(o => String(o.id) !== String(id));
+          localStorage.setItem('raga_orders', JSON.stringify(local));
+        } catch(e){}
+
+        renderOrders();
+        renderTransactions();
+        renderTransactionHistory();
+        updateStats();
+
+        if (currentViewingOrder && String(currentViewingOrder.id) === String(id)) {
+          closeModal('modal-view-order');
+        }
+      } else {
+        console.error('Failed to delete order:', data.message);
+      }
+    } catch(err) {
+      console.error('Error deleting order:', err);
+    }
   }
 
   function updateStats() {
@@ -1722,7 +2969,10 @@
 
     const totalOrders = ordersList.length;
     const totalRevenue = ordersList
-      .filter(o => (o.status || '').toLowerCase() !== 'cancelled')
+      .filter(o => {
+        const paySt = (o.payment_status || (o.status === 'Cancelled' ? 'Refunded' : 'Success')).toLowerCase();
+        return paySt === 'success';
+      })
       .reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
 
     const ordersEl = document.getElementById('stat-dashboard-orders');
@@ -1965,6 +3215,7 @@
     renderCategoryGrid();
     renderOrders();
     renderTransactions();
+    renderTransactionHistory();
     renderMessages();
     
     const initialView = window.location.hash ? window.location.hash.substring(1) : 'dashboard';

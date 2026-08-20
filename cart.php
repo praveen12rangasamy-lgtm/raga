@@ -482,36 +482,68 @@
       event.preventDefault();
       
       // Extract form values
-      const fullName = document.getElementById("ship-full").value;
-      const payMethod = document.querySelector('input[name="payment"]:checked').value;
+      const fullName = document.getElementById("ship-full")?.value || '';
+      const email = document.getElementById("ship-email")?.value || '';
+      const phone = document.getElementById("ship-phone")?.value || '';
+      const address = document.getElementById("ship-address")?.value || '';
+      const pincode = document.getElementById("ship-pin")?.value || '';
+      const city = document.getElementById("ship-city")?.value || '';
+      const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'upi';
       
       // Calculate final total
       const shippingFee = checkoutSubtotal >= 1999 ? 0 : 150;
       const finalAmount = checkoutSubtotal + shippingFee - discountAppliedVal;
 
+      // Determine next Raga order ID (e.g., Raga-001, Raga-002...)
+      let existingOrders = [];
+      try {
+        existingOrders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
+      } catch(e){}
+
+      const nextIndex = existingOrders.length + 1;
+      const orderId = `Raga-${String(nextIndex).padStart(3, '0')}`;
+
       // Populate success modal info
-      const orderId = `#RAGA-${Math.floor(10000000 + Math.random() * 90000000)}`;
       document.getElementById("order-ref").textContent = orderId;
-      document.getElementById("order-pay").textContent = "UPI Payment";
+      document.getElementById("order-name").textContent = fullName;
+      document.getElementById("order-pay").textContent = payMethod === 'upi' ? 'UPI Payment' : (payMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid Card');
       document.getElementById("order-amount").textContent = `₹ ${finalAmount.toLocaleString("en-IN")}`;
 
       const prodIds = (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.map(i => i.id) : [];
       const prodNames = (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.map(i => i.name).join(', ') : '';
+      const itemsDetail = (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+        fabric: item.fabric || '',
+        weave: item.weave || ''
+      })) : [];
 
       // Save order to database & localStorage
       const newOrder = {
         id: orderId,
         date: new Date().toISOString(),
         customer: fullName,
-        items: (typeof cart !== 'undefined' && Array.isArray(cart)) ? cart.length : 1,
+        email: email,
+        phone: phone,
+        address: address,
+        pincode: pincode,
+        city: city,
+        items: itemsDetail.length > 0 ? itemsDetail.reduce((sum, i) => sum + (i.quantity || 1), 0) : 1,
         amount: finalAmount,
+        subtotal: checkoutSubtotal,
+        discount: discountAppliedVal,
+        shipping: shippingFee,
         payment: payMethod,
         product_ids: prodIds,
-        product_name: prodNames
+        product_name: prodNames,
+        items_detail: itemsDetail,
+        status: 'Processing'
       };
 
       try {
-        let existingOrders = JSON.parse(localStorage.getItem('raga_orders') || '[]');
         existingOrders.unshift(newOrder);
         localStorage.setItem('raga_orders', JSON.stringify(existingOrders));
       } catch(e){}
@@ -520,6 +552,10 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newOrder)
+      }).then(res => res.json()).then(data => {
+        if (data.order_id && document.getElementById("order-ref")) {
+          document.getElementById("order-ref").textContent = data.order_id;
+        }
       }).catch(err => console.error('Failed to save order to database', err));
 
       // Open Success modal

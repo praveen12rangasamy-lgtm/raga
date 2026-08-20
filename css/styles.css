@@ -69,6 +69,30 @@ img {
   background: #702152;
 }
 
+/* Sidebar & Catalog Scrollable Styles */
+#filter-sidebar, .sidebar-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: #d4b270 transparent;
+  overscroll-behavior: contain;
+}
+
+#filter-sidebar::-webkit-scrollbar, .sidebar-scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+#filter-sidebar::-webkit-scrollbar-track, .sidebar-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#filter-sidebar::-webkit-scrollbar-thumb, .sidebar-scrollable::-webkit-scrollbar-thumb {
+  background: #d4b270;
+  border-radius: 4px;
+}
+
+#filter-sidebar::-webkit-scrollbar-thumb:hover, .sidebar-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #702152;
+}
+
 /* Modal and Drawer Animations */
 .drawer-transition {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
